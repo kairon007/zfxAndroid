@@ -1,0 +1,67 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#404040"    tools:context="com.zifei.corebeau.my.ui.fragment.MyFragment" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        android:gravity="center_horizontal|center_vertical">
+
+        <TextView
+            android:id="@+id/ib_my_post"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:background="@drawable/my_circle_selector"
+            android:text="post"
+            android:gravity="center_horizontal|center_vertical" />
+
+        <TextView
+            android:layout_toRightOf="@id/ib_my_post"
+            android:layout_marginLeft="50dp"
+            android:id="@+id/ib_my_like"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:background="@drawable/my_circle_selector"
+            android:text="like"
+            android:textColor="#404040"
+            android:gravity="center_horizontal|center_vertical" />
+
+        <TextView
+            android:layout_below="@id/ib_my_post"
+            android:layout_marginTop="50dp"
+            android:id="@+id/ib_my_follow"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:background="@drawable/my_circle_selector"
+            android:text="follow"
+            android:textColor="#404040"
+            android:gravity="center_horizontal|center_vertical" />
+        
+        <TextView
+            android:layout_below="@id/ib_my_like"
+            android:layout_toRightOf="@id/ib_my_follow"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="50dp"
+            android:id="@+id/ib_my_mail"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:background="@drawable/my_circle_selector"
+            android:text="mail"
+            android:textColor="#404040"
+            android:gravity="center_horizontal|center_vertical" />
+
+        <TextView
+            android:layout_marginTop="50dp"
+            android:layout_below="@id/ib_my_mail"
+            android:id="@+id/ib_my_logout"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:background="@drawable/my_circle_selector"
+            android:text="shop"
+            android:textColor="#404040"
+            android:gravity="center_horizontal|center_vertical" />
+    </RelativeLayout>
+
+</LinearLayout>

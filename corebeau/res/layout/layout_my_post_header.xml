@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="250dp" xmlns:app="http://schemas.android.com/apk/res/com.zifei.corebeau">
+    <ImageView 
+        android:id="@+id/iv_my_post_background"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+		android:background="@color/common_orange"/>
+    <TextView
+        android:id="@+id/tv_my_post_nickname"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:text="aaaaaa"
+        />
+    <com.zifei.corebeau.common.ui.view.CircularImageView
+        android:id="@+id/civ_my_post_icon"
+        android:layout_width="80dp" 
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal|bottom"
+        app:border="true"
+        app:border_width="4dp"
+        app:border_color="@color/common_background_white"/>
+		
+</FrameLayout>

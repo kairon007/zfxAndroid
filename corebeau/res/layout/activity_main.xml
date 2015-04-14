@@ -1,0 +1,75 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+       >
+
+        <LinearLayout
+            android:id="@+id/vw_group"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:background="@color/common_orange">
+            <RelativeLayout
+                android:id="@+id/rl_spot_tab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
+                <ImageView 
+                    android:id="@+id/iv_rl_spot_tab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_search_tab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
+                <ImageView 
+                    android:id="@+id/iv_rl_search_tab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_my_tab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
+                  <ImageView 
+                    android:id="@+id/iv_rl_my_tab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_other_tab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
+                <ImageView 
+                    android:id="@+id/iv_rl_other_tab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools" android:id="@+id/pager"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        tools:context=".MainActivity" />
+</LinearLayout>
