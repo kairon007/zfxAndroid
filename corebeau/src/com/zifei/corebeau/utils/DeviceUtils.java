@@ -29,6 +29,10 @@ import android.util.Log;
  */
 public class DeviceUtils {
 	
+	
+	
+	
+	
     public static final   String m_szDevIDShort = "35" + //we make this look like a valid IMEI
 
                 Build.BOARD.length() % 10 +

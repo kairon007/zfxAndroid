@@ -13,6 +13,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.zifei.corebeau.R;
+import com.zifei.corebeau.R.color;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
 import com.zifei.corebeau.search.bean.RecommendUserList;
 import com.zifei.corebeau.utils.StringUtil;
@@ -81,7 +82,8 @@ public class RecommedUserAdapter extends BaseAdapter {
 		ViewHolder holder = new ViewHolder();
 		holder.usericon = (CircularImageView) convertView
 				.findViewById(R.id.civ_search_user_recommend);
-		holder.usericon.setBorderWidth(0);
+		holder.usericon.setBorderWidth(1);
+		holder.usericon.setBorderColor(color.spot_top_divider);
 		// holder.nickName = (TextView)
 		// convertView.findViewById(R.id.spot_user_nickname);
 

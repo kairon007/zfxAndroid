@@ -9,15 +9,21 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         android:paddingTop="10dp">
+        
+           <View
+          style="@style/spot_top_divider"
+        android:layout_width="match_parent" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/spot_list_outline"
+            android:background="@color/common_item_inner"
             android:orientation="vertical">
+            
+             <View
+          style="@style/spot_top_divider"
+        android:layout_width="match_parent" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -27,8 +33,8 @@
 
                 <com.zifei.corebeau.common.ui.view.CircularImageView
                     android:id="@+id/spot_user_thumb"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp" />
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
 
                 <TextView
                     android:id="@+id/spot_user_nickname"
@@ -39,6 +45,10 @@
                     android:textColor="#404040"
                     android:textSize="15sp" />
             </LinearLayout>
+            
+                 <View
+          style="@style/spot_inner_divider"
+        android:layout_width="match_parent" />
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -49,6 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
+                    android:background="@color/image_loading"
                     android:scaleType="centerCrop" />
 
                 <LinearLayout
@@ -76,6 +87,10 @@
                 </LinearLayout>
 
             </FrameLayout>
+            
+            <View
+          style="@style/spot_top_divider"
+        android:layout_width="match_parent" />
 
             <TextView
                 android:id="@+id/tv_spot_message"
@@ -94,6 +109,10 @@
                 android:paddingBottom="15dp"
                 android:text="..."
                 android:textSize="20dp" />
+            
+                <View
+          style="@style/spot_top_divider"
+        android:layout_width="match_parent" />
 
         </LinearLayout>
     </LinearLayout>

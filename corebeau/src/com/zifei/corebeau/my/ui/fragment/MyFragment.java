@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.common.ui.OnFragmentInteractionListener;
+import com.zifei.corebeau.my.ui.FollowActivity;
 import com.zifei.corebeau.my.ui.MyPostActivity;
 import com.zifei.corebeau.post.ui.CommentActivity;
 import com.zifei.corebeau.post.ui.PostActivity;
@@ -95,7 +96,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
 			startActivity(intent3);
 			break;
 		case R.id.ib_my_follow:
-			Intent intent4 = new Intent(getActivity(), CommentActivity.class);
+			Intent intent4 = new Intent(getActivity(), FollowActivity.class);
 			startActivity(intent4);
 			break;
 			

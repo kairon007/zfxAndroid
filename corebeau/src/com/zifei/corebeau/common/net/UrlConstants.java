@@ -29,10 +29,14 @@ public class UrlConstants {
     public static String SEARCH = BASE_URL + "/spot_post";
 
     //post
+    
+    public static String GET_QINIU_TOKEN = "";
 
     public static String GET_POST = BASE_URL + "/get_post";
 
     public static String DELETE_POST = BASE_URL + "/delete_post";
+    
+    public static String INSERT_POST = BASE_URL + "modify";
 
     public static String MODIFY_POST = BASE_URL + "modify";
 

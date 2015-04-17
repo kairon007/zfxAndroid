@@ -11,4 +11,13 @@
     <color name="common_dark_grey">#404040</color>
     <color name="common_background_white">#FAFAFA</color>
     <color name="inner_white">#FFFFFF</color>
+    
+    <color name="common_bar_navy">#2D333D</color>
+    <color name="common_background_grey">#DEDFE0</color>
+    <color name="common_item_inner">#FFFFFF</color>
+    <color name="bar_name">#F4F5F5</color>
+    <color name="image_loading">#F0F0F0</color>
+    
+    <color name="spot_top_divider">#ABABAC</color>
+     <color name="spot_inner_divider">#D8D8D8</color>
 </resources>

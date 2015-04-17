@@ -103,4 +103,12 @@ public class CorebeauApp extends Application {
         }
     };
     
+    public void add(Activity activity) {
+		activities.add(activity);
+	}
+
+	public void remove(Activity activity) {
+		activities.remove(activity);
+	}
+    
 }

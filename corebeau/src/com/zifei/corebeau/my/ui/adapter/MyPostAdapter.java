@@ -46,8 +46,6 @@ public class MyPostAdapter extends BaseAdapter {
 		imageLoader.init(config);
 
 		imageOptions = new DisplayImageOptions.Builder() //
-				// .showImageOnLoading(R.drawable.mall_item_bg) // 载入时图片设置为黑色
-				// .showImageOnFail(R.drawable.mall_item_bg) // 加载失败时显示的图片
 				.delayBeforeLoading(200) // 载入之前的延迟时间
 				.cacheInMemory(false).cacheOnDisk(true)
 				// .imageScaleType(ImageScaleType.EXACTLY_STRETCHED)

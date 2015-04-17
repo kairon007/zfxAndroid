@@ -1,5 +1,7 @@
 package com.zifei.corebeau.test;
 
+import com.zifei.corebeau.my.bean.FollowListResponse;
+import com.zifei.corebeau.my.bean.FollowUser;
 import com.zifei.corebeau.post.bean.Comment;
 import com.zifei.corebeau.post.bean.Post;
 import com.zifei.corebeau.search.bean.RecommendPostList;
@@ -262,5 +264,53 @@ public class TestData {
         list.add(list3);
 
         return list;
+    }
+    
+    
+    public static ArrayList<FollowUser>  getFollowList() {
+    	ArrayList<FollowUser> list = new ArrayList<FollowUser>();
+    	FollowUser list1 = new FollowUser();
+    	list1.setNickname("apink");
+    	list1.setUserId("ewrwerr234v23");
+    	list1.setUserIcon("http://e0.vingle.net/t_us_m/opdr3ab94hxosfpwyl2x");
+    	list.add(list1);
+    	
+    	FollowUser list2 = new FollowUser();
+    	list2.setNickname("gogoback");
+    	list2.setUserId("e t 45b453");
+    	list2.setUserIcon("http://a.disquscdn.com/uploads/users/12043/9068/avatar92.jpg?1409636527");
+    	list.add(list2);
+    	
+    	FollowUser list3 = new FollowUser();
+    	list3.setNickname("wangzheng");
+    	list3.setUserId("rg g ggd s");
+    	list3.setUserIcon("http://e0.vingle.net/t_us_m/opdr3ab94hxosfpwyl2x");
+    	list.add(list3);
+    	
+    	FollowUser list4 = new FollowUser();
+    	list4.setNickname("jinde");
+    	list4.setUserId("ffffeeee");
+    	list4.setUserIcon("http://dbscthumb.phinf.naver.net/0727_000_22/20150314100549505_AY3XAL86W.png/25682_1426076163.png?type=appG1");
+    	list.add(list4);
+    	
+    	FollowUser list5 = new FollowUser();
+    	list5.setNickname("xfi");
+    	list5.setUserId("gggggrrrr");
+    	list5.setUserIcon("http://a.disquscdn.com/uploads/users/12043/9068/avatar92.jpg?1409636527");
+    	list.add(list5);
+    	
+    	FollowUser list6 = new FollowUser();
+    	list6.setNickname("xfigirl");
+    	list6.setUserId("fgerherher");
+    	list6.setUserIcon("http://e0.vingle.net/t_us_m/opdr3ab94hxosfpwyl2x");
+    	list.add(list6);
+    	
+    	FollowUser list7 = new FollowUser();
+    	list7.setNickname("xfiman");
+    	list7.setUserId("regerger");
+    	list7.setUserIcon("http://dbscthumb.phinf.naver.net/0727_000_22/20150314100549505_AY3XAL86W.png/25682_1426076163.png?type=appG1");
+    	list.add(list7);
+    	
+		return list;
     }
 }

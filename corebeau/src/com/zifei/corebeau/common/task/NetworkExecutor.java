@@ -6,9 +6,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import android.os.AsyncTask;
 
+import com.zifei.corebeau.account.task.UserInfoService;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.CorebeauApp;
-import com.zifei.corebeau.common.PreferenceManager;
 import com.zifei.corebeau.common.net.CustomHttpResponse;
 import com.zifei.corebeau.common.net.HttpNetworkClient;
 import com.zifei.corebeau.common.net.Response;
@@ -17,24 +17,21 @@ import com.zifei.corebeau.utils.StringUtil;
 
 public class NetworkExecutor {
 
-	public static <T> void post(String url, Map<String, Object> paramData, Class<T> resultType, CallBack<T> callback) {
+	private static UserInfoService userInfoService = new UserInfoService(CorebeauApp.app);
+
+	public static <T> NetworkAsync<T> post(String url, Map<String, Object> paramData, Class<T> resultType,
+			CallBack<T> callback) {
 		paramData = setUserIdLoginId(paramData);
 		NetworkAsync<T> task = new NetworkAsync<T>(url, paramData, resultType, callback);
 		task.execute();
+		return task;
 	}
 	
-	private static Map<String, Object> setUserIdLoginId(Map<String, Object> paramData) {  // logout시 delete 확실히 하기
-		String userId = PreferenceManager.getInstance(CorebeauApp.app.getApplicationContext()).getPreferencesString("userId");
-		String loginId = PreferenceManager.getInstance(CorebeauApp.app.getApplicationContext()).getPreferencesString("loginId");
-		
-		if(!StringUtil.isEmpty(userId) && userId!=null && !StringUtil.isEmpty(loginId) && loginId!=null){
-			paramData.put("loginId", loginId);
-			paramData.put("userId", userId);
-			return paramData;
-		}
-		
-	     return paramData;
-	}	
+	private static Map<String, Object> setUserIdLoginId(Map<String, Object> paramData) {
+		paramData.put("loginId", userInfoService.getLoginId());
+		paramData.put("userId", userInfoService.getUserId());
+		return paramData;
+	}
 	
 	private static class NetworkAsync<T> extends AsyncTask<Void, Integer, CustomHttpResponse> implements CancelListener{
 
