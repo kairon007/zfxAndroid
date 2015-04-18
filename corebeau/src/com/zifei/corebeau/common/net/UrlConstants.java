@@ -8,9 +8,9 @@ public class UrlConstants {
 
     //account
 	 
-	 public static String LOGIN = BASE_URL + "/login";
+	 public static String LOGIN = BASE_URL + "/login/account";
 	 
-	 public static String LOGIN_BY_DEVICE = BASE_URL + "/login/byDevice";
+	 public static String LOGIN_BY_DEVICE = BASE_URL + "/login/device";
 	 
 	 public static String LOGOUT = BASE_URL + "/logout";
 
