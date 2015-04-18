@@ -24,11 +24,11 @@ import java.security.Key;
  */
 public class AESTools {
     // 密钥  
-    private final static String secretKey = "com.huisuoping.v4.uV252QkRe05ehplS";
+    private final static String secretKey = "";
     // 向量  
-    private final static String iv = "01234567";
+    private final static String iv = "";
     // 加解密统一使用的编码方式  
-    private final static String encoding = "utf-8";
+    private final static String encoding = "";
 
     /**
      * 3DES加密

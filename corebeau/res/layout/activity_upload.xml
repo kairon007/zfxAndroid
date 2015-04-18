@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="@dimen/navi_height"
+    android:background="@color/inner_white"
     android:orientation="vertical" >
     
     <GridView 
@@ -20,6 +22,7 @@
         android:id="@+id/et_upload_text"
         android:layout_height="200dp"
         android:layout_width="match_parent"
+        and
         />
 	
 

@@ -234,7 +234,7 @@ public class QiniuTask {
 	private static Date buildTokenDate;
 	private static ScheduledExecutorService replenishTimer = Executors.newScheduledThreadPool(1, new UpApi.DaemonThreadFactory());
 	private static ReadWriteLock rw = new ReentrantReadWriteLock();
-	private void initBuildToken() {
+	public void initBuildToken() {
 		replenishTimer.scheduleAtFixedRate(new Runnable() {
 			private long gap = 1000 * 60 * 40; // 40分钟
 			public void run() {

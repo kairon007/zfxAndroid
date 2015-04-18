@@ -60,6 +60,8 @@ public class UploadActivity extends BarActivity implements OnClickListener {
 		setActivityStatus();
 		myTask = new MyTask(this);
 		qiniuTask = new QiniuTask(this);
+		
+		qiniuTask.initBuildToken();
 	}
 	
 	private void setActivityStatus(){
@@ -82,7 +84,7 @@ public class UploadActivity extends BarActivity implements OnClickListener {
 	private void startSelectActivity() {
 		Intent intent = new Intent(this, MultiImageSelectorActivity.class);
 		intent.putExtra(MultiImageSelectorActivity.EXTRA_SHOW_CAMERA, true);
-		intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, 9);
+		intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, 5);
 		intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_MODE,
 				MultiImageSelectorActivity.MODE_MULTI);
 		startActivityForResult(intent, REQUEST_IMAGE);
@@ -155,6 +157,7 @@ public class UploadActivity extends BarActivity implements OnClickListener {
 			if (convertView == null) {
 				imageView = new ImageView(mContext);
 				imageView.setLayoutParams(new GridView.LayoutParams(300, 300));
+				imageView.setBackground(background);
 				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 				imageView.setPadding(8, 8, 8, 8);
 			} else {
@@ -196,6 +199,7 @@ public class UploadActivity extends BarActivity implements OnClickListener {
 
 		@Override
 		protected void onFailure(UploadResultCallRet ret, UpParam p, Object passParam) {
+			Utils.showToast(UploadActivity.this, "fail!");
 			if (ret.getException() != null) {
 				ret.getException().printStackTrace();
 			}

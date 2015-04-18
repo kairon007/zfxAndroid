@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:background="@color/common_orange" >
+    android:layout_height="@dimen/navi_height"
+    android:background="@color/common_bar_navy" >
 
     <ImageView 
         android:id="@+id/iv_bar_left"
