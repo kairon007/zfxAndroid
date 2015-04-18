@@ -247,8 +247,8 @@ public class SplashActivity extends CommonFragmentActvity implements
 		if (TextUtils.isEmpty(trim_email)) {
 			Utils.showToast(SplashActivity.this, "email empty");
 			return false;
-		} else if (StringUtil.isEmail(trim_email)
-				|| StringUtil.isPhoneNum(trim_email)) {
+		} else if (!StringUtil.isEmail(trim_email)
+				&& !StringUtil.isPhoneNum(trim_email)) {
 			Utils.showToast(SplashActivity.this,
 					"please input email or phone number");
 			return false;
@@ -266,8 +266,8 @@ public class SplashActivity extends CommonFragmentActvity implements
 		if (TextUtils.isEmpty(trim_email)) {
 			Utils.showToast(SplashActivity.this, "email empty");
 			return false;
-		} else if (StringUtil.isEmail(trim_email)
-				|| StringUtil.isPhoneNum(trim_email)) {
+		} else if (!StringUtil.isEmail(trim_email)
+				&& !StringUtil.isPhoneNum(trim_email)) {
 			Utils.showToast(SplashActivity.this,
 					"please input email or phone number");
 			return false;
@@ -288,8 +288,8 @@ public class SplashActivity extends CommonFragmentActvity implements
 		if (TextUtils.isEmpty(trim_email)) {
 			Utils.showToast(SplashActivity.this, "email empty");
 			return false;
-		} else if (StringUtil.isEmail(trim_email)
-				|| StringUtil.isPhoneNum(trim_email)) {
+		} else if (!StringUtil.isEmail(trim_email)
+				&& !StringUtil.isPhoneNum(trim_email)) {
 			Utils.showToast(SplashActivity.this,
 					"please input email or phone number");
 			return false;
