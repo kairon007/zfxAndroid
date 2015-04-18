@@ -28,8 +28,8 @@ public class RegisterResponse extends Response{
         this.userInfo = userInfo;
     }
 
-    public static final int EMAIL_EXIST = -100;  //手机号码已经存在
-
+    public static final int ACCOUNT_EXIST = -100;  //手机号码已经存在
+    
     public static final int NICKNAME_EXIST = -200;
 
 }

@@ -20,10 +20,12 @@ import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 import com.zifei.corebeau.R;
+import com.zifei.corebeau.account.bean.response.RegisterResponse;
 import com.zifei.corebeau.account.task.AccountTask;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.CorebeauApp;
 import com.zifei.corebeau.common.PreferenceManager;
+import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
 
 import org.w3c.dom.Text;
@@ -36,325 +38,334 @@ import java.util.Locale;
 /**
  * Created by im14s_000 on 2015/3/26.
  */
-public class SplashActivity extends CommonFragmentActvity implements View.OnClickListener {
+public class SplashActivity extends CommonFragmentActvity implements
+		View.OnClickListener {
 
-    private final int DELAY_MILLIS = 1000;
-    private PreferenceManager preferenceManager;
-    private CorebeauApp app;
-    private LinearLayout accountForm;
-    private EditText email, password, nickname;
-    private TextView typeChange, submit,findpassType;
-//    private boolean isLoginMode = true;
-    private AccountTask accountTask;
-    private ProgressBar progressBar;
-    private TaskType taskType;
-    private TextView logo;
-    private enum TaskType {
-        LOGIN, REGISTER, FINDPASS
-    }
+	private final int DELAY_MILLIS = 1000;
+	private PreferenceManager preferenceManager;
+	private CorebeauApp app;
+	private EditText email, password, nickname;
+	private TextView typeChange, submit, findpassType;
+	private AccountTask accountTask;
+	private ProgressBar progressBar;
+	private TaskType taskType;
+	private TextView logo;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+	private enum TaskType {
+		LOGIN, REGISTER, FINDPASS
+	}
 
-//        app = (CorebeauApp) getApplication();
-        preferenceManager = PreferenceManager.getInstance(this);
-        accountTask = new AccountTask(this);
-        logo = (TextView)findViewById(R.id.logo);
-        logo.setText("zfi");
-        logo.setTextColor(Color.WHITE);
-        logo.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
-        logo.setTextSize(50);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_splash);
 
+		preferenceManager = PreferenceManager.getInstance(this);
+		accountTask = new AccountTask(this);
+		logo = (TextView) findViewById(R.id.logo);
+		logo.setText("zfi");
+		logo.setTextColor(Color.WHITE);
+		logo.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+		logo.setTextSize(50);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-                MobclickAgent.onError(SplashActivity.this);
-            }
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+				MobclickAgent.onError(SplashActivity.this);
+			}
 
-        }).start();
+		}).start();
 
-        handler.postDelayed(run, DELAY_MILLIS);
-    }
+		handler.postDelayed(run, DELAY_MILLIS);
+	}
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+	}
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        handler.removeCallbacks(run);
-    }
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		handler.removeCallbacks(run);
+	}
 
-    final Handler handler = new Handler();
-    private Runnable run = new Runnable() {
-        @Override
-        public void run() {
+	final Handler handler = new Handler();
+	private Runnable run = new Runnable() {
+		@Override
+		public void run() {
 
+			String userId = PreferenceManager.getInstance(SplashActivity.this)
+					.getPreferencesString("userId");
 
-                String userId = PreferenceManager.getInstance(SplashActivity.this).getPreferencesString("userId");
+			if (userId != null && userId != "") {
+				Intent intent = new Intent(SplashActivity.this,
+						MainActivity.class);
+				startActivity(intent);
+				HashMap<String, String> map = new HashMap<String, String>();
+				map.put("time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+						Locale.getDefault()).format(new Date()));
+				MobclickAgent.onEvent(SplashActivity.this, "launcher", map);
 
-                if (userId != null && userId != "") {
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    map.put("time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()));
-                    MobclickAgent.onEvent(SplashActivity.this, "launcher", map);
-//                }
+				finish();
 
+			} else {
 
-            finish();
+				email = (EditText) findViewById(R.id.et_login_email);
+				password = (EditText) findViewById(R.id.et_login_pass);
+				nickname = (EditText) findViewById(R.id.et_login_nickname);
+				findpassType = (TextView) findViewById(R.id.tv_change_findpass);
+				typeChange = (TextView) findViewById(R.id.tv_type_change);
+				submit = (TextView) findViewById(R.id.tv_submit);
+				progressBar = (ProgressBar) findViewById(R.id.pb_splash);
 
-                } else {
+				findpassType.setOnClickListener(SplashActivity.this);
+				typeChange.setOnClickListener(SplashActivity.this);
+				submit.setOnClickListener(SplashActivity.this);
 
-                    // layout animation 넣지말고 edit text 따로해서 애니메이션 넣기
+				Animation appear1 = AnimationUtils.loadAnimation(
+						getApplicationContext(), R.anim.ani_login_form);
+				email.setVisibility(View.VISIBLE);
+				email.setAnimation(appear1);
+				password.setVisibility(View.VISIBLE);
+				password.setAnimation(appear1);
+				nickname.setVisibility(View.VISIBLE);
+				nickname.setAnimation(appear1);
 
-                    accountForm = (LinearLayout)findViewById(R.id.ll_login_form);
-                    email = (EditText)findViewById(R.id.et_login_email);
-                    password = (EditText)findViewById(R.id.et_login_pass);
-                    nickname = (EditText)findViewById(R.id.et_login_nickname);
-                    findpassType = (TextView)findViewById(R.id.tv_change_findpass);
-                    typeChange = (TextView)findViewById(R.id.tv_type_change);
-                    submit = (TextView)findViewById(R.id.tv_submit);
-                    progressBar = (ProgressBar) findViewById(R.id.pb_splash);
+				Animation appear3 = AnimationUtils.loadAnimation(
+						getApplicationContext(), R.anim.ani_logo);
+				logo.setAnimation(appear3);
+				logo.setVisibility(View.GONE);
+				Animation appear2 = AnimationUtils.loadAnimation(
+						getApplicationContext(), R.anim.ani_login_register);
 
-                    findpassType.setOnClickListener(SplashActivity.this);
-                    typeChange.setOnClickListener(SplashActivity.this);
-                    submit.setOnClickListener(SplashActivity.this);
+				typeChange.setVisibility(View.VISIBLE);
+				typeChange.setAnimation(appear2);
 
-                    Animation appear1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.ani_login_form);
-                    email.setVisibility(View.VISIBLE);
-                    email.setAnimation(appear1);
-                    password.setVisibility(View.VISIBLE);
-                    password.setAnimation(appear1);
-                    nickname.setVisibility(View.VISIBLE);
-                    nickname.setAnimation(appear1);
+				submit.setVisibility(View.VISIBLE);
+				submit.setAnimation(appear2);
 
-                    Animation appear3 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.ani_logo);
-                    logo.setAnimation(appear3);
-                    logo.setVisibility(View.GONE);
-                    Animation appear2 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.ani_login_register);
+				taskType = TaskType.REGISTER;
+				setTextByType();
+			}
+		}
+	};
 
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.tv_submit:
+			paramCheck();
+			break;
+		case R.id.tv_type_change:
+			if (taskType == TaskType.REGISTER) {
+				this.taskType = TaskType.LOGIN;
+				setTextByType();
+			} else if (taskType == TaskType.LOGIN) {
+				this.taskType = TaskType.REGISTER;
+				setTextByType();
+			} else {
+				this.taskType = TaskType.LOGIN;
+				setTextByType();
+			}
+			break;
+		case R.id.tv_change_findpass:
+			this.taskType = TaskType.FINDPASS;
+			setTextByType();
+			break;
+		}
+	}
 
-                    typeChange.setVisibility(View.VISIBLE);
-                    typeChange.setAnimation(appear2);
+	private void setTextByType() {
+		switch (taskType) {
+		case LOGIN:
+			findpassType.setVisibility(View.VISIBLE);
+			findpassType.setText("are you forget password?");
+			typeChange.setText("register");
+			submit.setText("login");
+			password.setVisibility(View.VISIBLE);
+			nickname.setVisibility(View.GONE);
 
-                    submit.setVisibility(View.VISIBLE);
-                    submit.setAnimation(appear2);
+			break;
 
-                    taskType = TaskType.REGISTER;
-                    setTextByType();
-                }
-        }
-    };
+		case REGISTER:
+			findpassType.setVisibility(View.GONE);
+			typeChange.setText("are you already joined?");
+			submit.setText("register");
+			password.setVisibility(View.VISIBLE);
+			nickname.setVisibility(View.VISIBLE);
+			break;
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_submit :
-                paramCheck();
-                break;
-            case R.id.tv_type_change :
-                if(taskType == TaskType.REGISTER){
-                    this.taskType = TaskType.LOGIN;
-                    setTextByType();
-                } else if(taskType == TaskType.LOGIN){
-                    this.taskType = TaskType.REGISTER;
-                    setTextByType();
-                } else {
-                    this.taskType = TaskType.LOGIN;
-                    setTextByType();
-                }
-                break;
-            case R.id.tv_change_findpass :
-                this.taskType = TaskType.FINDPASS;
-                setTextByType();
-                break;
-        }
-    }
+		case FINDPASS:
+			findpassType.setVisibility(View.GONE);
+			typeChange.setText("are you already joined?");
+			submit.setText("send");
+			password.setVisibility(View.GONE);
+			nickname.setVisibility(View.GONE);
 
-    private void setTextByType(){
-        switch (taskType) {
-            case LOGIN:
-                findpassType.setVisibility(View.VISIBLE);
-                findpassType.setText("are you forget password?");
-                typeChange.setText("register");
-                submit.setText("login");
+			break;
+		}
+	}
 
-//                email.setVisibility(View.VISIBLE);
-                password.setVisibility(View.VISIBLE);
-                nickname.setVisibility(View.GONE);
+	private String trim_email;
+	private String trim_password;
+	private String trim_nickname;
 
-                break;
+	private void paramCheck() {
 
-            case REGISTER:
-                findpassType.setVisibility(View.GONE);
-                typeChange.setText("are you already joined?");
-                submit.setText("register");
-                password.setVisibility(View.VISIBLE);
-                nickname.setVisibility(View.VISIBLE);
-                break;
+		trim_email = email.getText().toString().trim();
+		trim_password = password.getText().toString().trim();
+		trim_nickname = password.getText().toString().trim();
 
-            case FINDPASS:
-                findpassType.setVisibility(View.GONE);
-                typeChange.setText("are you already joined?");
-                submit.setText("send");
-                password.setVisibility(View.GONE);
-                nickname.setVisibility(View.GONE);
+		switch (taskType) {
+		case LOGIN:
+			if (loginParamCheck()) {
+				loginTask(trim_email, trim_password);
+			}
+			;
+			break;
 
-                break;
-        }
-    }
+		case REGISTER:
+			if (registerParamCheck()) {
+				registerTask(trim_email, trim_password, trim_nickname);
+			}
+			break;
 
-    private String trim_email;
-    private String trim_password;
-    private String trim_nickname;
+		case FINDPASS:
+			if (findPasswordParamCheck()) {
+				findPasswordTask(trim_email);
+			}
+			break;
+		}
+	}
 
+	private boolean loginParamCheck() {
+		if (TextUtils.isEmpty(trim_email)) {
+			Utils.showToast(SplashActivity.this, "email empty");
+			return false;
+		} else if (StringUtil.isEmail(trim_email)
+				|| StringUtil.isPhoneNum(trim_email)) {
+			Utils.showToast(SplashActivity.this,
+					"please input email or phone number");
+			return false;
+		} else if (TextUtils.isEmpty(trim_password)) {
+			Utils.showToast(SplashActivity.this, "password empty");
+			return false;
+		} else if (trim_password.length() < 8 || trim_password.length() > 16) {
+			Utils.showToast(SplashActivity.this, "password must be 8~16 word");
+			return false;
+		}
+		return true;
+	}
 
-    private void paramCheck(){
+	private boolean registerParamCheck() {
+		if (TextUtils.isEmpty(trim_email)) {
+			Utils.showToast(SplashActivity.this, "email empty");
+			return false;
+		} else if (StringUtil.isEmail(trim_email)
+				|| StringUtil.isPhoneNum(trim_email)) {
+			Utils.showToast(SplashActivity.this,
+					"please input email or phone number");
+			return false;
+		} else if (TextUtils.isEmpty(trim_password)) {
+			Utils.showToast(SplashActivity.this, "password empty");
+			return false;
+		} else if (trim_password.length() < 8 || trim_password.length() > 16) {
+			Utils.showToast(SplashActivity.this, "password must be 8~16 word");
+			return false;
+		} else if (taskType == TaskType.REGISTER & trim_nickname.isEmpty()) {
+			Utils.showToast(SplashActivity.this, "nickname empty");
+			return false;
+		}
+		return true;
+	}
 
-        // toast들  text animation으로 대체
-        // toast 색갈 변경.... custom toast
+	private boolean findPasswordParamCheck() {
+		if (TextUtils.isEmpty(trim_email)) {
+			Utils.showToast(SplashActivity.this, "email empty");
+			return false;
+		} else if (StringUtil.isEmail(trim_email)
+				|| StringUtil.isPhoneNum(trim_email)) {
+			Utils.showToast(SplashActivity.this,
+					"please input email or phone number");
+			return false;
+		}
+		return true;
+	}
 
-        trim_email = email.getText().toString().trim();
-        trim_password = password.getText().toString().trim();
-        trim_nickname = password.getText().toString().trim();
+	private void loginTask(String email, String password) {
+		progressBar.setVisibility(View.VISIBLE);
+		accountTask.login(email, password,
+				new AsyncCallBacks.TwoOne<Integer, String, String>() {
 
-        switch (taskType) {
-            case LOGIN:
-                if(loginParamCheck()){
-                    loginTask(trim_email,trim_password);
-                };
-                break;
+					@Override
+					public void onSuccess(Integer state, String msg) {
+						progressBar.setVisibility(View.GONE);
+						Intent intent = new Intent(SplashActivity.this,
+								MainActivity.class);
 
-            case REGISTER:
-                if(registerParamCheck()){
-                    registerTask(trim_email, trim_password, trim_nickname);
-                }
-                break;
+						startActivity(intent);
+						finish();
+					}
 
-            case FINDPASS:
-                if(findPasswordParamCheck()) {
-                    findPasswordTask(trim_email);
-                }
-                break;
-        }
-    }
+					@Override
+					public void onError(String errorMsg) {
+						progressBar.setVisibility(View.GONE);
+						Utils.showToast(SplashActivity.this, errorMsg);
+					}
+				});
+	}
 
-    private boolean loginParamCheck(){
-        if (TextUtils.isEmpty(trim_email)) {
-            Utils.showToast(SplashActivity.this, "email empty");
-            return false;
-//        } else if (trim_email) {  // check email form
-        } else if (TextUtils.isEmpty(trim_password)) {
-            Utils.showToast(SplashActivity.this, "password empty");
-            return false;
-        } else if(trim_password.length()< 8 || trim_password.length()> 16){
-            Utils.showToast(SplashActivity.this, "password must be 8~16 word");
-            return false;
-        }
-        return true;
-    }
+	private void registerTask(String email, String password, String nickname) {
+		progressBar.setVisibility(View.VISIBLE);
+		accountTask.register(email, password, nickname,
+				new AsyncCallBacks.ZeroTwo<Integer, String>() {
 
-    private boolean registerParamCheck(){
-        if (TextUtils.isEmpty(trim_email)) {
-            Utils.showToast(SplashActivity.this, "email empty");
-            return false;
-//        } else if (trim_email) {  // check email form
+					@Override
+					public void onSuccess() {
+						progressBar.setVisibility(View.GONE);
+						Intent intent = new Intent(SplashActivity.this,
+								MainActivity.class);
 
-        } else if (TextUtils.isEmpty(trim_password)) {
-            Utils.showToast(SplashActivity.this, "password empty");
-            return false;
-        } else if(trim_password.length()< 8 || trim_password.length()> 16){
-            Utils.showToast(SplashActivity.this, "password must be 8~16 word");
-            return false;
-        }else if(taskType == TaskType.REGISTER & trim_nickname.isEmpty()){
-            Utils.showToast(SplashActivity.this, "nickname empty");
-            return false;
-//        }else if(isRegister == true & trim_nickname.isEmpty()){
-//            Utils.showToast(SplashActivity.this, "nickname empty");
-            //nick name   %^&*( impossible and 7 ~ 1? word
-        }
-        return true;
-    }
+						startActivity(intent);
+						finish();
+					}
 
-    private boolean findPasswordParamCheck(){
-        if (TextUtils.isEmpty(trim_email)) {
-            Utils.showToast(SplashActivity.this, "email empty");
-            return false;
-//        } else if (trim_email) {  // check email form
-        }
-        return true;
-    }
+					@Override
+					public void onError(Integer status, String msg) {
+						progressBar.setVisibility(View.GONE);
 
-    private void loginTask(String email, String password){
-        progressBar.setVisibility(View.VISIBLE);
-        accountTask.login(email, password, new AsyncCallBacks.TwoOne<Integer, String, String>() {
+						if (status == RegisterResponse.ACCOUNT_EXIST) {
+							Utils.showToast(SplashActivity.this,
+									"already registered");
+						} else if (status == RegisterResponse.NICKNAME_EXIST) {
+							Utils.showToast(SplashActivity.this,
+									"please write another nickname");
+						}
 
-            @Override
-            public void onSuccess(Integer state, String msg) {
-                progressBar.setVisibility(View.GONE);
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+						Utils.showToast(SplashActivity.this, msg);
+					}
+				});
+	}
 
-                startActivity(intent);
-                finish();
-            }
+	private void findPasswordTask(String email) {
+		progressBar.setVisibility(View.VISIBLE);
+		accountTask.findPassword(email, new AsyncCallBacks.ZeroOne<String>() {
 
-            @Override
-            public void onError(String errorMsg) {
-                progressBar.setVisibility(View.GONE);
-                Utils.showToast(SplashActivity.this, errorMsg);
-            }
-        });
-    }
+			@Override
+			public void onSuccess() {
+				progressBar.setVisibility(View.GONE);
+				Utils.showToast(SplashActivity.this,
+						"we send success to your email, check your new pass on email");
+			}
 
-
-    private void registerTask(String email, String password, String nickname){
-        progressBar.setVisibility(View.VISIBLE);
-        accountTask.register(email, password, nickname, new AsyncCallBacks.ZeroOne<String>() {
-
-            @Override
-            public void onSuccess() {
-                progressBar.setVisibility(View.GONE);
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-
-                startActivity(intent);
-                finish();
-            }
-
-            @Override
-            public void onError(String errorMsg) {
-                progressBar.setVisibility(View.GONE);
-                Utils.showToast(SplashActivity.this, errorMsg);
-            }
-        });
-    }
-
-
-    private void findPasswordTask(String email){
-        progressBar.setVisibility(View.VISIBLE);
-//        accountTask.findPassword(email, password, nickname, new AsyncCallBacks.ZeroOne<String>() {
-//
-//            @Override
-//            public void onSuccess() {
-//                progressBar.setVisibility(View.GONE);
-//                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-//
-//                startActivity(intent);
-//                finish();
-//            }
-//
-//            @Override
-//            public void onError(String errorMsg) {
-//                progressBar.setVisibility(View.GONE);
-//                Utils.showToast(SplashActivity.this, errorMsg);
-//            }
-//        });
-    }
+			@Override
+			public void onError(String errorMsg) {
+				progressBar.setVisibility(View.GONE);
+				Utils.showToast(SplashActivity.this, errorMsg);
+			}
+		});
+	}
 
 }

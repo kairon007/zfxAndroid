@@ -3,6 +3,7 @@ package com.zifei.corebeau.account.task;
 import android.content.Context;
 
 import com.zifei.corebeau.account.bean.UserInfo;
+import com.zifei.corebeau.account.bean.response.FindPasswordResponse;
 import com.zifei.corebeau.account.bean.response.LoginResponse;
 import com.zifei.corebeau.account.bean.response.RegisterResponse;
 import com.zifei.corebeau.common.AsyncCallBacks;
@@ -74,7 +75,7 @@ public class AccountTask {
 
     }
 
-    public void register(final String phone, final String password, final String nickname, final AsyncCallBacks.ZeroOne<String> callBack) {
+    public void register(final String phone, final String password, final String nickname, final AsyncCallBacks.ZeroTwo<Integer,String> callBack) {
 
         Map<String, Object> params = Utils.buildMap("phone", phone, "password", password);
 
@@ -94,20 +95,18 @@ public class AccountTask {
 
                     callBack.onSuccess();
 
-                } else if (status == RegisterResponse.EMAIL_EXIST) {
-                    callBack.onError(msg);
+                } else if (status == RegisterResponse.ACCOUNT_EXIST) {
+                    callBack.onError(status, msg);
                 } else if (status == RegisterResponse.NICKNAME_EXIST) {
-                    callBack.onError(msg);
-                } else if (status == RegisterResponse.FAILED) {
-                    callBack.onError(msg);
+                    callBack.onError(status, msg);
                 } else {
-                    callBack.onError(msg);
+                    callBack.onError(status, msg);
                 }
             }
 
             @Override
             public void onError(Integer status, String msg) {
-                callBack.onError(msg);
+                callBack.onError(status, msg);
             }
 
         });
@@ -116,16 +115,16 @@ public class AccountTask {
     public void findPassword(String email,final AsyncCallBacks.ZeroOne<String> callBack) {
         Map<String, Object> params = Utils.buildMap( "email", email);
 
-        NetworkExecutor.post(UrlConstants.FINDPASS, params, Response.class, new NetworkExecutor.CallBack<Response>() {
+        NetworkExecutor.post(UrlConstants.FINDPASS, params, FindPasswordResponse.class, new NetworkExecutor.CallBack<FindPasswordResponse>() {
             @Override
-            public void onSuccess(Response response) {
+            public void onSuccess(FindPasswordResponse response) {
 
                 int status = response.getStatusCode();
                 String msg = response.getMsg();
 
                 if (status == Response.SUCCESS) {
                     callBack.onSuccess();
-                } else if (status == Response.FAILED) {
+                } else if (status == FindPasswordResponse.ACCOUNT_NOT_EXIST) {
                     callBack.onError(msg);
                 } else {
                     callBack.onError(msg);
