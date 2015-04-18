@@ -32,6 +32,7 @@ public abstract class BarActivity extends Activity {
 				e.printStackTrace();
 			}
 		}
+		
 
 		if (callback != null) {
 			callback.onCreate(savedInstanceState);
