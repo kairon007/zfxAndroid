@@ -28,12 +28,15 @@ public class AccountTask {
 		userInfoService = new UserInfoService(context);
 	}
 
-	public void login(final String email, final String password,
+	public void login(final String account, final String password,
 			final AsyncCallBacks.TwoOne<Integer, String, String> callback) {
 
-		Map<String, Object> params = Utils.buildMap("email", email, "password",
-				password, "osVersion", DeviceUtils.getSDKVersion(),
-				"appVersion", Utils.getVersionCode());
+		Map<String, Object> params = Utils.buildMap("account", account, "password",
+				password, "imei", DeviceUtils.getDeviceId(CorebeauApp.app),
+				"manufacturer", DeviceUtils.getManufacturer(),
+				"appVersion", Utils.getVersionCode(),"androidId",
+				DeviceUtils.getAndroidId(), "macAddress",
+				DeviceUtils.getMacAddress());
 
 		NetworkExecutor.post(UrlConstants.LOGIN, params, LoginResponse.class,
 				new NetworkExecutor.CallBack<LoginResponse>() {
