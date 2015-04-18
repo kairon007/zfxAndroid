@@ -12,12 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.etsy.android.grid.util.DynamicHeightImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.zifei.corebeau.R;
+import com.zifei.corebeau.common.ui.widget.staggered.util.DynamicHeightImageView;
 import com.zifei.corebeau.search.bean.RecommendPostList;
 
 public class SampleAdapter extends ArrayAdapter<RecommendPostList> {

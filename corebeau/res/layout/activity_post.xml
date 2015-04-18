@@ -31,7 +31,7 @@
                     android:layout_height="wrap_content" >
                 </com.zifei.corebeau.post.ui.view.PostViewPager>
 
-                <com.viewpagerindicator.CirclePageIndicator
+                <com.zifei.corebeau.common.ui.widget.indicator.CirclePageIndicator
                     android:id="@+id/indicator"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"

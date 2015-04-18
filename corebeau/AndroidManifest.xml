@@ -42,7 +42,7 @@
         <activity android:name=".my.ui.UploadActivity"
             android:theme="@android:style/Theme.NoTitleBar"></activity>
         
-        <activity android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity"
+        <activity android:name="com.zifei.corebeau.my.ui.selector.MultiImageSelectorActivity"
             android:theme="@android:style/Theme.NoTitleBar"></activity>
         
         <activity android:name="com.zifei.corebeau.my.ui.FollowActivity"

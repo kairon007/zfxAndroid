@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ListView;
 
-import com.meetme.android.horizontallistview.HorizontalListView;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.User.bean.response.PostResponse;
 import com.zifei.corebeau.User.task.PostTask;
@@ -20,7 +19,6 @@ public class OtherUserActivity extends Activity {
 
     private ListView imageListView;
     //    private ListView commentListView;
-    private HorizontalListView subListView;
     private PostTask postTask;
     private OtherUserPostAdapter imageAdapter;
     private Integer postId;

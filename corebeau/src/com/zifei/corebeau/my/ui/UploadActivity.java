@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.crypto.Mac;
 
-import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +34,7 @@ import com.zifei.corebeau.common.ui.BarActivity;
 import com.zifei.corebeau.my.bean.MyPostListResponse;
 import com.zifei.corebeau.my.bean.QiniuResponse;
 import com.zifei.corebeau.my.task.MyTask;
+import com.zifei.corebeau.my.ui.selector.MultiImageSelectorActivity;
 import com.zifei.corebeau.test.TestData;
 import com.zifei.corebeau.utils.StringUtil;
 

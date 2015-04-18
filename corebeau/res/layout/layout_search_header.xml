@@ -12,11 +12,11 @@
         android:layout_height="50dp"
         android:background="#FFFFFF"></SearchView>
 
-    <com.meetme.android.horizontallistview.HorizontalListView
+    <com.zifei.corebeau.common.ui.view.HorizontalListView
         android:id="@+id/hlv_search"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        ></com.meetme.android.horizontallistview.HorizontalListView>
+        ></com.zifei.corebeau.common.ui.view.HorizontalListView>
     
 
 </LinearLayout>

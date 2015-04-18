@@ -1,5 +1,7 @@
 package com.zifei.corebeau.search.ui.adapter;
 
+import java.util.List;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.meetme.android.horizontallistview.HorizontalListView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -15,10 +16,9 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.R.color;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
+import com.zifei.corebeau.common.ui.view.HorizontalListView;
 import com.zifei.corebeau.search.bean.RecommendUserList;
 import com.zifei.corebeau.utils.StringUtil;
-
-import java.util.List;
 
 /**
  * Created by im14s_000 on 2015/4/2.

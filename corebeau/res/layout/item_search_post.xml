@@ -11,7 +11,7 @@
         android:layout_width="match_parent" 
         />
 
-    <com.etsy.android.grid.util.DynamicHeightImageView
+    <com.zifei.corebeau.common.ui.widget.staggered.util.DynamicHeightImageView
         android:layout_below="@id/search_image_top_divider"
         android:id="@+id/iv_search_post"
         android:layout_width="match_parent"
