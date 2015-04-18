@@ -5,7 +5,7 @@
     android:background="@color/common_bar_navy" >
 
     <ImageView 
-        android:id="@+id/iv_bar_left"
+        android:id="@+id/navi_bar_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"

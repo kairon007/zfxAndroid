@@ -22,7 +22,7 @@
         android:id="@+id/et_upload_text"
         android:layout_height="200dp"
         android:layout_width="match_parent"
-        and
+        android:gravity="top"
         />
 	
 

@@ -50,7 +50,7 @@ public class NavigationBar extends LinearLayout {
 //        leftBtn = (Button) findViewById(R.id.navi_bar_left_btn);
         rightBtn = (ImageButton) findViewById(R.id.navi_bar_right_btn);
         rightText = (TextView) findViewById(R.id.navi_bar_right_text);
-        backImageView = (ImageView)findViewById(R.id.iv_bar_left);
+        backImageView = (ImageView)findViewById(R.id.navi_bar_left);
 
         paint = new Paint();
     }
@@ -84,6 +84,7 @@ public class NavigationBar extends LinearLayout {
 //        this.leftBtn.setVisibility(View.VISIBLE);
         backImageView.setVisibility(View.VISIBLE);
 //        this.leftBtn.setOnClickListener(l);
+        backImageView.setOnClickListener(l);
     }
 
     public void setRightButton(int resid, OnClickListener l) {

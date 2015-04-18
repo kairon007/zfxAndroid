@@ -156,10 +156,9 @@ public class UploadActivity extends BarActivity implements OnClickListener {
 			ImageView imageView;
 			if (convertView == null) {
 				imageView = new ImageView(mContext);
-				imageView.setLayoutParams(new GridView.LayoutParams(300, 300));
-				imageView.setBackground(background);
+				imageView.setLayoutParams(new GridView.LayoutParams(350, 350));
+				imageView.setBackgroundResource(R.drawable.upload_preimage);
 				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-				imageView.setPadding(8, 8, 8, 8);
 			} else {
 				imageView = (ImageView) convertView;
 			}
