@@ -35,7 +35,7 @@ public class MultiImageSelectorActivity extends FragmentActivity implements Mult
     /** 多选 */
     public static final int MODE_MULTI = 1;
 
-    private ArrayList<String> resultList = new ArrayList<>();
+    private ArrayList<String> resultList = new ArrayList<String>();
     private Button mSubmitButton;
     private int mDefaultCount;
 
