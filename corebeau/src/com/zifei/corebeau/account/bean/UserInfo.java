@@ -16,6 +16,8 @@ public class UserInfo {
     private String picUrl;
 
     private String picThumbUrl;
+    
+    private String userPhone;
 
     private short gender;
 
@@ -27,7 +29,25 @@ public class UserInfo {
 
     private boolean emailVerfied;
     
-    public String getAccount() {
+    private Long userRegtime;
+    
+	public Long getUserRegtime() {
+		return userRegtime;
+	}
+
+	public void setUserRegtime(Long userRegtime) {
+		this.userRegtime = userRegtime;
+	}
+
+	public String getUserPhone() {
+		return userPhone;
+	}
+
+	public void setUserPhone(String userPhone) {
+		this.userPhone = userPhone;
+	}
+
+	public String getAccount() {
 		return account;
 	}
 

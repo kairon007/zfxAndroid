@@ -86,11 +86,9 @@ public class AccountTask {
 			final AsyncCallBacks.TwoTwo<Integer, String, Integer, String> callback) {
 
 		Map<String, Object> params = Utils.buildMap("imei",
-				DeviceUtils.getDeviceId(CorebeauApp.app), "model",
-				DeviceUtils.getModel(), "manufacturer",
-				DeviceUtils.getManufacturer(), "osVersion",
-				DeviceUtils.getSDKVersion(), "appVersion",
-				Utils.getVersionCode());
+				DeviceUtils.getDeviceId(CorebeauApp.app), "androidId",
+				DeviceUtils.getAndroidId(), "macAddress",
+				DeviceUtils.getMacAddress());
 
 		NetworkExecutor.post(UrlConstants.LOGIN_BY_DEVICE, params,
 				LoginByDeviceResponse.class,
@@ -101,7 +99,7 @@ public class AccountTask {
 						int status = response.getStatusCode();
 						String msg = response.getMsg();
 
-						if (status == LoginByDeviceResponse.SUCCESS) {
+						if (status == LoginByDeviceResponse.SUCCESS || status == LoginByDeviceResponse.ACCOUNT_EXIST) {
 
 							UserInfo userInfo = new UserInfo();
 							userInfo.setUserId(response.getUserInfo()
@@ -110,6 +108,8 @@ public class AccountTask {
 							userInfoService.updateCurentUserInfo(userInfo);
 							callback.onSuccess(status, msg);
 							
+						} else if (status == LoginByDeviceResponse.IMEI_DUPLICATE){
+							callback.onError(status, msg);
 //						} else if (status == LoginByDeviceResponse.   ) {  // distinguish go where??
 //						} else if (status == LoginByDeviceResponse.   ) {
 //						} else if (status == LoginByDeviceResponse.   ) {
