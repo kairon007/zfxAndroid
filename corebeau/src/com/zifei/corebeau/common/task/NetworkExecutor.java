@@ -14,7 +14,6 @@ import com.zifei.corebeau.common.net.HttpNetworkClient;
 import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.utils.StringUtil;
 
-
 public class NetworkExecutor {
 
 	private static UserInfoService userInfoService = new UserInfoService(CorebeauApp.app);
@@ -26,14 +25,26 @@ public class NetworkExecutor {
 		task.execute();
 		return task;
 	}
-	
+
+	public static <T> void syncPost(String url, Map<String, Object> paramData, Class<T> resultType, CallBack<T> callback) {
+		paramData = setUserIdLoginId(paramData);
+		CustomHttpResponse result = HttpNetworkClient.post(url, paramData);
+		processResult(result, callback, resultType);
+	}
+
 	private static Map<String, Object> setUserIdLoginId(Map<String, Object> paramData) {
-		paramData.put("loginId", userInfoService.getLoginId());
-		paramData.put("userId", userInfoService.getUserId());
+		String userId = userInfoService.getUserId();
+		String loginId = userInfoService.getLoginId();
+		
+		if (!StringUtil.isEmpty(loginId)) {
+		
+			paramData.put("loginId", loginId);
+			paramData.put("userId", userId);
+		}
 		return paramData;
 	}
-	
-	private static class NetworkAsync<T> extends AsyncTask<Void, Integer, CustomHttpResponse> implements CancelListener{
+
+	public static class NetworkAsync<T> extends AsyncTask<Void, Integer, CustomHttpResponse> {
 
 		private String url;
 
@@ -58,78 +69,56 @@ public class NetworkExecutor {
 		@Override
 		protected void onPostExecute(CustomHttpResponse result) {
 			super.onPostExecute(result);
-			if (result != null) {
-				int statusCode = result.getStatusCode();
-				if (statusCode == NetworkConstants.OK) {
-					ObjectMapper objectMapper = new ObjectMapper();
-					T data = null;
-					try {
-						if (!StringUtil.isEmpty(result.getData())) {
-							data = objectMapper.readValue(result.getData(), resultType);
-						}
-					} catch (Exception e) {
-						callback.onError(NetworkConstants.RESPONSE_DECODE_EXCEPTION, "网络返回数据解析异常，请稍后再试");
+			processResult(result, callback, resultType);
+		}
+	}
+
+	private static <T> void processResult(CustomHttpResponse result, CallBack<T> callback, Class<T> resultType) {
+		if (result != null) {
+			int statusCode = result.getStatusCode();
+			if (statusCode == NetworkConstants.OK) {
+				ObjectMapper objectMapper = new ObjectMapper();
+				T data = null;
+				try {
+					if (!StringUtil.isEmpty(result.getData())) {
+						data = objectMapper.readValue(result.getData(), resultType);
+					}
+				} catch (Exception e) {
+					callback.onError(NetworkConstants.RESPONSE_DECODE_EXCEPTION, "网络返回数据解析异常，请稍后再试");
+					return;
+				}
+				if (data != null) {
+					Response response = (Response) data;
+					if (response.getStatusCode() >= 200 && response.getStatusCode() < 300) {
+						callback.onSuccess(data);
 						return;
 					}
-					if (data != null) {
-						Response response = (Response) data;
-						if (response.getStatusCode() >= 200 && response.getStatusCode() < 300) {
-							callback.onSuccess(data);
-							return;
-						}
-						switch (response.getStatusCode()) {
-						case Response.DUPLICATE_REQUEST: {
-							callback.onError(Response.DUPLICATE_REQUEST, "请求太频繁，请稍后再试");
-							return;
-						}
-						case Response.NOT_LOGIN: {
-							callback.onError(Response.NOT_LOGIN, "您还没有登录，请登录");
-							return;
-						}
-						case Response.PARAM_INVALID: {
-							callback.onError(Response.PARAM_INVALID, "请求参数无效，请稍后再试");
-							return;
-						}
-						case Response.PARAM_PARSE_ERROR: {
-							callback.onError(Response.PARAM_PARSE_ERROR, "参数解析出错，请稍后再试");
-							return;
-						}
-						default:
-							callback.onError(response.getStatusCode(), response.getMsg());
-							return;
-						}
-					} else {
-						callback.onError(NetworkConstants.NETWORK_EXCEPTION, "未知错误，请稍后再试");
-					}
+					callback.onError(response.getStatusCode(), response.getMsg());
 				} else {
-					switch (statusCode) {
-					case NetworkConstants.NETWORK_TIMEOUT_EXCEPTION: {
-						callback.onError(NetworkConstants.NETWORK_TIMEOUT_EXCEPTION, "网络请求超时，请检查网络后再试");
-						return;
-					}
-					case NetworkConstants.PARAM_ENCRPT_EXCEPTION: {
-						callback.onError(NetworkConstants.PARAM_ENCRPT_EXCEPTION, "参数加密错误，请稍后再试");
-						return;
-					}
-					case NetworkConstants.NETWORK_EXCEPTION: {
-						callback.onError(NetworkConstants.NETWORK_EXCEPTION, "网络异常，请检查网络后再试");
-						return;
-					}
-					default:
-						callback.onError(NetworkConstants.NETWORK_EXCEPTION, "未知错误，请稍后再试");
-						return;
-					}
+					callback.onError(NetworkConstants.NETWORK_EXCEPTION, "未知错误，请稍后再试");
+				}
+			} else {
+				switch (statusCode) {
+				case NetworkConstants.NETWORK_TIMEOUT_EXCEPTION: {
+					callback.onError(NetworkConstants.NETWORK_TIMEOUT_EXCEPTION, "网络请求超时，请检查网络后再试");
+					break;
+				}
+				case NetworkConstants.PARAM_ENCRPT_EXCEPTION: {
+					callback.onError(NetworkConstants.PARAM_ENCRPT_EXCEPTION, "参数加密错误，请稍后再试");
+					break;
+				}
+				case NetworkConstants.NETWORK_EXCEPTION: {
+					callback.onError(NetworkConstants.NETWORK_EXCEPTION, "网络异常，请检查网络后再试");
+					break;
+				}
+				default:
+					callback.onError(NetworkConstants.NETWORK_EXCEPTION, "未知错误，请稍后再试");
+					break;
 				}
 			}
-		}
-
-		@Override
-		public void cancel() {
-			cancel(true);
 		}
 	}
 
 	public static class CallBack<T> extends AsyncCallBacks.OneTwo<T, Integer, String> {
 	}
-
 }
