@@ -1,5 +1,7 @@
 package com.zifei.corebeau.my.ui.selector.bean;
 
+import android.net.Uri;
+
 /**
  * 图片实体
  * Created by Nereo on 2015/4/7.

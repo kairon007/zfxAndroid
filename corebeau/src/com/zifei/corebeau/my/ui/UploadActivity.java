@@ -1,17 +1,15 @@
 package com.zifei.corebeau.my.ui;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.crypto.Mac;
-
-
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,23 +18,26 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.qiniu.android.common.Config;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.BarActivity;
-import com.zifei.corebeau.my.bean.MyPostListResponse;
 import com.zifei.corebeau.my.bean.QiniuResponse;
+import com.zifei.corebeau.my.qiniu.QiniuTask;
+import com.zifei.corebeau.my.qiniu.up.UpParam;
+import com.zifei.corebeau.my.qiniu.up.UploadHandler;
+import com.zifei.corebeau.my.qiniu.up.rs.UploadResultCallRet;
+import com.zifei.corebeau.my.qiniu.up.slice.Block;
 import com.zifei.corebeau.my.task.MyTask;
 import com.zifei.corebeau.my.ui.selector.MultiImageSelectorActivity;
-import com.zifei.corebeau.test.TestData;
-import com.zifei.corebeau.utils.StringUtil;
+import com.zifei.corebeau.utils.Utils;
 
 public class UploadActivity extends BarActivity implements OnClickListener {
 
@@ -47,6 +48,7 @@ public class UploadActivity extends BarActivity implements OnClickListener {
 	private ImageLoaderConfiguration config;
 	private GridView gridView;
 	private MyTask myTask;
+	private QiniuTask qiniuTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class UploadActivity extends BarActivity implements OnClickListener {
 		initLoader();
 		setActivityStatus();
 		myTask = new MyTask(this);
+		qiniuTask = new QiniuTask(this);
 	}
 	
 	private void setActivityStatus(){
@@ -78,18 +81,10 @@ public class UploadActivity extends BarActivity implements OnClickListener {
 
 	private void startSelectActivity() {
 		Intent intent = new Intent(this, MultiImageSelectorActivity.class);
-
-		// whether show camera
 		intent.putExtra(MultiImageSelectorActivity.EXTRA_SHOW_CAMERA, true);
-
-		// max select image amount
 		intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, 9);
-
-		// select mode (MultiImageSelectorActivity.MODE_SINGLE OR
-		// MultiImageSelectorActivity.MODE_MULTI)
 		intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_MODE,
 				MultiImageSelectorActivity.MODE_MULTI);
-
 		startActivityForResult(intent, REQUEST_IMAGE);
 	}
 
@@ -100,46 +95,18 @@ public class UploadActivity extends BarActivity implements OnClickListener {
 			if (resultCode == RESULT_OK) {
 				mSelectPath = data
 						.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-				// StringBuilder sb = new StringBuilder();
 				ArrayList<String> imageList = new ArrayList<String>();
 				for (String p : mSelectPath) {
-					// sb.append(p);
-					// sb.append("\n");
 					imageList.add(p);
+					qiniuTask.preUpload(Uri.fromFile(new File(p)), uploadHandler);
 				}
-				// mResultText.setText(sb.toString());
 				gridView.setAdapter(new ImageAdapter(this,imageList));
 			}
 		}
 	}
 	
-	private void submit(final ArrayList<String> imageList){
-		new Thread(new Runnable(){
-            @Override
-            public void run() {
-            	for (String dataUri : imageList) {
-            		uploadImage(dataUri);
-				}
-                
-            }
-        }).start();
-	}
-	
-	private void uploadImage(String dataUri) {
-		// data = <File对象、或 文件路径、或 字节数组>
-		// String data =
-		String key = "fix where? get? random?";
-		String token = "getToken()  value";
-
-		if (token != null) {
-			UploadManager uploadManager = new UploadManager();
-			uploadManager.put(dataUri, key, token, new UpCompletionHandler() {
-				@Override
-				public void complete(String key, ResponseInfo info,
-						JSONObject response) {
-				}
-			}, null);
-		}
+	private void submit(){
+		qiniuTask.doUpload();
 	}
 	
 	private void getToken() {
@@ -147,10 +114,12 @@ public class UploadActivity extends BarActivity implements OnClickListener {
 
 			@Override
 			public void onSuccess(QiniuResponse msg) {
+				
 			}
 
 			@Override
 			public void onError(String msg) {
+				
 			}
 		});
     }
@@ -197,11 +166,52 @@ public class UploadActivity extends BarActivity implements OnClickListener {
 
 			return imageView;
 		}
-
 	}
 
 	@Override
 	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.navi_bar_right_text:
+			submit();
+			break;
+		}
 	}
+	
+	
+	public UploadHandler uploadHandler = new UploadHandler() {
+		@Override
+		protected void onProcess(long contentLength, long currentUploadLength, long lastUploadLength, UpParam p, Object passParam) {
+		}
 
+		@Override
+		protected void onSuccess(UploadResultCallRet ret, UpParam p, Object passParam) {
+			Utils.showToast(UploadActivity.this, "success!!");
+			try {
+				String sourceId = qiniuTask.generateSourceId(p, passParam);
+				qiniuTask.clean(sourceId);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		@Override
+		protected void onFailure(UploadResultCallRet ret, UpParam p, Object passParam) {
+			if (ret.getException() != null) {
+				ret.getException().printStackTrace();
+			}
+		}
+
+		@Override
+		protected void onBlockSuccess(List<Block> uploadedBlocks, Block block, UpParam p, Object passParam) {
+			Utils.showToast(UploadActivity.this, "block success!!");
+			try {
+				String sourceId = qiniuTask.generateSourceId(p, passParam);
+				qiniuTask.addBlock(sourceId, block);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+	};
+	
 }
