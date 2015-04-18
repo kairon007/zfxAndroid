@@ -48,8 +48,8 @@ public class HttpNetworkClient {
 		ObjectMapper mapper = new ObjectMapper();
 		String encriptData = null;
 		try {
-			encriptData = AESTools.encode(mapper.writeValueAsString(paramData));
-			encriptData = URLEncoder.encode(encriptData, "UTF-8");
+			//encriptData = AESTools.encode(mapper.writeValueAsString(paramData));
+			encriptData = URLEncoder.encode(mapper.writeValueAsString(paramData), "UTF-8");
 		} catch (Exception e) {
 			customHttpResponse.setStatusCode(NetworkConstants.PARAM_ENCRPT_EXCEPTION);
 		}
