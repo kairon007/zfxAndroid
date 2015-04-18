@@ -23,7 +23,7 @@ public class TestData {
         list0.setPostId(0);
         list0.setUserId(0);
         list0.setUserNickname("zebra");
-        list0.setMessage("this is hen hao yifu duiduiduiduiduidui" +
+        list0.setMessage("this is hen hao yifu \n duiduiduiduiduidui" +
                 "ahahahahahah");
         list0.setPic("http://e1.vingle.net/t_ca_xl/pov2p85puxn26hsavykh.jpg");
         list0.setUserIcon("http://e0.vingle.net/t_us_m/opdr3ab94hxosfpwyl2x");

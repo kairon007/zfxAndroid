@@ -270,7 +270,7 @@ public class SplashActivity extends CommonFragmentActvity implements View.OnClic
         } else if (TextUtils.isEmpty(trim_password)) {
             Utils.showToast(SplashActivity.this, "password empty");
             return false;
-        } else if(trim_email.length()< 8 || trim_email.length()> 16){
+        } else if(trim_password.length()< 8 || trim_password.length()> 16){
             Utils.showToast(SplashActivity.this, "password must be 8~16 word");
             return false;
         }else if(taskType == TaskType.REGISTER & trim_nickname.isEmpty()){
