@@ -9,7 +9,7 @@ public class UserInfo {
 
     private String userId;
 
-    private String email;
+    private String account;
 
     private String nickName;
 
@@ -27,7 +27,15 @@ public class UserInfo {
 
     private boolean emailVerfied;
     
-    public String getLoginId() {
+    public String getAccount() {
+		return account;
+	}
+
+	public void setAccount(String account) {
+		this.account = account;
+	}
+
+	public String getLoginId() {
 		return loginId;
 	}
 
@@ -49,14 +57,6 @@ public class UserInfo {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getNickName() {

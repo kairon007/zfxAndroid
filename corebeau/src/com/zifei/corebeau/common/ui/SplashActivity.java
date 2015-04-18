@@ -1,20 +1,20 @@
 package com.zifei.corebeau.common.ui;
 
-import android.app.Activity;
-import android.content.DialogInterface;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -22,18 +22,12 @@ import com.umeng.analytics.MobclickAgent;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.account.bean.response.RegisterResponse;
 import com.zifei.corebeau.account.task.AccountTask;
+import com.zifei.corebeau.account.task.UserInfoService;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.CorebeauApp;
 import com.zifei.corebeau.common.PreferenceManager;
 import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
-
-import org.w3c.dom.Text;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
 
 /**
  * Created by im14s_000 on 2015/3/26.
@@ -42,7 +36,6 @@ public class SplashActivity extends CommonFragmentActvity implements
 		View.OnClickListener {
 
 	private final int DELAY_MILLIS = 1000;
-	private PreferenceManager preferenceManager;
 	private CorebeauApp app;
 	private EditText email, password, nickname;
 	private TextView typeChange, submit, findpassType;
@@ -50,6 +43,7 @@ public class SplashActivity extends CommonFragmentActvity implements
 	private ProgressBar progressBar;
 	private TaskType taskType;
 	private TextView logo;
+	private UserInfoService userInfoService;
 
 	private enum TaskType {
 		LOGIN, REGISTER, FINDPASS
@@ -60,8 +54,7 @@ public class SplashActivity extends CommonFragmentActvity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
 
-		preferenceManager = PreferenceManager.getInstance(this);
-		accountTask = new AccountTask(this);
+		init();
 		logo = (TextView) findViewById(R.id.logo);
 		logo.setText("zfi");
 		logo.setTextColor(Color.WHITE);
@@ -78,6 +71,11 @@ public class SplashActivity extends CommonFragmentActvity implements
 		}).start();
 
 		handler.postDelayed(run, DELAY_MILLIS);
+	}
+	
+	protected void init() {
+		accountTask = new AccountTask(this);
+		userInfoService = new UserInfoService(this);
 	}
 
 	@Override
@@ -96,61 +94,66 @@ public class SplashActivity extends CommonFragmentActvity implements
 		@Override
 		public void run() {
 
-			String userId = PreferenceManager.getInstance(SplashActivity.this)
-					.getPreferencesString("userId");
-
-			if (userId != null && userId != "") {
-				Intent intent = new Intent(SplashActivity.this,
-						MainActivity.class);
-				startActivity(intent);
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
-						Locale.getDefault()).format(new Date()));
-				MobclickAgent.onEvent(SplashActivity.this, "launcher", map);
-
-				finish();
+			if (!StringUtil.isEmpty(userInfoService.getLoginId()) && !StringUtil.isEmpty(userInfoService.getLoginId())) {
+				goMainActivity();
 
 			} else {
 
-				email = (EditText) findViewById(R.id.et_login_email);
-				password = (EditText) findViewById(R.id.et_login_pass);
-				nickname = (EditText) findViewById(R.id.et_login_nickname);
-				findpassType = (TextView) findViewById(R.id.tv_change_findpass);
-				typeChange = (TextView) findViewById(R.id.tv_type_change);
-				submit = (TextView) findViewById(R.id.tv_submit);
-				progressBar = (ProgressBar) findViewById(R.id.pb_splash);
-
-				findpassType.setOnClickListener(SplashActivity.this);
-				typeChange.setOnClickListener(SplashActivity.this);
-				submit.setOnClickListener(SplashActivity.this);
-
-				Animation appear1 = AnimationUtils.loadAnimation(
-						getApplicationContext(), R.anim.ani_login_form);
-				email.setVisibility(View.VISIBLE);
-				email.setAnimation(appear1);
-				password.setVisibility(View.VISIBLE);
-				password.setAnimation(appear1);
-				nickname.setVisibility(View.VISIBLE);
-				nickname.setAnimation(appear1);
-
-				Animation appear3 = AnimationUtils.loadAnimation(
-						getApplicationContext(), R.anim.ani_logo);
-				logo.setAnimation(appear3);
-				logo.setVisibility(View.GONE);
-				Animation appear2 = AnimationUtils.loadAnimation(
-						getApplicationContext(), R.anim.ani_login_register);
-
-				typeChange.setVisibility(View.VISIBLE);
-				typeChange.setAnimation(appear2);
-
-				submit.setVisibility(View.VISIBLE);
-				submit.setAnimation(appear2);
-
-				taskType = TaskType.REGISTER;
-				setTextByType();
+				loginByDevice();
 			}
 		}
 	};
+	
+	private void goMainActivity(){
+		Intent intent = new Intent(SplashActivity.this,
+				MainActivity.class);
+		startActivity(intent);
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+				Locale.getDefault()).format(new Date()));
+		MobclickAgent.onEvent(SplashActivity.this, "launcher", map);
+
+		finish();
+	}
+	
+	private void lauchLoginPage(){
+		email = (EditText) findViewById(R.id.et_login_email);
+		password = (EditText) findViewById(R.id.et_login_pass);
+		nickname = (EditText) findViewById(R.id.et_login_nickname);
+		findpassType = (TextView) findViewById(R.id.tv_change_findpass);
+		typeChange = (TextView) findViewById(R.id.tv_type_change);
+		submit = (TextView) findViewById(R.id.tv_submit);
+		progressBar = (ProgressBar) findViewById(R.id.pb_splash);
+
+		findpassType.setOnClickListener(SplashActivity.this);
+		typeChange.setOnClickListener(SplashActivity.this);
+		submit.setOnClickListener(SplashActivity.this);
+
+		Animation appear1 = AnimationUtils.loadAnimation(
+				getApplicationContext(), R.anim.ani_login_form);
+		email.setVisibility(View.VISIBLE);
+		email.setAnimation(appear1);
+		password.setVisibility(View.VISIBLE);
+		password.setAnimation(appear1);
+		nickname.setVisibility(View.VISIBLE);
+		nickname.setAnimation(appear1);
+
+		Animation appear3 = AnimationUtils.loadAnimation(
+				getApplicationContext(), R.anim.ani_logo);
+		logo.setAnimation(appear3);
+		logo.setVisibility(View.GONE);
+		Animation appear2 = AnimationUtils.loadAnimation(
+				getApplicationContext(), R.anim.ani_login_register);
+
+		typeChange.setVisibility(View.VISIBLE);
+		typeChange.setAnimation(appear2);
+
+		submit.setVisibility(View.VISIBLE);
+		submit.setAnimation(appear2);
+
+		taskType = TaskType.REGISTER;
+		setTextByType();
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -294,9 +297,9 @@ public class SplashActivity extends CommonFragmentActvity implements
 		return true;
 	}
 
-	private void loginTask(String email, String password) {
+	private void loginTask(String account, String password) {
 		progressBar.setVisibility(View.VISIBLE);
-		accountTask.login(email, password,
+		accountTask.login(account, password,
 				new AsyncCallBacks.TwoOne<Integer, String, String>() {
 
 					@Override
@@ -317,9 +320,9 @@ public class SplashActivity extends CommonFragmentActvity implements
 				});
 	}
 
-	private void registerTask(String email, String password, String nickname) {
+	private void registerTask(String account, String password, String nickname) {
 		progressBar.setVisibility(View.VISIBLE);
-		accountTask.register(email, password, nickname,
+		accountTask.register(account, password, nickname,
 				new AsyncCallBacks.ZeroTwo<Integer, String>() {
 
 					@Override
@@ -349,9 +352,9 @@ public class SplashActivity extends CommonFragmentActvity implements
 				});
 	}
 
-	private void findPasswordTask(String email) {
+	private void findPasswordTask(String account) {
 		progressBar.setVisibility(View.VISIBLE);
-		accountTask.findPassword(email, new AsyncCallBacks.ZeroOne<String>() {
+		accountTask.findPassword(account, new AsyncCallBacks.ZeroOne<String>() {
 
 			@Override
 			public void onSuccess() {
@@ -364,6 +367,20 @@ public class SplashActivity extends CommonFragmentActvity implements
 			public void onError(String errorMsg) {
 				progressBar.setVisibility(View.GONE);
 				Utils.showToast(SplashActivity.this, errorMsg);
+			}
+		});
+	}
+	
+	private void loginByDevice(){
+		accountTask.loginByDevice(new AsyncCallBacks.TwoTwo<Integer,String,Integer,String>(){
+			@Override
+			public void onSuccess(Integer status, String msg) {
+				goMainActivity();
+			}
+
+			@Override
+			public void onError(Integer status, String errorMsg) {
+				lauchLoginPage();
 			}
 		});
 	}

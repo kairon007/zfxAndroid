@@ -10,6 +10,8 @@ public class UrlConstants {
 	 
 	 public static String LOGIN = BASE_URL + "/login";
 	 
+	 public static String LOGIN_BY_DEVICE = BASE_URL + "/login/byDevice";
+	 
 	 public static String LOGOUT = BASE_URL + "/logout";
 
     public static String REGIST = BASE_URL + "/register";

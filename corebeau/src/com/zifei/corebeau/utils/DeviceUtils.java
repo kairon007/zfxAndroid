@@ -10,17 +10,18 @@ import java.security.NoSuchAlgorithmException;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
+
+import com.zifei.corebeau.common.CorebeauApp;
 
 /**
  * get device infomation
@@ -28,10 +29,6 @@ import android.util.Log;
  * @author Kevin
  */
 public class DeviceUtils {
-	
-	
-	
-	
 	
     public static final   String m_szDevIDShort = "35" + //we make this look like a valid IMEI
 
@@ -222,40 +219,34 @@ public class DeviceUtils {
             PackageInfo pi=context.getPackageManager().getPackageInfo(context.getPackageName(), 0);  
             return pi.versionCode +"";  
         } catch (NameNotFoundException e) {  
-            // TODO Auto-generated catch block  
             e.printStackTrace();  
             return "0";  
         }  
     }
     
-    public static String getAndroidId(Context context){
-    	try {
-    		return Secure.getString(context.getContentResolver(),Secure.ANDROID_ID);
-		} catch (Exception e) {
-			return "0";
+    
+    public static String getMacAddress() {
+		WifiManager wimanager = (WifiManager) CorebeauApp.app.getSystemService(Context.WIFI_SERVICE);
+
+		String macAddress = wimanager.getConnectionInfo().getMacAddress();
+
+		if (macAddress == null) {
+			macAddress = "";
 		}
-    	
-    }
-    
-    public static String getMacAddress(Context context) {
-        String macAddress = "000000000000";
-        try {
-            WifiManager wifiMgr = (WifiManager) context
-                    .getSystemService(Context.WIFI_SERVICE);
-            WifiInfo info = (null == wifiMgr ? null : wifiMgr
-                    .getConnectionInfo());
-            if (null != info) {
-                if (!TextUtils.isEmpty(info.getMacAddress()))
-                    macAddress = info.getMacAddress().replace(":", "");
-                else
-                    return macAddress;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return macAddress;
-        }
-        return macAddress;
-    }
-    
+
+		return macAddress;
+	}
+
+	public static String getAndroidId() {
+		Context context = CorebeauApp.app;
+		ContentResolver contentResolver = context.getContentResolver();
+		String androidId = Secure.getString(contentResolver, Secure.ANDROID_ID);
+
+		if (androidId == null) {
+			androidId = "";
+		}
+
+		return androidId;
+	}
     
 }
