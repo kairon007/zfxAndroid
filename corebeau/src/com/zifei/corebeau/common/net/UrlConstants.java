@@ -4,7 +4,7 @@ public class UrlConstants {
 	 
 //	 public static final String BASE_URL = "http://api.huaqianapp.com";
 	 
-	 public static final String BASE_URL = "http://122.144.134.82:48080/...";
+	 public static final String BASE_URL = "http://192.168.91.102:8080/frontend";
 
     //account
 	 
@@ -12,7 +12,7 @@ public class UrlConstants {
 	 
 	 public static String LOGOUT = BASE_URL + "/logout";
 
-    public static String REGIST = BASE_URL + "/regist";
+    public static String REGIST = BASE_URL + "/register";
 
     public static String FINDPASS = BASE_URL + "/findpass";
 

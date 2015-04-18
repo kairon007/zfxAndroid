@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -63,9 +62,9 @@ public class MultiImageSelectorFragment extends Fragment {
     private static final int REQUEST_CAMERA = 100;
 
     // 结果数据
-    private ArrayList<String> resultList = new ArrayList<>();
+    private ArrayList<String> resultList = new ArrayList<String>();
     // 文件夹数据
-    private ArrayList<Folder> mResultFolder = new ArrayList<>();
+    private ArrayList<Folder> mResultFolder = new ArrayList<Folder>();
 
     // 图片Grid
     private GridView mGridView;
@@ -102,12 +101,12 @@ public class MultiImageSelectorFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_multi_image, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view,  Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         // 选择图片数量
@@ -281,7 +280,7 @@ public class MultiImageSelectorFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated( Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // 首次加载所有图片
         //new LoadImageTask().execute();
@@ -391,7 +390,7 @@ public class MultiImageSelectorFragment extends Fragment {
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             if (data != null) {
-                List<Image> images = new ArrayList<>();
+                List<Image> images = new ArrayList<Image>();
                 int count = data.getCount();
                 if (count > 0) {
                     data.moveToFirst();
@@ -410,7 +409,7 @@ public class MultiImageSelectorFragment extends Fragment {
                             folder.path = folderFile.getAbsolutePath();
                             folder.cover = image;
                             if (!mResultFolder.contains(folder)) {
-                                List<Image> imageList = new ArrayList<>();
+                                List<Image> imageList = new ArrayList<Image>();
                                 imageList.add(image);
                                 folder.images = imageList;
                                 mResultFolder.add(folder);
