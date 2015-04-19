@@ -6,4 +6,5 @@ package com.zifei.corebeau.common;
 public class PreferenceConstants {
 
     public static final String PREPERENCE_KEY = "corebeau.preferences";
+    public static final String ENABLE_NOTIFICATION = "enable_notification";
 }

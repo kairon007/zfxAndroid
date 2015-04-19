@@ -1,5 +1,7 @@
 package com.zifei.corebeau.spot.ui.fragment;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,9 +20,7 @@ import com.zifei.corebeau.spot.bean.SpotList;
 import com.zifei.corebeau.spot.bean.response.SpotListResponse;
 import com.zifei.corebeau.spot.task.SpotTask;
 import com.zifei.corebeau.spot.ui.adapter.SpotAdapter;
-import com.zifei.corebeau.test.TestData;
-
-import java.util.List;
+import com.zifei.corebeau.utils.Utils;
 
 public class SpotFragment extends Fragment implements AbsListView.OnItemClickListener {
 
@@ -102,9 +102,9 @@ public class SpotFragment extends Fragment implements AbsListView.OnItemClickLis
             @Override
             public void onError(String msg) {
                 progressBar.setVisibility(View.GONE);
-                spotAdapter.addData(TestData.getSpotList(), false);
-                spotAdapter.notifyDataSetChanged();
-//                Utils.showToast(getActivity(), msg);
+//                spotAdapter.addData(TestData.getSpotList(), false);
+//                spotAdapter.notifyDataSetChanged();
+                Utils.showToast(getActivity(), msg);
             }
         });
     }

@@ -11,9 +11,8 @@ import com.zifei.corebeau.common.ui.BarActivity;
 import com.zifei.corebeau.my.bean.FollowListResponse;
 import com.zifei.corebeau.my.task.FollowTask;
 import com.zifei.corebeau.my.ui.adapter.FollowAdapter;
-import com.zifei.corebeau.test.TestData;
+import com.zifei.corebeau.utils.Utils;
 
-//public class FollowActivity extends BarActivity{
 public class FollowActivity extends BarActivity{
 	
 	private ListView followList;
@@ -42,14 +41,15 @@ public class FollowActivity extends BarActivity{
 		followTask.getFollowList(new AsyncCallBacks.OneOne<FollowListResponse, String>() {
 
 			@Override
-			public void onSuccess(FollowListResponse msg) {
+			public void onSuccess(FollowListResponse response) {
 				progressBar.setVisibility(View.INVISIBLE);
+				followAdapter.addData(response.getFollowUserList(), false);
 			}
 
 			@Override
 			public void onError(String msg) {
 				progressBar.setVisibility(View.INVISIBLE);
-				followAdapter.addData(TestData.getFollowList(), false);
+				Utils.showToast(FollowActivity.this, msg);
 			}
 		});
 	}

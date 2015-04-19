@@ -16,8 +16,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -29,17 +31,21 @@ import com.qiniu.android.storage.UploadManager;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.BarActivity;
-import com.zifei.corebeau.my.bean.QiniuResponse;
+import com.zifei.corebeau.common.ui.MainActivity;
+import com.zifei.corebeau.common.ui.SplashActivity;
+import com.zifei.corebeau.my.bean.TokenResponse;
 import com.zifei.corebeau.my.qiniu.QiniuTask;
 import com.zifei.corebeau.my.qiniu.up.UpParam;
 import com.zifei.corebeau.my.qiniu.up.UploadHandler;
 import com.zifei.corebeau.my.qiniu.up.rs.UploadResultCallRet;
 import com.zifei.corebeau.my.qiniu.up.slice.Block;
 import com.zifei.corebeau.my.task.MyTask;
+import com.zifei.corebeau.my.task.UploadTask;
+import com.zifei.corebeau.my.task.UploadTask.OnUploadStatusListener;
 import com.zifei.corebeau.my.ui.selector.MultiImageSelectorActivity;
 import com.zifei.corebeau.utils.Utils;
 
-public class UploadActivity extends BarActivity implements OnClickListener {
+public class UploadActivity extends BarActivity implements OnClickListener, OnUploadStatusListener {
 
 	private static final int REQUEST_IMAGE = 2;
 	private ArrayList<String> mSelectPath;
@@ -47,8 +53,10 @@ public class UploadActivity extends BarActivity implements OnClickListener {
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
 	private GridView gridView;
-	private MyTask myTask;
-	private QiniuTask qiniuTask;
+	private UploadTask uploadTask;
+	private ProgressBar progressBar;
+	private EditText editText;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,12 +64,13 @@ public class UploadActivity extends BarActivity implements OnClickListener {
 		setContentView(R.layout.activity_upload);
 		startSelectActivity();
 		gridView = (GridView)findViewById(R.id.gv_upload_image);
+		progressBar = (ProgressBar)findViewById(R.id.pb_upload);
+		editText = (EditText)findViewById(R.id.et_upload_text);
+		
 		initLoader();
 		setActivityStatus();
-		myTask = new MyTask(this);
-		qiniuTask = new QiniuTask(this);
-		
-		qiniuTask.initBuildToken();
+		uploadTask = new UploadTask(this);
+		uploadTask.setonTouchUpCallBackListener(this);
 	}
 	
 	private void setActivityStatus(){
@@ -100,7 +109,6 @@ public class UploadActivity extends BarActivity implements OnClickListener {
 				ArrayList<String> imageList = new ArrayList<String>();
 				for (String p : mSelectPath) {
 					imageList.add(p);
-					qiniuTask.preUpload(Uri.fromFile(new File(p)), uploadHandler);
 				}
 				gridView.setAdapter(new ImageAdapter(this,imageList));
 			}
@@ -108,24 +116,38 @@ public class UploadActivity extends BarActivity implements OnClickListener {
 	}
 	
 	private void submit(){
-		qiniuTask.doUpload();
-	}
-	
-	private void getToken() {
-		myTask.getQiniuToken(new AsyncCallBacks.OneOne<QiniuResponse, String>() {
+		progressBar.setVisibility(View.VISIBLE);
+		uploadTask.getToken(mSelectPath, new AsyncCallBacks.TwoTwo<Integer, String, Integer, String>() {
 
 			@Override
-			public void onSuccess(QiniuResponse msg) {
+			public void onSuccess(Integer state, String msg) {
 				
+			}
+
+			@Override
+			public void onError(Integer state, String msg) {
+				progressBar.setVisibility(View.GONE);
+				Utils.showToast(UploadActivity.this, msg);
+			}
+		});
+	}
+	
+	private void upload(String message){
+		uploadTask.upload(message, new AsyncCallBacks.ZeroOne<String>() {
+
+			@Override
+			public void onSuccess() {
+				progressBar.setVisibility(View.GONE);
 			}
 
 			@Override
 			public void onError(String msg) {
-				
+				progressBar.setVisibility(View.GONE);
+				Utils.showToast(UploadActivity.this, msg);
 			}
 		});
-    }
-
+	}
+	
 	public class ImageAdapter extends BaseAdapter {
 
 		private Context mContext;
@@ -178,43 +200,17 @@ public class UploadActivity extends BarActivity implements OnClickListener {
 			break;
 		}
 	}
-	
-	
-	public UploadHandler uploadHandler = new UploadHandler() {
-		@Override
-		protected void onProcess(long contentLength, long currentUploadLength, long lastUploadLength, UpParam p, Object passParam) {
-		}
 
-		@Override
-		protected void onSuccess(UploadResultCallRet ret, UpParam p, Object passParam) {
-			Utils.showToast(UploadActivity.this, "success!!");
-			try {
-				String sourceId = qiniuTask.generateSourceId(p, passParam);
-				qiniuTask.clean(sourceId);
-			} catch (IOException e) {
-				e.printStackTrace();
+	@Override
+	public void uploadFinish(boolean status) {
+		
+		if(status){
+			upload(editText.getText().toString());
+		}else{
+			if(progressBar != null){
+				progressBar.setVisibility(View.GONE);
 			}
+			Utils.showToast(UploadActivity.this, "upload fail.... reuplod plz");
 		}
-
-		@Override
-		protected void onFailure(UploadResultCallRet ret, UpParam p, Object passParam) {
-			Utils.showToast(UploadActivity.this, "fail!");
-			if (ret.getException() != null) {
-				ret.getException().printStackTrace();
-			}
-		}
-
-		@Override
-		protected void onBlockSuccess(List<Block> uploadedBlocks, Block block, UpParam p, Object passParam) {
-			Utils.showToast(UploadActivity.this, "block success!!");
-			try {
-				String sourceId = qiniuTask.generateSourceId(p, passParam);
-				qiniuTask.addBlock(sourceId, block);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-	};
-	
+	}
 }

@@ -4,7 +4,9 @@ public class UrlConstants {
 	 
 //	 public static final String BASE_URL = "http://api.huaqianapp.com";
 	 
-	 public static final String BASE_URL = "http://192.168.91.104:8080/frontend";
+//	 public static final String BASE_URL = "http://115.28.175.29:8080/frontend";
+	
+	public static final String BASE_URL = "http://192.168.91.104:8080/frontend";
 
     //account
 	 
@@ -26,13 +28,15 @@ public class UrlConstants {
 
     public static String GET_SEARCH_RECOMMEND_USER = BASE_URL + "/spot_post";
 
-    public static String GET_SEARCH_POST = BASE_URL + "/spot_post";
+    public static String GET_SEARCH_RECOMMEND_POST = BASE_URL + "/post/getLatestItemInfo";
 
     public static String SEARCH = BASE_URL + "/spot_post";
 
     //post
     
-    public static String GET_QINIU_TOKEN = "";
+    public static String GET_UPLOAD_TOKEN = BASE_URL + "/post/getUploadToken";
+    
+    public static String UPLOAD = BASE_URL + "/post/uploadItem";
 
     public static String GET_POST = BASE_URL + "/get_post";
 

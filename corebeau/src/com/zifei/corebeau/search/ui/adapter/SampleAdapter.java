@@ -1,10 +1,9 @@
 package com.zifei.corebeau.search.ui.adapter;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import android.content.Context;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +17,9 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.common.ui.widget.staggered.util.DynamicHeightImageView;
-import com.zifei.corebeau.search.bean.RecommendPostList;
+import com.zifei.corebeau.search.bean.ItemInfo;
 
-public class SampleAdapter extends ArrayAdapter<RecommendPostList> {
+public class SampleAdapter extends ArrayAdapter<ItemInfo> {
 
 	private DisplayImageOptions imageOptions;
 	private ImageLoader imageLoader;
@@ -30,7 +29,7 @@ public class SampleAdapter extends ArrayAdapter<RecommendPostList> {
 
 	private final LayoutInflater mLayoutInflater;
 
-	public SampleAdapter(final Context context, final int textViewResourceId, ArrayList<RecommendPostList> objects) {
+	public SampleAdapter(final Context context, final int textViewResourceId, List<ItemInfo> objects) {
 		super(context, textViewResourceId, objects);
 		
 		this.mLayoutInflater = LayoutInflater.from(context);
@@ -65,10 +64,10 @@ public class SampleAdapter extends ArrayAdapter<RecommendPostList> {
 		}
 		double positionHeight = getPositionRatio(position);
 //		vh.image.setHeightRatio(positionHeight);
-		ImageLoader.getInstance().displayImage(getItem(position).getPicThumbUrl(), vh.image,imageOptions);
-		vh.message.setText(getItem(position).getMessage());
-		vh.likeCnt.setText(getItem(position).getLikeCount().toString());
-		vh.commentCnt.setText(getItem(position).getCommentCount().toString());
+		ImageLoader.getInstance().displayImage(getItem(position).getShowUrl(), vh.image,imageOptions);
+		vh.message.setText(getItem(position).getTitle());
+		vh.likeCnt.setText(getItem(position).getLikeCnt());
+		vh.commentCnt.setText(getItem(position).getCommentCnt());
 		return convertView;
 	}
 	

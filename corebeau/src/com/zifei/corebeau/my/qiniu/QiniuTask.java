@@ -43,14 +43,13 @@ public class QiniuTask {
 	
 	private List<Upload> ups = new LinkedList<Upload>();
 
-	public void preUpload(Uri uri, UploadHandler uploadHandler) {
+	public void preUpload(Uri uri, UploadHandler uploadHandler, String token) {
 		// 此参数会传递到回调
 		String passObject = "test: " + uri.getEncodedPath() + "passObject";
 
 		String qiniuKey = UUID.randomUUID().toString();
 		PutExtra extra = null;
-
-		Upload up = UpApi.build(getAuthorizer(), qiniuKey, uri, context, extra, passObject, uploadHandler);
+		Upload up = UpApi.build(getAuthorizer(token), qiniuKey, uri, context, extra, passObject, uploadHandler);
 		addUp(up);
 	}
 	
@@ -68,6 +67,10 @@ public class QiniuTask {
 			}
 		}
 		return false;
+	}
+	
+	public int getLength(){
+		return ups.size();
 	}
 
 	private List<Executor> executors = new ArrayList<Executor>();
@@ -231,55 +234,11 @@ public class QiniuTask {
 	public long start = 0;
 	private static Authorizer authorizer = new Authorizer();
 
-	private static Date buildTokenDate;
-	private static ScheduledExecutorService replenishTimer = Executors.newScheduledThreadPool(1, new UpApi.DaemonThreadFactory());
-	private static ReadWriteLock rw = new ReentrantReadWriteLock();
-	public void initBuildToken() {
-		replenishTimer.scheduleAtFixedRate(new Runnable() {
-			private long gap = 1000 * 60 * 40; // 40分钟
-			public void run() {
-				if (getBuildTokenDate() == null || (new Date().getTime() - getBuildTokenDate().getTime() > gap)) {
-					buildToken();
-				}
-			}
-
-		}, 0, 10, TimeUnit.MINUTES);
-
-		authorizer.setUploadToken("iDq6OVCngjLsVz_9960jV1UaU6NT9dndQVKdhYE5:UO1tVL9jfXMkokPjc5mxfU3rOYg=:eyJzY29wZSI6InpmeHBpY3R1cmUiLCJkZWFkbGluZSI6MTQyOTM0OTE0MX0=");
-		buildTokenDate = new Date();
-	}
-
-	private Random r = new Random();
-	private void buildToken() {
+	public Authorizer getAuthorizer(String token) {
 		try {
-			rw.writeLock().lock();
-			if (r.nextBoolean()) {// 模拟
-				throw new RuntimeException("  获取token失败。  ");
-			}
-			authorizer.setUploadToken("iDq6OVCngjLsVz_9960jV1UaU6NT9dndQVKdhYE5:UO1tVL9jfXMkokPjc5mxfU3rOYg=:eyJzY29wZSI6InpmeHBpY3R1cmUiLCJkZWFkbGluZSI6MTQyOTM0OTE0MX0=");
-			buildTokenDate = new Date();
-		} catch (Exception e) {
-
-		} finally {
-			rw.writeLock().unlock();
-		}
-	}
-
-	private Date getBuildTokenDate() {
-		try {
-			rw.readLock().lock();
-			return buildTokenDate;
-		} finally {
-			rw.readLock().unlock();
-		}
-	}
-
-	public Authorizer getAuthorizer() {
-		try {
-			rw.readLock().lock();
+			authorizer.setUploadToken(token);
 			return authorizer;
 		} finally {
-			rw.readLock().unlock();
 		}
 	}
 

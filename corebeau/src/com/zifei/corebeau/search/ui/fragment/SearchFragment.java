@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,15 +19,14 @@ import com.zifei.corebeau.R;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.view.HorizontalListView;
 import com.zifei.corebeau.common.ui.widget.staggered.StaggeredGridView;
-import com.zifei.corebeau.post.ui.PostActivity;
-import com.zifei.corebeau.search.bean.RecommendPostList;
-import com.zifei.corebeau.search.bean.RecommendUserList;
+import com.zifei.corebeau.search.bean.ItemInfo;
+import com.zifei.corebeau.search.bean.PageBean;
+import com.zifei.corebeau.search.bean.Response.RecommendPostResponse;
 import com.zifei.corebeau.search.bean.Response.RecommendUserResponse;
 import com.zifei.corebeau.search.task.SearchTask;
-import com.zifei.corebeau.search.ui.adapter.RecommedPostAdapter;
 import com.zifei.corebeau.search.ui.adapter.RecommedUserAdapter;
 import com.zifei.corebeau.search.ui.adapter.SampleAdapter;
-import com.zifei.corebeau.test.TestData;
+import com.zifei.corebeau.utils.Utils;
 
 public class SearchFragment extends Fragment implements AbsListView.OnScrollListener, AbsListView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
@@ -38,13 +34,12 @@ public class SearchFragment extends Fragment implements AbsListView.OnScrollList
     private HorizontalListView horizontalListView;
     private StaggeredGridView staggeredGridView;
     private RecommedUserAdapter recommedUserAdapter;
-    private RecommedPostAdapter recommedPostAdapter;
     private SearchTask searchTask;
     private ProgressBar progressBar;
     private SampleAdapter mAdapter;
     private boolean mHasRequestedMore;
     private static final String TAG = "StaggeredGridActivity";
-    private ArrayList<RecommendPostList> mData;
+    private ArrayList<ItemInfo> mData;
     public static final String SAVED_DATA_KEY = "SAVED_DATA";
     private static final int FETCH_DATA_TASK_DURATION = 2000;
     
@@ -80,38 +75,24 @@ public class SearchFragment extends Fragment implements AbsListView.OnScrollList
         staggeredGridView = (StaggeredGridView)view.findViewById(R.id.sgv_search);
         staggeredGridView.setOnItemClickListener(this);
         
-        if (mData == null) {
-        	getRecommendPostList();
-        }
-        
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         View header = layoutInflater.inflate(R.layout.layout_search_header, null);
         horizontalListView = (HorizontalListView)header.findViewById(R.id.hlv_search);
         staggeredGridView.addHeaderView(header);
         staggeredGridView.setEmptyView(view.findViewById(android.R.id.empty));
-        mAdapter = new SampleAdapter(getActivity(), android.R.layout.simple_list_item_1,
-        		TestData.getRecommendPostList());
         
-        
-
-        staggeredGridView.setAdapter(mAdapter);
-
         staggeredGridView.setOnItemClickListener(this);
         staggeredGridView.setOnScrollListener(this);
         staggeredGridView.setOnItemLongClickListener(this);
-        fetchData();
-        
-        
         recommedUserAdapter = new RecommedUserAdapter(getActivity(),horizontalListView);
         horizontalListView.setAdapter(recommedUserAdapter);
         
-        getRecommendUserList();
         getRecommendPostList();
         return view;
     }
     
     private void fillAdapter() {
-        for (RecommendPostList data : mData) {
+        for (ItemInfo data : mData) {
             mAdapter.add(data);
         }
     }
@@ -129,12 +110,12 @@ public class SearchFragment extends Fragment implements AbsListView.OnScrollList
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-    	RecommendPostList mData = (RecommendPostList)parent.getAdapter().getItem(position);
-    	if(mData != null){
-    		Intent intent = new Intent(getActivity(), PostActivity.class);
-            intent.putExtra("postId", mData.getPostId());
-            getActivity().startActivity(intent);
-    	}
+//    	RecommendPostList mData = (RecommendPostList)parent.getAdapter().getItem(position);
+//    	if(mData != null){
+//    		Intent intent = new Intent(getActivity(), PostActivity.class);
+//            intent.putExtra("postId", mData.getPostId());
+//            getActivity().startActivity(intent);
+//    	}
     }
     
     @Override
@@ -166,7 +147,7 @@ public class SearchFragment extends Fragment implements AbsListView.OnScrollList
 //        mHasRequestedMore = false;
     }
     
-    private ArrayList<RecommendPostList> generateData() {
+    private ArrayList<ItemInfo> generateData() {
 		return mData;
 	}
 
@@ -176,71 +157,67 @@ public class SearchFragment extends Fragment implements AbsListView.OnScrollList
             @Override
             public void onSuccess(RecommendUserResponse response) {
                 progressBar.setVisibility(View.GONE);
-                List<RecommendUserList> spotList = response.getRecommendUserList();
-                if (spotList.size() <= 0) {
-//                    showNotice(getString(R.string.common_notice_recommend));
-
-                } else {
-//                    spotAdapter.refresh(spotList);
-                }
-            }
-
-            @Override
-            public void onError(String msg) {
-                progressBar.setVisibility(View.GONE);
-                recommedUserAdapter.addData(TestData.getRecommendUserList(), false);
-                recommedUserAdapter.notifyDataSetChanged();
-                
-                
-//                Utils.showToast(getActivity(), msg);
-            }
-        });
-    }
-
-    private void getRecommendPostList(){
-        progressBar.setVisibility(View.VISIBLE);
-        searchTask.getRecommendUserList(new AsyncCallBacks.OneOne<RecommendUserResponse, String>() {
-            @Override
-            public void onSuccess(RecommendUserResponse response) {
-                progressBar.setVisibility(View.GONE);
-//                if (response.size() <= 0) {
-////                    showNotice(getString(R.string.common_notice_recommend));
-//
+//                List<RecommendUserList> spotList = response.getRecommendUserList();
+//                if (spotList.size() <= 0) {
 //                } else {
-////                    spotAdapter.refresh(spotList);
 //                }
             }
 
             @Override
             public void onError(String msg) {
                 progressBar.setVisibility(View.GONE);
-//                recommedPostAdapter.addData(TestData.getRecommendPostList(), false);
-//                recommedPostAdapter.notifyDataSetChanged();
-               
-                
-//                Utils.showToast(getActivity(), msg);
-                
-                mData = TestData.getRecommendPostList();
-                
-                
+//                recommedUserAdapter.addData(TestData.getRecommendUserList(), false);
+//                recommedUserAdapter.notifyDataSetChanged();
+                Utils.showToast(getActivity(), msg);
             }
         });
     }
     
-    private void fetchData() {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-            	 SystemClock.sleep(FETCH_DATA_TASK_DURATION);
-                return null;
+
+    private void getRecommendPostList(){
+        progressBar.setVisibility(View.VISIBLE);
+        searchTask.getRecommendPostList(new AsyncCallBacks.OneOne<RecommendPostResponse, String>() {
+            @SuppressWarnings("unchecked")
+			@Override
+            public void onSuccess(RecommendPostResponse response) {
+                progressBar.setVisibility(View.GONE);
+                
+                PageBean<ItemInfo> pageBean = (PageBean<ItemInfo>) response.getPageBean();
+                List<ItemInfo> list = pageBean.getList();
+                if (response.getPageBean().getList().size() <= 0) {
+                	
+                } else {
+                    mAdapter = new SampleAdapter(getActivity(), android.R.layout.simple_list_item_1,
+                    		list);
+                    
+                    staggeredGridView.setAdapter(mAdapter);
+                	
+                }
             }
 
             @Override
-            protected void onPostExecute(Void aVoid) {
-                fillAdapter();
+            public void onError(String msg) {
+                progressBar.setVisibility(View.GONE);
+
+                Utils.showToast(getActivity(), msg);
             }
-        }.execute();
+        });
     }
+    
+//    private void fetchData() {
+//        new AsyncTask<Void, Void, Void>() {
+//            @Override
+//            protected Void doInBackground(Void... params) {
+//            	 SystemClock.sleep(FETCH_DATA_TASK_DURATION);
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void aVoid) {
+//                fillAdapter();
+//            }
+//        }.execute();
+//    }
 
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view,

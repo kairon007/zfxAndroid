@@ -36,7 +36,6 @@ public class SplashActivity extends CommonFragmentActvity implements
 		View.OnClickListener {
 
 	private final int DELAY_MILLIS = 1000;
-	private CorebeauApp app;
 	private EditText email, password, nickname;
 	private TextView typeChange, submit, findpassType;
 	private AccountTask accountTask;
@@ -96,9 +95,7 @@ public class SplashActivity extends CommonFragmentActvity implements
 
 			if (!StringUtil.isEmpty(userInfoService.getLoginId()) && !StringUtil.isEmpty(userInfoService.getLoginId())) {
 				goMainActivity();
-
 			} else {
-
 				loginByDevice();
 			}
 		}

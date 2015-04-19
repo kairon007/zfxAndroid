@@ -25,7 +25,6 @@ import com.zifei.corebeau.post.bean.response.PostResponse;
 import com.zifei.corebeau.post.task.PostTask;
 import com.zifei.corebeau.post.ui.adapter.ImageAdapter;
 import com.zifei.corebeau.post.ui.view.PostViewPager;
-import com.zifei.corebeau.test.TestData;
 import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
 
@@ -145,8 +144,8 @@ public class PostActivity extends FragmentActivity implements OnClickListener {
 
             @Override
             public void onError(String result) {
-            	currentPostImage = TestData.getPostImages();
-            	currentPost = TestData.getPost();
+//            	currentPostImage = TestData.getPostImages();
+//            	currentPost = TestData.getPost();
                 setPostData();
                 mIndicator.setViewPager(mPager);
                 

@@ -1,7 +1,6 @@
 package com.zifei.corebeau.post.ui;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,12 +12,8 @@ import android.widget.ListView;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.post.bean.response.CommentListResponse;
-import com.zifei.corebeau.post.bean.response.CommentResponse;
-import com.zifei.corebeau.post.bean.response.PostResponse;
 import com.zifei.corebeau.post.task.PostTask;
 import com.zifei.corebeau.post.ui.adapter.CommentAdapter;
-import com.zifei.corebeau.post.ui.adapter.ImageAdapter;
-import com.zifei.corebeau.test.TestData;
 import com.zifei.corebeau.utils.Utils;
 
 /**
@@ -99,7 +94,7 @@ public class CommentActivity extends Activity implements View.OnClickListener{
             @Override
             public void onError(String msg) {
                 Utils.showToast(CommentActivity.this, msg);
-                commentAdapter.addData(TestData.getCommentList(), false);
+//                commentAdapter.addData(TestData.getCommentList(), false);
             }
         });
     }
