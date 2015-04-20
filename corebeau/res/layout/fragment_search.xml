@@ -13,11 +13,12 @@
         app:item_margin="8dp" >
     </com.zifei.corebeau.common.ui.widget.staggered.StaggeredGridView>
 
-    <ProgressBar
+    <com.zifei.corebeau.common.ui.widget.progress.CircularProgressBar
         android:id="@+id/pb_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:visibility="gone" />
+        android:indeterminate="true"
+            android:indeterminateOnly="false" />
 
 </FrameLayout>

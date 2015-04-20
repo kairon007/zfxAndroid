@@ -110,18 +110,17 @@ public class UploadTask {
 			}
 			uploadStatusListener.uploadFinish(false);
 		}
-
-		@Override
-		protected void onBlockSuccess(List<Block> uploadedBlocks, Block block, UpParam p, Object passParam) {
-			Utils.showToast(context, "block success!!");
-			try {
-				String sourceId = qiniuTask.generateSourceId(p, passParam);
-				qiniuTask.addBlock(sourceId, block);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
+		
+        @Override
+        protected void onBlockSuccess(List<Block> uploadedBlocks, Block block, UpParam p, Object passParam) {
+            Utils.showToast(context, "block success!!");
+            try {
+                String sourceId = qiniuTask.generateSourceId(p, passParam);
+                qiniuTask.addBlock(sourceId, block);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 	};
 	
 	public void upload(String content, final AsyncCallBacks.ZeroOne<String> callback) {

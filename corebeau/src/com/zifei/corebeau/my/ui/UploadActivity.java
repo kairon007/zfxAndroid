@@ -138,6 +138,8 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 			@Override
 			public void onSuccess() {
 				progressBar.setVisibility(View.GONE);
+				Utils.showToast(UploadActivity.this, "upload success!!");
+				finish();
 			}
 
 			@Override

@@ -12,25 +12,27 @@
         />
 
     <com.zifei.corebeau.common.ui.widget.staggered.util.DynamicHeightImageView
-        android:layout_below="@id/search_image_top_divider"
         android:id="@+id/iv_search_post"
+        android:layout_below="@id/search_image_top_divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitXY" />
     
     <View
-         android:id="@+id/search_image_bottom_divider"
+        android:id="@+id/search_image_bottom_divider"
+        android:layout_below="@id/iv_search_post" 
           style="@style/spot_top_divider"
         android:layout_width="match_parent" 
         />
 
    <ImageView
         android:id="@+id/comment_icon"
+        android:layout_below="@id/search_image_bottom_divider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/search_list_reply"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/search_image_bottom_divider" />
+         />
     
     <TextView
         android:id="@+id/tv_comment_cnt"

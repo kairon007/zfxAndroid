@@ -186,26 +186,26 @@ public class QiniuTask {
 		}
 		return bls;
 	}
-
-	public void addBlock(String sourceId, Block block) throws IOException {
-		File file = initFile(getDir(), sourceId);
-		String l = sync(block);
-		BufferedWriter writer = null;
-		try {
-			writer = new BufferedWriter(new FileWriter(file, true));
-			writer.newLine();
-			writer.write(l);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (writer != null) {
-				try {
-					writer.close();
-				} catch (Exception e) {
-				}
-			}
-		}
-	}
+	
+    public void addBlock(String sourceId, Block block) throws IOException {
+        File file = initFile(getDir(), sourceId);
+        String l = sync(block);
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(file, true));
+            writer.newLine();
+            writer.write(l);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (Exception e) {
+                }
+            }
+        }
+    }
 
 	public void clean(String sourceId) throws IOException {
 		File file = new File(getDir(), sourceId);
@@ -226,11 +226,10 @@ public class QiniuTask {
 		}
 	}
 
-	private String sync(Block b) {
-		return b.getIdx() + "," + b.getCtx() + "," + b.getLength() + "," + b.getHost();
-	}
-	
-	
+    private String sync(Block b) {
+        return b.getIdx() + "," + b.getCtx() + "," + b.getLength() + "," + b.getHost();
+    }
+    
 	public long start = 0;
 	private static Authorizer authorizer = new Authorizer();
 

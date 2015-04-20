@@ -1,17 +1,17 @@
 package com.zifei.corebeau.search.bean.Response;
 
 import com.zifei.corebeau.common.net.Response;
+import com.zifei.corebeau.search.bean.ItemInfo;
 import com.zifei.corebeau.search.bean.PageBean;
-@SuppressWarnings("rawtypes")
 public class RecommendPostResponse extends Response {
 	
-	private PageBean pageBean;
+	private PageBean<ItemInfo> pageBean;
 
-	public PageBean getPageBean() {
+	public PageBean<ItemInfo> getPageBean() {
 		return pageBean;
 	}
 
-	public void setPageBean(PageBean pageBean) {
+	public void setPageBean(PageBean<ItemInfo> pageBean) {
 		this.pageBean = pageBean;
 	}
 }

@@ -4,9 +4,9 @@ public class UrlConstants {
 	 
 //	 public static final String BASE_URL = "http://api.huaqianapp.com";
 	 
-//	 public static final String BASE_URL = "http://115.28.175.29:8080/frontend";
+	 public static final String BASE_URL = "http://115.28.175.29:8080/frontend";
 	
-	public static final String BASE_URL = "http://192.168.91.104:8080/frontend";
+//	public static final String BASE_URL = "http://192.168.91.104:8080/frontend";
 
     //account
 	 

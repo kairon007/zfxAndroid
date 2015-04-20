@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,6 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.common.ui.widget.staggered.util.DynamicHeightImageView;
@@ -23,7 +23,6 @@ public class SampleAdapter extends ArrayAdapter<ItemInfo> {
 
 	private DisplayImageOptions imageOptions;
 	private ImageLoader imageLoader;
-	private ImageLoaderConfiguration config;
 	private static final SparseArray<Double> sPositionHeightRatios = new SparseArray<Double>();
 	private final Random mRandom;
 
@@ -34,11 +33,7 @@ public class SampleAdapter extends ArrayAdapter<ItemInfo> {
 		
 		this.mLayoutInflater = LayoutInflater.from(context);
 		this.mRandom = new Random();
-
 		imageLoader = ImageLoader.getInstance();
-		config = new ImageLoaderConfiguration.Builder(context)
-				.threadPoolSize(3).build();
-		imageLoader.init(config);
 		imageOptions = new DisplayImageOptions.Builder().cacheInMemory(false)
 				.imageScaleType(ImageScaleType.EXACTLY)
 				.cacheOnDisk(true).build();
@@ -62,12 +57,10 @@ public class SampleAdapter extends ArrayAdapter<ItemInfo> {
 		} else {
 			vh = (ViewHolder) convertView.getTag();
 		}
-		double positionHeight = getPositionRatio(position);
-//		vh.image.setHeightRatio(positionHeight);
-		ImageLoader.getInstance().displayImage(getItem(position).getShowUrl(), vh.image,imageOptions);
+		imageLoader.displayImage(getItem(position).getShowUrl(), vh.image,imageOptions);
 		vh.message.setText(getItem(position).getTitle());
-		vh.likeCnt.setText(getItem(position).getLikeCnt());
-		vh.commentCnt.setText(getItem(position).getCommentCnt());
+		vh.likeCnt.setText(String.valueOf(getItem(position).getLikeCnt()));
+		vh.commentCnt.setText(String.valueOf(getItem(position).getCommentCnt()));
 		return convertView;
 	}
 	
