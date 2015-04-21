@@ -93,6 +93,7 @@ public class UploadTask {
 			File file = new File(p);
 			uriToBitmap(Uri.fromFile(file), listener,file.getName());
 		}
+		//TODO enable submit
 //		appSyncExecutor.execute(new Runnable() {
 //			@Override
 //			public void run() {

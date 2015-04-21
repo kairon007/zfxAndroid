@@ -73,6 +73,7 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 		setActivityStatus();
 		uploadTask = new UploadTask(this);
 		uploadTask.setonTouchUpCallBackListener(this);
+		//TODO disable submit and loading....
 	}
 	
 	private void setActivityStatus(){
