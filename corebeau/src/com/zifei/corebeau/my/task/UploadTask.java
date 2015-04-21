@@ -15,12 +15,15 @@ import java.util.concurrent.Executors;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.UrlConstants;
@@ -86,16 +89,23 @@ public class UploadTask {
 
 	public void imageReset(final ArrayList<String> stringPath,
 			final ImageCropListener listener) {
-		appSyncExecutor.execute(new Runnable() {
-			@Override
-			public void run() {
-				for (String p : stringPath) {
-					File file = new File(p);
-					uriToBitmap(Uri.fromFile(file), listener,file.getName());
-				}
-
-			}
-		});
+		for (String p : stringPath) {
+			File file = new File(p);
+			uriToBitmap(Uri.fromFile(file), listener,file.getName());
+		}
+//		appSyncExecutor.execute(new Runnable() {
+//			@Override
+//			public void run() {
+//				for (String p : stringPath) {
+//					File file = new File(p);
+//					uriToBitmap(Uri.fromFile(file), listener,file.getName());
+//				}
+//				
+//				//Submit enable;
+//				
+//
+//			}
+//		});
 	}
 
 	public interface ImageCropListener {
@@ -111,7 +121,7 @@ public class UploadTask {
 		try {
 			Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
 			filePath = saveBitmapToJpegFile(compressImage(bitmap),
-					TEMP_ROOT_PATH + fileName + TEMP_SUFFIX);
+					TEMP_ROOT_PATH + fileName);
 			listener.onSucess(filePath);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -119,11 +129,12 @@ public class UploadTask {
 		}
 	}
 
+	@SuppressLint("NewApi")
 	private Bitmap compressImage(Bitmap image) {
-
+		Log.i("image compressImage before",image.getByteCount()+" ");
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-		int options = 90;
+		int options = 100;
 		while (baos.toByteArray().length / 1024 > 100) {
 			baos.reset();
 			image.compress(Bitmap.CompressFormat.JPEG, options, baos);
@@ -131,10 +142,10 @@ public class UploadTask {
 		}
 		ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());
 		Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);
+		Log.i("image compressImage after",bitmap.getByteCount()+" ");
 		return bitmap;
 	}
 
-	private static final String TEMP_SUFFIX = "_temp.jpg";
 	private static final String TEMP_ROOT_PATH = Environment
 			.getExternalStorageDirectory().getPath() + "/";
 
@@ -144,13 +155,17 @@ public class UploadTask {
 
 	public String saveBitmapToJpegFile(Bitmap bitmap, String filePath) {
 		try {
-			FileOutputStream fileOutStr = new FileOutputStream(filePath);
-			BufferedOutputStream bufOutStr = new BufferedOutputStream(
-					fileOutStr);
-			bufOutStr.flush();
-			bufOutStr.close();
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			bitmap.compress(CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+			byte[] bitmapdata = bos.toByteArray();
+
+			//write the bytes in file
+			FileOutputStream fos = new FileOutputStream(filePath);
+			fos.write(bitmapdata);
+			fos.close();
 
 		} catch (Exception exception) {
+			exception.printStackTrace();
 		}
 		return filePath;
 	}
