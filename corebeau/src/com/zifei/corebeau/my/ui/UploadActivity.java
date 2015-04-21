@@ -35,17 +35,19 @@ import com.zifei.corebeau.common.ui.MainActivity;
 import com.zifei.corebeau.common.ui.SplashActivity;
 import com.zifei.corebeau.my.bean.TokenResponse;
 import com.zifei.corebeau.my.qiniu.QiniuTask;
+import com.zifei.corebeau.my.qiniu.QiniuUploadUitls.QiniuUploadUitlsListener;
 import com.zifei.corebeau.my.qiniu.up.UpParam;
 import com.zifei.corebeau.my.qiniu.up.UploadHandler;
 import com.zifei.corebeau.my.qiniu.up.rs.UploadResultCallRet;
 import com.zifei.corebeau.my.qiniu.up.slice.Block;
 import com.zifei.corebeau.my.task.MyTask;
 import com.zifei.corebeau.my.task.UploadTask;
+import com.zifei.corebeau.my.task.UploadTask.ImageCropListener;
 import com.zifei.corebeau.my.task.UploadTask.OnUploadStatusListener;
 import com.zifei.corebeau.my.ui.selector.MultiImageSelectorActivity;
 import com.zifei.corebeau.utils.Utils;
 
-public class UploadActivity extends BarActivity implements OnClickListener, OnUploadStatusListener {
+public class UploadActivity extends BarActivity implements OnClickListener, OnUploadStatusListener, {
 
 	private static final int REQUEST_IMAGE = 2;
 	private ArrayList<String> mSelectPath;
@@ -56,7 +58,7 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 	private UploadTask uploadTask;
 	private ProgressBar progressBar;
 	private EditText editText;
-	
+	private ArrayList<String> uploadImageList = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -106,13 +108,31 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 			if (resultCode == RESULT_OK) {
 				mSelectPath = data
 						.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-				ArrayList<String> imageList = new ArrayList<String>();
-				for (String p : mSelectPath) {
-					imageList.add(p);
-				}
-				gridView.setAdapter(new ImageAdapter(this,imageList));
+				
+				imageSetting(mSelectPath);
+				
 			}
 		}
+	}
+	
+	private void imageSetting(final ArrayList<String> mSelectPath){
+		
+		uploadTask.imageReset(mSelectPath , new ImageCropListener() {
+			
+			@Override
+			public void onSucess(String fileUrl) {
+				uploadImageList.add(fileUrl);
+				
+				if (uploadImageList.size() == mSelectPath.size()) {
+					gridView.setAdapter(new ImageAdapter(UploadActivity.this, uploadImageList));
+				}
+			}
+			
+			@Override
+			public void onError() {
+				Log.i("","fail!!! reupload plz");
+			}
+		});
 	}
 	
 	private void submit(){
@@ -202,6 +222,8 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 			break;
 		}
 	}
+	
+	
 
 	@Override
 	public void uploadFinish(boolean status) {
@@ -215,4 +237,5 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 			Utils.showToast(UploadActivity.this, "upload fail.... reuplod plz");
 		}
 	}
+
 }
