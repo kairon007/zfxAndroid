@@ -90,7 +90,8 @@ public class UploadTask {
 			@Override
 			public void run() {
 				for (String p : stringPath) {
-					uriToBitmap(Uri.fromFile(new File(p)), listener);
+					File file = new File(p);
+					uriToBitmap(Uri.fromFile(file), listener,file.getName());
 				}
 
 			}
@@ -103,12 +104,14 @@ public class UploadTask {
 		public void onError();
 	}
 
-	private void uriToBitmap(Uri uri, ImageCropListener listener) {
+	private void uriToBitmap(Uri uri, ImageCropListener listener,
+			String fileName) {
 		ContentResolver cr = context.getContentResolver();
 		String filePath = null;
 		try {
 			Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-			filePath = saveBitmapToJpegFile(compressImage(bitmap), tempJpeg);
+			filePath = saveBitmapToJpegFile(compressImage(bitmap),
+					TEMP_ROOT_PATH + fileName + TEMP_SUFFIX);
 			listener.onSucess(filePath);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -120,7 +123,7 @@ public class UploadTask {
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-		int options = 100;
+		int options = 90;
 		while (baos.toByteArray().length / 1024 > 100) {
 			baos.reset();
 			image.compress(Bitmap.CompressFormat.JPEG, options, baos);
@@ -131,9 +134,9 @@ public class UploadTask {
 		return bitmap;
 	}
 
-	private static final String fileName = "temp.jpg";
-	private static final String tempJpeg = Environment
-			.getExternalStorageDirectory().getPath() + "/" + fileName;
+	private static final String TEMP_SUFFIX = "_temp.jpg";
+	private static final String TEMP_ROOT_PATH = Environment
+			.getExternalStorageDirectory().getPath() + "/";
 
 	// private String tempFilePath(Uri uri){
 	// // uri.g
