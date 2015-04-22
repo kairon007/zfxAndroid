@@ -1,17 +1,15 @@
 package com.zifei.corebeau.my.task;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -23,6 +21,7 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import com.zifei.corebeau.common.AsyncCallBacks;
@@ -34,6 +33,7 @@ import com.zifei.corebeau.my.qiniu.up.UpParam;
 import com.zifei.corebeau.my.qiniu.up.UploadHandler;
 import com.zifei.corebeau.my.qiniu.up.rs.UploadResultCallRet;
 import com.zifei.corebeau.my.qiniu.up.slice.Block;
+import com.zifei.corebeau.utils.CommonConfig;
 import com.zifei.corebeau.utils.Utils;
 
 public class UploadTask {
@@ -66,9 +66,23 @@ public class UploadTask {
 						String msg = response.getMsg();
 
 						if (status == TokenResponse.SUCCESS) {
+							ContentResolver cr = context.getContentResolver();
 							for (String stringPath : stringPathList) {
-								// syncAppLog(stringPath,
-								// response.getUploadToken());
+								Bitmap bitmap;
+								try {
+									bitmap = BitmapFactory.decodeStream(cr
+											.openInputStream(Uri
+													.fromFile(new File(
+															stringPath))));
+									Uri uri = Uri.parse(MediaStore.Images.Media
+											.insertImage(cr,
+													compressImage(bitmap),
+													null, null));
+									qiniuTask.preUpload(uri, uploadHandler,
+											response.getUploadToken());
+								} catch (FileNotFoundException e) {
+									e.printStackTrace();
+								}
 							}
 							qiniuTask.doUpload();
 						} else {
@@ -84,30 +98,14 @@ public class UploadTask {
 				});
 	}
 
-	private static Executor appSyncExecutor = Executors
-			.newSingleThreadExecutor();
-
-	public void imageReset(final ArrayList<String> stringPath,
-			final ImageCropListener listener) {
-		for (String p : stringPath) {
-			File file = new File(p);
-			uriToBitmap(Uri.fromFile(file), listener,file.getName());
-		}
-		//TODO enable submit
-//		appSyncExecutor.execute(new Runnable() {
-//			@Override
-//			public void run() {
-//				for (String p : stringPath) {
-//					File file = new File(p);
-//					uriToBitmap(Uri.fromFile(file), listener,file.getName());
-//				}
-//				
-//				//Submit enable;
-//				
-//
-//			}
-//		});
-	}
+//	public void imageReset(final ArrayList<String> stringPath,
+//			final ImageCropListener listener) {
+//		for (String p : stringPath) {
+//			File file = new File(p);
+//			uriToBitmap(Uri.fromFile(file), listener, file.getName());
+//		}
+//		// TODO enable submit
+//	}
 
 	public interface ImageCropListener {
 		
@@ -116,35 +114,40 @@ public class UploadTask {
 		public void onError();
 	}
 
-	private void uriToBitmap(Uri uri, ImageCropListener listener,
-			String fileName) {
-		ContentResolver cr = context.getContentResolver();
-		String filePath = null;
-		try {
-			Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-			filePath = saveBitmapToJpegFile(compressImage(bitmap),
-					TEMP_ROOT_PATH + fileName);
-			listener.onSucess(filePath);
-		} catch (Exception e) {
-			e.printStackTrace();
-			listener.onError();
-		}
-	}
+//	private void uriToBitmap(Uri uri, ImageCropListener listener,
+//			String fileName) {
+//		ContentResolver cr = context.getContentResolver();
+//		String filePath = null;
+//		try {
+//			Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+//			filePath = saveBitmapToJpegFile(compressImage(bitmap),
+//					TEMP_ROOT_PATH + fileName);
+//			listener.onSucess(filePath);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			listener.onError();
+//		}
+//	}
 
 	@SuppressLint("NewApi")
 	private Bitmap compressImage(Bitmap image) {
-		Log.i("image compressImage before",image.getByteCount()+" ");
+		Log.i("image compressImage before", image.getByteCount() + " ");
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-		int options = 100;
-		while (baos.toByteArray().length / 1024 > 100) {
-			baos.reset();
-			image.compress(Bitmap.CompressFormat.JPEG, options, baos);
-			options -= 10;
+		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+		if (baos.toByteArray().length / 1024 <= CommonConfig.UPLOAD_IMAGE_QUALITY) {
+			ByteArrayInputStream isBm = new ByteArrayInputStream(
+					baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
+			Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
+			return bitmap;
 		}
-		ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());
-		Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);
-		Log.i("image compressImage after",bitmap.getByteCount()+" ");
+		int options = 100;
+		while (baos.toByteArray().length / 1024 > CommonConfig.UPLOAD_IMAGE_QUALITY) { // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
+			baos.reset();// 重置baos即清空baos
+			image.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
+			options -= 10;// 每次都减少10
+		}
+		ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
+		Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
 		return bitmap;
 	}
 
@@ -158,10 +161,10 @@ public class UploadTask {
 	public String saveBitmapToJpegFile(Bitmap bitmap, String filePath) {
 		try {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			bitmap.compress(CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+			bitmap.compress(CompressFormat.PNG, 100, bos);
 			byte[] bitmapdata = bos.toByteArray();
 
-			//write the bytes in file
+			// write the bytes in file
 			FileOutputStream fos = new FileOutputStream(filePath);
 			fos.write(bitmapdata);
 			fos.close();

@@ -1,17 +1,11 @@
 package com.zifei.corebeau.my.ui;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -20,29 +14,15 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.qiniu.android.http.ResponseInfo;
-import com.qiniu.android.storage.UpCompletionHandler;
-import com.qiniu.android.storage.UploadManager;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.BarActivity;
-import com.zifei.corebeau.common.ui.MainActivity;
-import com.zifei.corebeau.common.ui.SplashActivity;
-import com.zifei.corebeau.my.bean.response.TokenResponse;
-import com.zifei.corebeau.my.qiniu.QiniuTask;
-import com.zifei.corebeau.my.qiniu.QiniuUploadUitls.QiniuUploadUitlsListener;
-import com.zifei.corebeau.my.qiniu.up.UpParam;
-import com.zifei.corebeau.my.qiniu.up.UploadHandler;
-import com.zifei.corebeau.my.qiniu.up.rs.UploadResultCallRet;
-import com.zifei.corebeau.my.qiniu.up.slice.Block;
-import com.zifei.corebeau.my.task.MyTask;
+
 import com.zifei.corebeau.my.task.UploadTask;
-import com.zifei.corebeau.my.task.UploadTask.ImageCropListener;
 import com.zifei.corebeau.my.task.UploadTask.OnUploadStatusListener;
 import com.zifei.corebeau.my.ui.selector.MultiImageSelectorActivity;
 import com.zifei.corebeau.utils.Utils;
@@ -110,28 +90,27 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 				mSelectPath = data
 						.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
 				
-				imageSetting(mSelectPath);
-				
+				gridView.setAdapter(new ImageAdapter(UploadActivity.this, mSelectPath));
 			}
 		}
 	}
 	
 	private void imageSetting(final ArrayList<String> mSelectPath){
 		
-		uploadTask.imageReset(mSelectPath , new ImageCropListener() {
-			
-			@Override
-			public void onSucess(String fileUrl) {
-				uploadImageList.add(fileUrl);
-				
-				gridView.setAdapter(new ImageAdapter(UploadActivity.this, uploadImageList));
-			}
-			
-			@Override
-			public void onError() {
-				Log.i("","fail!!! reupload plz");
-			}
-		});
+//		uploadTask.imageReset(mSelectPath , new ImageCropListener() {
+//			
+//			@Override
+//			public void onSucess(String fileUrl) {
+//				uploadImageList.add(fileUrl);
+//			}
+//			
+//			@Override
+//			public void onError() {
+//				Log.i("","fail!!! reupload plz");
+//			}
+//		});
+		
+		
 	}
 	
 	private void submit(){
