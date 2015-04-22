@@ -73,6 +73,7 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 		setActivityStatus();
 		uploadTask = new UploadTask(this);
 		uploadTask.setonTouchUpCallBackListener(this);
+		//TODO disable submit and loading....
 	}
 	
 	private void setActivityStatus(){
@@ -123,9 +124,7 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 			public void onSucess(String fileUrl) {
 				uploadImageList.add(fileUrl);
 				
-				if (uploadImageList.size() == mSelectPath.size()) {
-					gridView.setAdapter(new ImageAdapter(UploadActivity.this, uploadImageList));
-				}
+				gridView.setAdapter(new ImageAdapter(UploadActivity.this, uploadImageList));
 			}
 			
 			@Override
