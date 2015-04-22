@@ -28,7 +28,7 @@ import android.util.Log;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.UrlConstants;
 import com.zifei.corebeau.common.task.NetworkExecutor;
-import com.zifei.corebeau.my.bean.TokenResponse;
+import com.zifei.corebeau.my.bean.response.TokenResponse;
 import com.zifei.corebeau.my.qiniu.QiniuTask;
 import com.zifei.corebeau.my.qiniu.up.UpParam;
 import com.zifei.corebeau.my.qiniu.up.UploadHandler;
@@ -110,6 +110,7 @@ public class UploadTask {
 	}
 
 	public interface ImageCropListener {
+		
 		public void onSucess(String fileUrl);
 
 		public void onError();

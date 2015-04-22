@@ -25,7 +25,7 @@ public class SpotTask {
 
         Map<String, Object> params = new HashMap<String, Object>();
 
-        NetworkExecutor.post(UrlConstants.GET_SPOT_LIST, params, SpotListResponse.class, new NetworkExecutor.CallBack<SpotListResponse>() {
+        NetworkExecutor.post(UrlConstants.GET_SEARCH_RECOMMEND_POST, params, SpotListResponse.class, new NetworkExecutor.CallBack<SpotListResponse>() {
             @Override
             public void onSuccess(SpotListResponse response) {
 

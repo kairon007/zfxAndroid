@@ -24,11 +24,11 @@ public class PostTask {
         this.context = context;
     }
 
-    public void getPost(Integer postId, final AsyncCallBacks.OneOne<PostResponse, String> callback) {
+    public void getItem(String itemId, final AsyncCallBacks.OneOne<PostResponse, String> callback) {
 
-        Map<String, Object> params = Utils.buildMap("postId",postId);
+        Map<String, Object> params = Utils.buildMap("itemId",itemId);
 
-        NetworkExecutor.post(UrlConstants.GET_POST, params, PostResponse.class, new NetworkExecutor.CallBack<PostResponse>() {
+        NetworkExecutor.post(UrlConstants.GET_ITEM_DETAIL, params, PostResponse.class, new NetworkExecutor.CallBack<PostResponse>() {
             @Override
             public void onSuccess(PostResponse response) {
 
@@ -37,8 +37,6 @@ public class PostTask {
 
                 if(status == PostResponse.SUCCESS){
                     callback.onSuccess(response);
-                }else if(status == PostResponse.FAILED){
-                    callback.onError(msg);
                 }else{
                     callback.onError(msg);
                 }
@@ -159,7 +157,7 @@ public class PostTask {
 
 
     // db에 쌓아놓고 나중에 서버와 싱크 맞춤
-    public void insertLike(Integer postId, final AsyncCallBacks.OneOne<Response, String> callback) {
+    public void insertLike(String postId, final AsyncCallBacks.OneOne<Response, String> callback) {
         Map<String, Object> params = Utils.buildMap("postId",postId);
 
         NetworkExecutor.post(UrlConstants.DELETE_COMMENT, params, Response.class, new NetworkExecutor.CallBack<Response>() {
@@ -185,7 +183,7 @@ public class PostTask {
         });
     }
 
-    public void deleteLike(Integer postId, final AsyncCallBacks.OneOne<Response, String> callback) {
+    public void deleteLike(String postId, final AsyncCallBacks.OneOne<Response, String> callback) {
         Map<String, Object> params = Utils.buildMap("postId",postId);
 
         NetworkExecutor.post(UrlConstants.DELETE_COMMENT, params, Response.class, new NetworkExecutor.CallBack<Response>() {

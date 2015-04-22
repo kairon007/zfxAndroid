@@ -1,7 +1,7 @@
 package com.zifei.corebeau.search.bean.Response;
 
+import com.zifei.corebeau.bean.PageBean;
 import com.zifei.corebeau.common.net.Response;
-import com.zifei.corebeau.search.bean.PageBean;
 @SuppressWarnings("rawtypes")
 public class RecommendUserResponse extends Response {
 

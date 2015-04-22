@@ -8,7 +8,7 @@ import android.widget.ProgressBar;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.BarActivity;
-import com.zifei.corebeau.my.bean.FollowListResponse;
+import com.zifei.corebeau.my.bean.response.FollowListResponse;
 import com.zifei.corebeau.my.task.FollowTask;
 import com.zifei.corebeau.my.ui.adapter.FollowAdapter;
 import com.zifei.corebeau.utils.Utils;

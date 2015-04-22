@@ -1,5 +1,7 @@
 package com.zifei.corebeau.post.bean.response;
 
+import java.util.List;
+
 import com.zifei.corebeau.post.bean.Post;
 import com.zifei.corebeau.common.net.Response;
 
@@ -9,13 +11,14 @@ import com.zifei.corebeau.common.net.Response;
  */
 public class PostResponse extends Response {
 
-    private Post post;
+	private List<String> pictureUrls;
 
-    public Post getPost() {
-        return post;
-    }
+	public List<String> getPictureUrls() {
+		return pictureUrls;
+	}
 
-    public void setPost(Post post) {
-        this.post = post;
-    }
+	public void setPictureUrls(List<String> pictureUrls) {
+		this.pictureUrls = pictureUrls;
+	}
+	
 }

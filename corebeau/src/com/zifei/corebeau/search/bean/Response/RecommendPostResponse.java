@@ -1,8 +1,8 @@
 package com.zifei.corebeau.search.bean.Response;
 
+import com.zifei.corebeau.bean.ItemInfo;
+import com.zifei.corebeau.bean.PageBean;
 import com.zifei.corebeau.common.net.Response;
-import com.zifei.corebeau.search.bean.ItemInfo;
-import com.zifei.corebeau.search.bean.PageBean;
 public class RecommendPostResponse extends Response {
 	
 	private PageBean<ItemInfo> pageBean;

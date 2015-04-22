@@ -8,7 +8,7 @@ import android.content.Context;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.UrlConstants;
 import com.zifei.corebeau.common.task.NetworkExecutor;
-import com.zifei.corebeau.my.bean.MyPostListResponse;
+import com.zifei.corebeau.my.bean.response.MyPostListResponse;
 
 public class ScrapTask {
 	

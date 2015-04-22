@@ -18,8 +18,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.zifei.corebeau.R;
+import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.common.ui.widget.staggered.util.DynamicHeightImageView;
-import com.zifei.corebeau.search.bean.ItemInfo;
 
 public class SampleAdapter extends ArrayAdapter<ItemInfo> {
 
@@ -45,14 +45,14 @@ public class SampleAdapter extends ArrayAdapter<ItemInfo> {
 	public View getView(final int position, View convertView,
 			final ViewGroup parent) {
 
-		String imgUrl = getItem(position).getShowUrl();
-		 try {
-			URL u = new URL(imgUrl);
-			Image i= ImageIO.read(u);
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		String imgUrl = getItem(position).getShowUrl();
+//		 try {
+//			URL u = new URL(imgUrl);
+//			Image i= ImageIO.read(u);
+//		} catch (MalformedURLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		 
 		ViewHolder vh;
 		if (convertView == null) {

@@ -33,7 +33,7 @@ import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.BarActivity;
 import com.zifei.corebeau.common.ui.MainActivity;
 import com.zifei.corebeau.common.ui.SplashActivity;
-import com.zifei.corebeau.my.bean.TokenResponse;
+import com.zifei.corebeau.my.bean.response.TokenResponse;
 import com.zifei.corebeau.my.qiniu.QiniuTask;
 import com.zifei.corebeau.my.qiniu.QiniuUploadUitls.QiniuUploadUitlsListener;
 import com.zifei.corebeau.my.qiniu.up.UpParam;

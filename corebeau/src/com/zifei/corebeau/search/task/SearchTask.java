@@ -8,10 +8,10 @@ import org.codehaus.jackson.type.TypeReference;
 
 import android.content.Context;
 
+import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.UrlConstants;
 import com.zifei.corebeau.common.task.NetworkExecutor;
-import com.zifei.corebeau.search.bean.ItemInfo;
 import com.zifei.corebeau.search.bean.Response.RecommendPostResponse;
 import com.zifei.corebeau.search.bean.Response.RecommendUserResponse;
 

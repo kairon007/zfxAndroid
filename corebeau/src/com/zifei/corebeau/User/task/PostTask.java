@@ -28,7 +28,7 @@ public class PostTask {
 
         Map<String, Object> params = Utils.buildMap("postId",postId);
 
-        NetworkExecutor.post(UrlConstants.GET_POST, params, PostResponse.class, new NetworkExecutor.CallBack<PostResponse>() {
+        NetworkExecutor.post(UrlConstants.GET_ITEM_DETAIL, params, PostResponse.class, new NetworkExecutor.CallBack<PostResponse>() {
             @Override
             public void onSuccess(PostResponse response) {
 

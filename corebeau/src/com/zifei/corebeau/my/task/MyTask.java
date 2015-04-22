@@ -7,8 +7,8 @@ import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.common.net.UrlConstants;
 import com.zifei.corebeau.common.task.NetworkExecutor;
-import com.zifei.corebeau.my.bean.MyPostListResponse;
-import com.zifei.corebeau.my.bean.TokenResponse;
+import com.zifei.corebeau.my.bean.response.MyPostListResponse;
+import com.zifei.corebeau.my.bean.response.TokenResponse;
 import com.zifei.corebeau.spot.bean.response.SpotListResponse;
 
 import android.content.Context;
@@ -26,7 +26,7 @@ public class MyTask {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 
-		NetworkExecutor.post(UrlConstants.GET_SPOT_LIST, params,
+		NetworkExecutor.post(UrlConstants.GET_MY_POST, params,
 				MyPostListResponse.class,
 				new NetworkExecutor.CallBack<MyPostListResponse>() {
 					@Override
@@ -37,8 +37,6 @@ public class MyTask {
 
 						if (status == MyPostListResponse.SUCCESS) {
 							callback.onSuccess(response);
-						} else if (status == MyPostListResponse.FAILED) {
-							callback.onError(msg);
 						} else {
 							callback.onError(msg);
 						}

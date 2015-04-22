@@ -1,8 +1,9 @@
-package com.zifei.corebeau.my.bean;
+package com.zifei.corebeau.my.bean.response;
 
 import java.util.List;
 
 import com.zifei.corebeau.common.net.Response;
+import com.zifei.corebeau.my.bean.FollowUser;
 
 public class FollowListResponse extends Response {
 	

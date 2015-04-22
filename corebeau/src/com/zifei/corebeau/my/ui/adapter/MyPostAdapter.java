@@ -18,6 +18,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.R.color;
 import com.zifei.corebeau.User.ui.OtherUserActivity;
+import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
 import com.zifei.corebeau.post.ui.PostActivity;
 import com.zifei.corebeau.spot.bean.SpotList;
@@ -32,7 +33,7 @@ public class MyPostAdapter extends BaseAdapter {
 
 	private Context context;
 	private LayoutInflater inflater;
-	private List<SpotList> data = null;
+	private List<ItemInfo> data = null;
 	private DisplayImageOptions imageOptions;
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
@@ -53,7 +54,7 @@ public class MyPostAdapter extends BaseAdapter {
 				.build();
 	}
 
-	public void addData(List<SpotList> data, boolean append) {
+	public void addData(List<ItemInfo> data, boolean append) {
 		if (append) {
 			this.data.addAll(data);
 		} else {
@@ -62,7 +63,7 @@ public class MyPostAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 
-	public List<SpotList> getData() {
+	public List<ItemInfo> getData() {
 		return this.data;
 	}
 
@@ -101,11 +102,7 @@ public class MyPostAdapter extends BaseAdapter {
 		}
 
 		ViewHolder holder = new ViewHolder();
-		holder.usericon = (CircularImageView) convertView
-				.findViewById(R.id.spot_user_thumb);
 //		holder.usericon.setBorderWidth(5);
-		holder.nickName = (TextView) convertView
-				.findViewById(R.id.spot_user_nickname);
 		holder.message = (TextView) convertView
 				.findViewById(R.id.tv_spot_message);
 		// holder.date = (TextView) convertView.findViewById(R.id.spot_image);
@@ -113,21 +110,14 @@ public class MyPostAdapter extends BaseAdapter {
 		holder.goPostDetail = (TextView) convertView
 				.findViewById(R.id.tv_go_detail);
 
-		final SpotList p = data.get(position);
+		final ItemInfo p = data.get(position);
 
-		String urlThumb = p.getUserIcon();
-		if (!StringUtil.isEmpty(urlThumb)) {
-			imageLoader.displayImage(urlThumb, holder.usericon, imageOptions);
-		} else {
-		}
-
-		holder.nickName.setText(p.getUserNickname());
-		holder.message.setText(p.getMessage());
+		holder.message.setText(p.getTitle());
 		// holder.date.setText(p.getMessage());
 
-		String url = p.getPic();
+		String url = p.getShowUrl();
 		if (!StringUtil.isEmpty(url)) {
-			imageLoader.displayImage(url, holder.image, imageOptions);
+			imageLoader.displayImage(url+"", holder.image, imageOptions);
 		} else {
 //			holder.image.setBackgroundColor(color.blue);
 		}
@@ -141,12 +131,12 @@ public class MyPostAdapter extends BaseAdapter {
 			}
 		});
 
-		holder.goPostDetail.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				goPostPage(p.getPostId());
-			}
-		});
+//		holder.goPostDetail.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				goPostPage(p.getPostId());
+//			}
+//		});
 
 		convertView.setTag(position);
 		return convertView;
@@ -155,11 +145,6 @@ public class MyPostAdapter extends BaseAdapter {
 	private void goPostPage(Integer postId) {
 		context.startActivity(new Intent(context, PostActivity.class).putExtra(
 				"postId", postId));
-	}
-
-	private void goUserPage(Integer userId) {
-		context.startActivity(new Intent(context, OtherUserActivity.class)
-				.putExtra("userId", userId));
 	}
 
 	private class ViewHolder {

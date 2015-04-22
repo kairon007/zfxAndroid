@@ -15,13 +15,13 @@ import android.widget.AdapterView;
 import android.widget.SearchView;
 
 import com.zifei.corebeau.R;
+import com.zifei.corebeau.bean.ItemInfo;
+import com.zifei.corebeau.bean.PageBean;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.view.HorizontalListView;
 import com.zifei.corebeau.common.ui.widget.progress.CircularProgressBar;
 import com.zifei.corebeau.common.ui.widget.progress.CircularProgressDrawable;
 import com.zifei.corebeau.common.ui.widget.staggered.StaggeredGridView;
-import com.zifei.corebeau.search.bean.ItemInfo;
-import com.zifei.corebeau.search.bean.PageBean;
 import com.zifei.corebeau.search.bean.Response.RecommendPostResponse;
 import com.zifei.corebeau.search.bean.Response.RecommendUserResponse;
 import com.zifei.corebeau.search.task.SearchTask;

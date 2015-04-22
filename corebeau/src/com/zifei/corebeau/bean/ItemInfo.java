@@ -1,4 +1,4 @@
-package com.zifei.corebeau.search.bean;
+package com.zifei.corebeau.bean;
 
 import java.io.Serializable;
 

@@ -1,5 +1,7 @@
 package com.zifei.corebeau.spot.ui.adapter;
 
+import java.util.List;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -14,15 +16,12 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.User.ui.OtherUserActivity;
+import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
 import com.zifei.corebeau.post.ui.PostActivity;
-import com.zifei.corebeau.spot.bean.SpotList;
 import com.zifei.corebeau.utils.StringUtil;
-
-import java.util.List;
 
 /**
  * Created by im14s_000 on 2015/3/25.
@@ -31,7 +30,7 @@ public class SpotAdapter extends BaseAdapter {
 
 	private Context context;
 	private LayoutInflater inflater;
-	private List<SpotList> data = null;
+	private List<ItemInfo> data = null;
 	private DisplayImageOptions imageOptions;
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
@@ -45,16 +44,12 @@ public class SpotAdapter extends BaseAdapter {
 		imageLoader.init(config);
 
 		imageOptions = new DisplayImageOptions.Builder() //
-				// .showImageOnLoading(R.drawable.mall_item_bg) // 载入时图片设置为黑色
-				// .showImageOnFail(R.drawable.mall_item_bg) // 加载失败时显示的图片
 				.delayBeforeLoading(200) // 载入之前的延迟时间
 				.cacheInMemory(false).cacheOnDisk(true)
-				// .imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
-				// .displayer(new FadeInBitmapDisplayer(500))
 				.build();
 	}
 
-	public void addData(List<SpotList> data, boolean append) {
+	public void addData(List<ItemInfo> data, boolean append) {
 		if (append) {
 			this.data.addAll(data);
 		} else {
@@ -63,7 +58,7 @@ public class SpotAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 
-	public List<SpotList> getData() {
+	public List<ItemInfo> getData() {
 		return this.data;
 	}
 
@@ -114,24 +109,25 @@ public class SpotAdapter extends BaseAdapter {
 		holder.goPostDetail = (TextView) convertView
 				.findViewById(R.id.tv_go_detail);
 
-		final SpotList p = data.get(position);
+		final ItemInfo p = data.get(position);
 
-		String urlThumb = p.getUserIcon();
+		String urlThumb = p.getUserImageUrl();
 		if (!StringUtil.isEmpty(urlThumb)) {
 			imageLoader.displayImage(urlThumb, holder.usericon, imageOptions);
 		} else {
 		}
 
-		holder.nickName.setText(p.getUserNickname());
-		holder.message.setText(p.getMessage());
+		holder.nickName.setText(p.getNickName());
+		holder.message.setText(p.getTitle());
 		// holder.date.setText(p.getMessage());
 
-		String url = p.getPic();
+		String url = p.getUserImageUrl();
 		if (!StringUtil.isEmpty(url)) {
 			imageLoader.displayImage(url, holder.image, imageOptions);
 		} else {
 
 		}
+		
 		holder.nickName.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -145,7 +141,7 @@ public class SpotAdapter extends BaseAdapter {
 		holder.goPostDetail.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				goPostPage(p.getPostId());
+				goPostPage(p);
 			}
 		});
 
@@ -153,9 +149,9 @@ public class SpotAdapter extends BaseAdapter {
 		return convertView;
 	}
 
-	private void goPostPage(Integer postId) {
+	private void goPostPage(ItemInfo itemInfo) {
 		context.startActivity(new Intent(context, PostActivity.class).putExtra(
-				"postId", postId));
+				"itemInfo", itemInfo));
 	}
 
 	private void goUserPage(Integer userId) {

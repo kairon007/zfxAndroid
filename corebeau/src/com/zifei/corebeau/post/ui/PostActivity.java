@@ -15,6 +15,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.zifei.corebeau.R;
+import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
@@ -33,11 +34,10 @@ import com.zifei.corebeau.utils.Utils;
  */
 public class PostActivity extends FragmentActivity implements OnClickListener {
 
-    private List<String> currentPostImage;
-    private Post currentPost;
     private PostViewPager mPager;
     private PostTask postTask;
-    private Integer postId;
+    private ItemInfo itemInfo;
+    private String itemId;
     private DisplayImageOptions imageOptions;
     private ImageLoader imageLoader;
     private ImageLoaderConfiguration config;
@@ -50,6 +50,8 @@ public class PostActivity extends FragmentActivity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+        Intent intent = getIntent();
+        itemInfo = (ItemInfo) intent.getSerializableExtra("itemInfo");
         init();
     }
 
@@ -72,7 +74,7 @@ public class PostActivity extends FragmentActivity implements OnClickListener {
         ivComment.setOnClickListener(this);
         
         initImageLoader();
-        
+        setPostData();
        
     }
     
@@ -114,10 +116,6 @@ public class PostActivity extends FragmentActivity implements OnClickListener {
                 .cacheOnDisk(true)
                 .build();
     }
-    
-    
-    
-    
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -136,37 +134,40 @@ public class PostActivity extends FragmentActivity implements OnClickListener {
     }
 
     private void getPostTask() {
-        postTask.getPost(postId, new AsyncCallBacks.OneOne<PostResponse, String>() {
+        postTask.getItem(itemId, new AsyncCallBacks.OneOne<PostResponse, String>() {
             @Override
-            public void onSuccess(PostResponse result) {
-
+            public void onSuccess(PostResponse response) {
+            	List<String> urlList = response.getPictureUrls();
+            	setPostImage(urlList);
+                
             }
 
             @Override
             public void onError(String result) {
-//            	currentPostImage = TestData.getPostImages();
-//            	currentPost = TestData.getPost();
-                setPostData();
-                mIndicator.setViewPager(mPager);
-                
                 
             }
         });
     }
-
-    private void setPostData() {
-    	mPager.setAdapter(new ImageAdapter(this, currentPostImage));
+    
+    private void setPostImage(List<String> urlList){
+    	mPager.setAdapter(new ImageAdapter(this, urlList));
 //    	userIcon.set
-    	String iconUrl = currentPost.getUserIcon();
+    	String iconUrl = itemInfo.getUserImageUrl();
     	if (!StringUtil.isEmpty(iconUrl)) {
             imageLoader.displayImage(iconUrl, userIcon, imageOptions);
         } else {
         	// default image
         }
-    	tvNickname.setText(currentPost.getUserNickname());
-        tvLikeCnt.setText(currentPost.getCountLike().toString());
-        tvCommentCnt.setText(currentPost.getCountComment().toString());
-        tvMsg.setText(currentPost.getMessage());
+    	mIndicator.setViewPager(mPager);
+    }
+
+    private void setPostData() {
+    	
+    	tvNickname.setText(itemInfo.getNickName());
+        tvLikeCnt.setText(String.valueOf(itemInfo.getLikeCnt()));
+        tvCommentCnt.setText(String.valueOf(itemInfo.getCommentCnt()));
+        tvMsg.setText(itemInfo.getTitle());
+        
     }
     
     private class PageChangeListener implements OnPageChangeListener {
@@ -188,7 +189,7 @@ public class PostActivity extends FragmentActivity implements OnClickListener {
 
     // 해놓고 백그라운드에서 돌린다
     private void insertLikeTask() {
-        postTask.insertLike(postId, new AsyncCallBacks.OneOne<Response, String>() {
+        postTask.insertLike(itemId, new AsyncCallBacks.OneOne<Response, String>() {
 
             @Override
             public void onSuccess(Response response) {
@@ -204,7 +205,7 @@ public class PostActivity extends FragmentActivity implements OnClickListener {
     }
 
     private void deleteLikeTask() {
-        postTask.deleteLike(postId, new AsyncCallBacks.OneOne<Response, String>() {
+        postTask.deleteLike(itemId, new AsyncCallBacks.OneOne<Response, String>() {
 
             @Override
             public void onSuccess(Response response) {
