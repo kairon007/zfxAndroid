@@ -1,10 +1,12 @@
 package com.zifei.corebeau.search.ui.adapter;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Random;
 
 import android.content.Context;
-import android.util.Log;
+import android.media.Image;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +45,15 @@ public class SampleAdapter extends ArrayAdapter<ItemInfo> {
 	public View getView(final int position, View convertView,
 			final ViewGroup parent) {
 
+		String imgUrl = getItem(position).getShowUrl();
+		 try {
+			URL u = new URL(imgUrl);
+			Image i= ImageIO.read(u);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
 		ViewHolder vh;
 		if (convertView == null) {
 			convertView = mLayoutInflater.inflate(R.layout.item_search_post,

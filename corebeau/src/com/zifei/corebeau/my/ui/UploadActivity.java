@@ -47,7 +47,7 @@ import com.zifei.corebeau.my.task.UploadTask.OnUploadStatusListener;
 import com.zifei.corebeau.my.ui.selector.MultiImageSelectorActivity;
 import com.zifei.corebeau.utils.Utils;
 
-public class UploadActivity extends BarActivity implements OnClickListener, OnUploadStatusListener, {
+public class UploadActivity extends BarActivity implements OnClickListener, OnUploadStatusListener {
 
 	private static final int REQUEST_IMAGE = 2;
 	private ArrayList<String> mSelectPath;
