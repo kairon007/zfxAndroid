@@ -20,11 +20,12 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 
 import com.zifei.corebeau.common.AsyncCallBacks;
+import com.zifei.corebeau.common.CorebeauApp;
 import com.zifei.corebeau.common.net.UrlConstants;
 import com.zifei.corebeau.common.task.NetworkExecutor;
 import com.zifei.corebeau.my.bean.response.TokenResponse;
@@ -33,6 +34,7 @@ import com.zifei.corebeau.my.qiniu.up.UpParam;
 import com.zifei.corebeau.my.qiniu.up.UploadHandler;
 import com.zifei.corebeau.my.qiniu.up.rs.UploadResultCallRet;
 import com.zifei.corebeau.my.qiniu.up.slice.Block;
+import com.zifei.corebeau.my.ui.UploadActivity;
 import com.zifei.corebeau.utils.CommonConfig;
 import com.zifei.corebeau.utils.Utils;
 
@@ -151,13 +153,6 @@ public class UploadTask {
 		return bitmap;
 	}
 
-	private static final String TEMP_ROOT_PATH = Environment
-			.getExternalStorageDirectory().getPath() + "/";
-
-	// private String tempFilePath(Uri uri){
-	// // uri.g
-	// }
-
 	public String saveBitmapToJpegFile(Bitmap bitmap, String filePath) {
 		try {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -246,6 +241,23 @@ public class UploadTask {
 					}
 
 				});
+	}
+	
+	public void upload(String message){
+		
+		upload(message, new AsyncCallBacks.ZeroOne<String>() {
+	
+			@Override
+			public void onSuccess() {
+				Utils.showToast(CorebeauApp.app, "upload success!!");
+				
+			}
+	
+			@Override
+			public void onError(String msg) {
+				Utils.showToast(CorebeauApp.app, "upload failed");
+			}
+		});
 	}
 
 	public interface OnUploadStatusListener {

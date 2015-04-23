@@ -44,7 +44,9 @@ public class PostActivity extends FragmentActivity implements OnClickListener {
     private CircularImageView userIcon;
     private TextView tvNickname, tvLikeCnt, tvCommentCnt, tvMsg; 
     private PageIndicator mIndicator;
-    private ImageView ivLike, ivComment;
+    private ImageView ivLike, ivComment, ivScrap;
+    private boolean isScrap = false;
+    private boolean isLike = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,7 @@ public class PostActivity extends FragmentActivity implements OnClickListener {
         tvLikeCnt = (TextView)findViewById(R.id.tv_post_like);
         tvCommentCnt = (TextView)findViewById(R.id.tv_post_comment);
         tvMsg = (TextView)findViewById(R.id.tv_post_msg);
+        ivScrap = (ImageView)findViewById(R.id.iv_post_scrap);
         
         ivLike.setOnClickListener(this);
         ivComment.setOnClickListener(this);
@@ -133,13 +136,26 @@ public class PostActivity extends FragmentActivity implements OnClickListener {
         super.onBackPressed();
     }
 
-    private void getPostTask() {
+    private void getPostTask() {   // get isScrap, isLike
         postTask.getItem(itemId, new AsyncCallBacks.OneOne<PostResponse, String>() {
             @Override
             public void onSuccess(PostResponse response) {
             	List<String> urlList = response.getPictureUrls();
             	setPostImage(urlList);
-                
+            	
+//            	ivScrap = response.get...;
+            	if(isScrap){
+            		ivScrap.setBackgroundResource(R.drawable.scrap_on);
+            	}else{
+            		ivScrap.setBackgroundResource(R.drawable.scrap_off);
+            	}
+            	
+//            	ivlike = response.get...;
+            	if(isLike){
+            		ivLike.setBackgroundResource(R.drawable.dashboard_post_control_like_selected);
+            	}else{
+            		ivLike.setBackgroundResource(R.drawable.dashboard_post_control_like);
+            	}
             }
 
             @Override
@@ -186,6 +202,29 @@ public class PostActivity extends FragmentActivity implements OnClickListener {
 		public void onPageSelected(int arg0) {
 		}
 	}
+    
+    private void addScrap(){
+    	
+    	postTask.addScrap(itemId, new AsyncCallBacks.OneOne<Response, String>() {
+
+            @Override
+            public void onSuccess(Response response) {
+
+                
+                // DB set data
+                
+                // delete add data
+            }
+
+            @Override
+            public void onError(String msg) {
+            	
+            	
+                
+                // remain add data
+            }
+        });
+    }
 
     // 해놓고 백그라운드에서 돌린다
     private void insertLikeTask() {

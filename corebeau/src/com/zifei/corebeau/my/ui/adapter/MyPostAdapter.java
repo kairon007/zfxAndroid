@@ -121,16 +121,7 @@ public class MyPostAdapter extends BaseAdapter {
 		} else {
 //			holder.image.setBackgroundColor(color.blue);
 		}
-		holder.nickName.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				notifyDataSetChanged();
-				Toast.makeText(context, "You have deleted row No. " + position,
-						Toast.LENGTH_SHORT).show();
-			}
-		});
-
+		
 //		holder.goPostDetail.setOnClickListener(new View.OnClickListener() {
 //			@Override
 //			public void onClick(View v) {

@@ -155,12 +155,12 @@ public class PostTask {
         });
     }
 
-
+    
     // db에 쌓아놓고 나중에 서버와 싱크 맞춤
-    public void insertLike(String postId, final AsyncCallBacks.OneOne<Response, String> callback) {
-        Map<String, Object> params = Utils.buildMap("postId",postId);
+    public void addScrap(String itemId, final AsyncCallBacks.OneOne<Response, String> callback) {
+        Map<String, Object> params = Utils.buildMap("itemId",itemId);
 
-        NetworkExecutor.post(UrlConstants.DELETE_COMMENT, params, Response.class, new NetworkExecutor.CallBack<Response>() {
+        NetworkExecutor.post(UrlConstants.ADD_SCRAP, params, Response.class, new NetworkExecutor.CallBack<Response>() {
             @Override
             public void onSuccess(Response response) {
 
@@ -169,8 +169,31 @@ public class PostTask {
 
                 if(status == Response.SUCCESS){
                     callback.onSuccess(response);
-                }else if(status == Response.FAILED){
+                }else{
                     callback.onError(msg);
+                }
+            }
+
+            @Override
+            public void onError(Integer status, String msg) {
+                callback.onError(msg);
+            }
+        });
+    }
+
+    // db에 쌓아놓고 나중에 서버와 싱크 맞춤
+    public void insertLike(String itemId, final AsyncCallBacks.OneOne<Response, String> callback) {
+        Map<String, Object> params = Utils.buildMap("itemId",itemId);
+
+        NetworkExecutor.post(UrlConstants.ADD_SCRAP, params, Response.class, new NetworkExecutor.CallBack<Response>() {
+            @Override
+            public void onSuccess(Response response) {
+
+                int status = response.getStatusCode();
+                String msg = response.getMsg();
+
+                if(status == Response.SUCCESS){
+                    callback.onSuccess(response);
                 }else{
                     callback.onError(msg);
                 }

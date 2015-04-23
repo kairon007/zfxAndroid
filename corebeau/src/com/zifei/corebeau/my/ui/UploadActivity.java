@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -18,13 +19,16 @@ import android.widget.ProgressBar;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.umeng.analytics.MobclickAgent;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.BarActivity;
+import com.zifei.corebeau.common.ui.SplashActivity;
 
 import com.zifei.corebeau.my.task.UploadTask;
 import com.zifei.corebeau.my.task.UploadTask.OnUploadStatusListener;
 import com.zifei.corebeau.my.ui.selector.MultiImageSelectorActivity;
+import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
 
 public class UploadActivity extends BarActivity implements OnClickListener, OnUploadStatusListener {
@@ -129,23 +133,22 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 			}
 		});
 	}
+
+	
+	
 	
 	private void upload(String message){
-		uploadTask.upload(message, new AsyncCallBacks.ZeroOne<String>() {
-
+		uploadTask.upload(message);
+		final Handler handler = new Handler();
+		Runnable run = new Runnable() {
 			@Override
-			public void onSuccess() {
-				progressBar.setVisibility(View.GONE);
-				Utils.showToast(UploadActivity.this, "upload success!!");
+			public void run() {
+				Utils.showToast(UploadActivity.this, "submit success");
 				finish();
 			}
-
-			@Override
-			public void onError(String msg) {
-				progressBar.setVisibility(View.GONE);
-				Utils.showToast(UploadActivity.this, msg);
-			}
-		});
+		};
+		handler.postDelayed(run, 500);
+		
 	}
 	
 	public class ImageAdapter extends BaseAdapter {

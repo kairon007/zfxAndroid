@@ -4,10 +4,10 @@ public class UrlConstants {
 
 	// public static final String BASE_URL = "http://api.huaqianapp.com";
 
-	// public static final String BASE_URL =
-	// "http://115.28.175.29:8080/frontend";
+	 public static final String BASE_URL =
+	 "http://115.28.175.29:8080/frontend";
 
-	public static final String BASE_URL = "http://192.168.91.104:8080/frontend";
+//	public static final String BASE_URL = "http://192.168.91.104:8080/frontend";
 
 	// account
 
@@ -51,6 +51,9 @@ public class UrlConstants {
 	public static String LIKE = BASE_URL + "/like";
 
 	public static String LIKE_DEL = BASE_URL + "/comment";
+	
+	
+	public static String ADD_SCRAP = BASE_URL + "/post/addFollowItem";
 
 	// my
 
