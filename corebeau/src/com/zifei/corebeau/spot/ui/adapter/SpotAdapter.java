@@ -108,6 +108,8 @@ public class SpotAdapter extends BaseAdapter {
 		holder.image = (ImageView) convertView.findViewById(R.id.spot_image);
 		holder.goPostDetail = (TextView) convertView
 				.findViewById(R.id.tv_go_detail);
+		holder.commentCnt = (TextView)convertView.findViewById(R.id.tv_spot_comment_cnt);
+		
 
 		final ItemInfo p = data.get(position);
 
@@ -119,9 +121,8 @@ public class SpotAdapter extends BaseAdapter {
 
 		holder.nickName.setText(p.getNickName());
 		holder.message.setText(p.getTitle());
-		// holder.date.setText(p.getMessage());
-
-		String url = p.getUserImageUrl();
+		holder.commentCnt.setText(String.valueOf(p.getCommentCnt()));
+		String url = p.getShowUrl();
 		if (!StringUtil.isEmpty(url)) {
 			imageLoader.displayImage(url, holder.image, imageOptions);
 		} else {
@@ -166,6 +167,7 @@ public class SpotAdapter extends BaseAdapter {
 		CircularImageView usericon;
 		ImageView image;
 		TextView goPostDetail;
+		TextView commentCnt;
 	}
 
 }

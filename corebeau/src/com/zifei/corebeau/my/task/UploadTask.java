@@ -108,6 +108,17 @@ public class UploadTask {
 //		}
 //		// TODO enable submit
 //	}
+	
+	
+
+//	public void imageReset(final ArrayList<String> stringPath,
+//			final ImageCropListener listener) {
+//		for (String p : stringPath) {
+//			File file = new File(p);
+//			uriToBitmap(Uri.fromFile(file), listener, file.getName());
+//		}
+//		// TODO enable submit
+//	}
 
 	public interface ImageCropListener {
 		

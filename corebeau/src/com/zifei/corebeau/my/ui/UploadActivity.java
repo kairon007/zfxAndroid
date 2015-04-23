@@ -42,7 +42,6 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 	private UploadTask uploadTask;
 	private ProgressBar progressBar;
 	private EditText editText;
-	private ArrayList<String> uploadImageList = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,24 +98,6 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 		}
 	}
 	
-	private void imageSetting(final ArrayList<String> mSelectPath){
-		
-//		uploadTask.imageReset(mSelectPath , new ImageCropListener() {
-//			
-//			@Override
-//			public void onSucess(String fileUrl) {
-//				uploadImageList.add(fileUrl);
-//			}
-//			
-//			@Override
-//			public void onError() {
-//				Log.i("","fail!!! reupload plz");
-//			}
-//		});
-		
-		
-	}
-	
 	private void submit(){
 		progressBar.setVisibility(View.VISIBLE);
 		uploadTask.getToken(mSelectPath, new AsyncCallBacks.TwoTwo<Integer, String, Integer, String>() {
@@ -135,16 +116,17 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 	}
 
 	
-	
+	final Handler handler = new Handler();
 	
 	private void upload(String message){
 		uploadTask.upload(message);
-		final Handler handler = new Handler();
+		
 		Runnable run = new Runnable() {
 			@Override
 			public void run() {
 				Utils.showToast(UploadActivity.this, "submit success");
 				finish();
+				
 			}
 		};
 		handler.postDelayed(run, 500);
