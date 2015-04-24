@@ -1,5 +1,7 @@
 package com.zifei.corebeau.my.task;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,26 +18,32 @@ import com.zifei.corebeau.common.net.UrlConstants;
 import com.zifei.corebeau.common.task.NetworkExecutor;
 import com.zifei.corebeau.my.bean.response.MyPostListResponse;
 import com.zifei.corebeau.my.bean.response.TokenResponse;
+import com.zifei.corebeau.my.qiniu.QiniuTask;
 import com.zifei.corebeau.my.qiniu.up.UpParam;
 import com.zifei.corebeau.my.qiniu.up.UploadHandler;
 import com.zifei.corebeau.my.qiniu.up.rs.UploadResultCallRet;
 import com.zifei.corebeau.my.qiniu.up.slice.Block;
 import com.zifei.corebeau.spot.bean.response.SpotListResponse;
+import com.zifei.corebeau.utils.CommonConfig;
 import com.zifei.corebeau.utils.Utils;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 public class MyTask {
 
 	private Context context;
+	private QiniuTask qiniuTask;
 
 	public MyTask(Context context) {
 		this.context = context;
+		qiniuTask = new QiniuTask(context);
 	}
 	
 	public void getUserInfo(){
@@ -331,10 +339,11 @@ public class MyTask {
 				Object passParam) {
 			ObjectMapper objectMapper = new ObjectMapper();
 			Map readValue;
+			String responseUrl = null;
 			try {
 				readValue = objectMapper
 						.readValue(ret.getResponse(), Map.class);
-				names.add((String) readValue.get("key"));
+				responseUrl = (String) readValue.get("key");
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
@@ -344,10 +353,7 @@ public class MyTask {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
-			if (names.size() == qiniuTask.getLength()) {
-				uploadStatusListener.uploadFinish(true);
-			}
+			uploadProfileImage(responseUrl);
 		}
 
 		@Override
@@ -357,7 +363,6 @@ public class MyTask {
 			if (ret.getException() != null) {
 				ret.getException().printStackTrace();
 			}
-			uploadStatusListener.uploadFinish(false);
 		}
 
 		@Override
@@ -373,12 +378,12 @@ public class MyTask {
 		}
 	};
 
-	public void upload(String content,
+	public void uploadProfileImage(String iconpicUrls,
 			final AsyncCallBacks.ZeroOne<String> callback) {
-		Map<String, Object> params = Utils.buildMap("title", content,
-				"picUrls", names);
+		Map<String, Object> params = Utils.buildMap(
+				"iconpicUrls", iconpicUrls);
 
-		NetworkExecutor.post(UrlConstants.UPLOAD, params, TokenResponse.class,
+		NetworkExecutor.post(UrlConstants.UPLOAD_MY_ICON_IMAGE, params, TokenResponse.class,
 				new NetworkExecutor.CallBack<TokenResponse>() {
 					@Override
 					public void onSuccess(TokenResponse response) {
@@ -393,9 +398,9 @@ public class MyTask {
 				});
 	}
 	
-	public void upload(String message){
+	public void uploadProfileImage(String url){
 		
-		upload(message, new AsyncCallBacks.ZeroOne<String>() {
+		uploadProfileImage(url, new AsyncCallBacks.ZeroOne<String>() {
 	
 			@Override
 			public void onSuccess() {
@@ -408,6 +413,28 @@ public class MyTask {
 				Utils.showToast(CorebeauApp.app, "upload failed");
 			}
 		});
+	}
+	
+	@SuppressLint("NewApi")
+	private Bitmap compressImage(Bitmap image) {
+		Log.i("image compressImage before", image.getByteCount() + " ");
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+		if (baos.toByteArray().length / 1024 <= CommonConfig.UPLOAD_IMAGE_QUALITY) {
+			ByteArrayInputStream isBm = new ByteArrayInputStream(
+					baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
+			Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
+			return bitmap;
+		}
+		int options = 100;
+		while (baos.toByteArray().length / 1024 > CommonConfig.UPLOAD_IMAGE_QUALITY) { // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
+			baos.reset();// 重置baos即清空baos
+			image.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
+			options -= 10;// 每次都减少10
+		}
+		ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
+		Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
+		return bitmap;
 	}
 
 }

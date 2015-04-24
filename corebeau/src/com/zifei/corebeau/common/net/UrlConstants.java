@@ -58,6 +58,8 @@ public class UrlConstants {
 	// my
 
 	public static String GET_MY_POST = BASE_URL + "/post/getItemInfoByUserId";
+	
+	public static String UPLOAD_MY_ICON_IMAGE = BASE_URL + "/.../...";
 
 	// comment
 
