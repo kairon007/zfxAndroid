@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_item_inner"
+    android:paddingTop="@dimen/navi_height"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="base "
+            android:textSize="15sp" />
+
+        <View style="@style/my_info_divider" />
+
+        <RelativeLayout
+            android:id="@+id/my_info_bind_account"
+            style="@style/other_rl_btn_press" >
+
+            <TextView
+                style="@style/other_rl_btn_text"
+                android:text="bind account" />
+        </RelativeLayout>
+
+        <View style="@style/my_info_divider" />
+
+        <RelativeLayout
+            android:id="@+id/my_info_change_password"
+            style="@style/other_rl_btn_press" >
+
+            <TextView
+                style="@style/other_rl_btn_text"
+                android:text="change password" />
+        </RelativeLayout>
+
+        <View style="@style/my_info_divider" />
+
+        <TextView
+            android:layout_marginTop="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="selection "
+            android:textSize="15sp" />
+
+        <RelativeLayout
+            android:id="@+id/my_info_nickname"
+            style="@style/other_rl_btn_press" >
+
+            <EditText
+                android:id="@+id/et_my_info_nickname"
+                android:layout_width="40dp"
+                android:layout_height="200dp" />
+        </RelativeLayout>
+
+        <View style="@style/my_info_divider" />
+
+        <RelativeLayout style="@style/other_rl_btn_press" >
+
+            <ImageView
+                android:id="@+id/iv_sex_male"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/scrap_off" />
+
+            <ImageView
+                android:id="@+id/iv_sex_female"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/iv_sex_male"
+                android:background="@drawable/scrap_off" />
+        </RelativeLayout>
+
+        <View style="@style/my_info_divider" />
+
+        <RelativeLayout
+            android:id="@+id/my_info_city"
+            style="@style/other_rl_btn_press" >
+
+            <TextView
+                style="@style/other_rl_btn_text"
+                android:text="city" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

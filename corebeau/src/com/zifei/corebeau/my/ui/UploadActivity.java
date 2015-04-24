@@ -19,16 +19,12 @@ import android.widget.ProgressBar;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.umeng.analytics.MobclickAgent;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.BarActivity;
-import com.zifei.corebeau.common.ui.SplashActivity;
-
 import com.zifei.corebeau.my.task.UploadTask;
 import com.zifei.corebeau.my.task.UploadTask.OnUploadStatusListener;
 import com.zifei.corebeau.my.ui.selector.MultiImageSelectorActivity;
-import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
 
 public class UploadActivity extends BarActivity implements OnClickListener, OnUploadStatusListener {
@@ -63,7 +59,8 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 		setNavTitle("upload");
 		setNavRightText("submit");
 		navi.setRightTextVisible(true);
-		navi.rightText.setOnClickListener(this);
+//		navi.rightText.setOnClickListener(this);
+		navi.rightTextClicker.setOnClickListener(this);
 	}
 
 	private void initLoader() {
@@ -92,7 +89,6 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 			if (resultCode == RESULT_OK) {
 				mSelectPath = data
 						.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-				
 				gridView.setAdapter(new ImageAdapter(UploadActivity.this, mSelectPath));
 			}
 		}
@@ -180,7 +176,7 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.navi_bar_right_text:
+		case R.id.navi_bar_text_clicker:
 			submit();
 			break;
 		}

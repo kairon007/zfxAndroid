@@ -1,5 +1,7 @@
 package com.zifei.corebeau.my.ui.adapter;
 
+import java.util.List;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -9,22 +11,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.zifei.corebeau.R;
-import com.zifei.corebeau.R.color;
-import com.zifei.corebeau.User.ui.OtherUserActivity;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
-import com.zifei.corebeau.post.ui.PostActivity;
-import com.zifei.corebeau.spot.bean.SpotList;
+import com.zifei.corebeau.post.ui.PostDetailActivity;
 import com.zifei.corebeau.utils.StringUtil;
-
-import java.util.List;
 
 /**
  * Created by im14s_000 on 2015/3/25.
@@ -128,13 +123,12 @@ public class MyPostAdapter extends BaseAdapter {
 //				goPostPage(p.getPostId());
 //			}
 //		});
-
 		convertView.setTag(position);
 		return convertView;
 	}
 
 	private void goPostPage(Integer postId) {
-		context.startActivity(new Intent(context, PostActivity.class).putExtra(
+		context.startActivity(new Intent(context, PostDetailActivity.class).putExtra(
 				"postId", postId));
 	}
 

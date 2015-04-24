@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,8 +20,6 @@ public class NavigationBar extends LinearLayout {
 
     public TextView title;
 
-//    private Button leftBtn;
-//
     private ImageButton rightBtn;
 
     public TextView rightText;
@@ -32,6 +29,8 @@ public class NavigationBar extends LinearLayout {
     private boolean showBackground = true;
     
     private ImageView backImageView;
+    
+    public LinearLayout rightTextClicker;
 
     public NavigationBar(Context context) {
         super(context);
@@ -51,7 +50,7 @@ public class NavigationBar extends LinearLayout {
         rightBtn = (ImageButton) findViewById(R.id.navi_bar_right_btn);
         rightText = (TextView) findViewById(R.id.navi_bar_right_text);
         backImageView = (ImageView)findViewById(R.id.navi_bar_left);
-
+        rightTextClicker = (LinearLayout)findViewById(R.id.navi_bar_text_clicker);
         paint = new Paint();
     }
 

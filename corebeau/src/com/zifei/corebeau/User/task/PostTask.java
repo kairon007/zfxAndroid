@@ -1,5 +1,7 @@
 package com.zifei.corebeau.User.task;
 
+import java.util.Map;
+
 import android.content.Context;
 
 import com.zifei.corebeau.User.bean.response.PostResponse;
@@ -10,8 +12,6 @@ import com.zifei.corebeau.common.task.NetworkExecutor;
 import com.zifei.corebeau.post.bean.response.CommentListResponse;
 import com.zifei.corebeau.post.bean.response.CommentResponse;
 import com.zifei.corebeau.utils.Utils;
-
-import java.util.Map;
 
 /**
  * Created by im14s_000 on 2015/3/23.

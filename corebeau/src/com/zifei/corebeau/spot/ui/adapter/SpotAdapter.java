@@ -11,7 +11,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -20,7 +19,7 @@ import com.zifei.corebeau.R;
 import com.zifei.corebeau.User.ui.OtherUserActivity;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
-import com.zifei.corebeau.post.ui.PostActivity;
+import com.zifei.corebeau.post.ui.PostDetailActivity;
 import com.zifei.corebeau.utils.StringUtil;
 
 /**
@@ -32,6 +31,7 @@ public class SpotAdapter extends BaseAdapter {
 	private LayoutInflater inflater;
 	private List<ItemInfo> data = null;
 	private DisplayImageOptions imageOptions;
+	private DisplayImageOptions iconImageOptions;
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
 
@@ -47,6 +47,14 @@ public class SpotAdapter extends BaseAdapter {
 				.delayBeforeLoading(200) // 载入之前的延迟时间
 				.cacheInMemory(false).cacheOnDisk(true)
 				.build();
+		
+		iconImageOptions = new DisplayImageOptions.Builder() //
+		.delayBeforeLoading(200) // 载入之前的延迟时间
+		.showImageForEmptyUri(R.drawable.my_default)
+		.showImageOnFail(R.drawable.my_default)
+		.showImageOnLoading(R.drawable.my_default)
+		.cacheInMemory(false).cacheOnDisk(true)
+		.build();
 	}
 
 	public void addData(List<ItemInfo> data, boolean append) {
@@ -104,7 +112,6 @@ public class SpotAdapter extends BaseAdapter {
 				.findViewById(R.id.spot_user_nickname);
 		holder.message = (TextView) convertView
 				.findViewById(R.id.tv_spot_message);
-		// holder.date = (TextView) convertView.findViewById(R.id.spot_image);
 		holder.image = (ImageView) convertView.findViewById(R.id.spot_image);
 		holder.goPostDetail = (TextView) convertView
 				.findViewById(R.id.tv_go_detail);
@@ -112,10 +119,10 @@ public class SpotAdapter extends BaseAdapter {
 		
 
 		final ItemInfo p = data.get(position);
-
+		imageLoader.displayImage("drawable://" + R.drawable.my_default, holder.usericon, iconImageOptions);
 		String urlThumb = p.getUserImageUrl();
 		if (!StringUtil.isEmpty(urlThumb)) {
-			imageLoader.displayImage(urlThumb, holder.usericon, imageOptions);
+			imageLoader.displayImage(urlThumb, holder.usericon, iconImageOptions);
 		} else {
 		}
 
@@ -129,13 +136,10 @@ public class SpotAdapter extends BaseAdapter {
 
 		}
 		
-		holder.nickName.setOnClickListener(new View.OnClickListener() {
-
+		holder.usericon.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				notifyDataSetChanged();
-				Toast.makeText(context, "You have deleted row No. " + position,
-						Toast.LENGTH_SHORT).show();
+				goUserPage(p.getUserId());
 			}
 		});
 
@@ -151,11 +155,11 @@ public class SpotAdapter extends BaseAdapter {
 	}
 
 	private void goPostPage(ItemInfo itemInfo) {
-		context.startActivity(new Intent(context, PostActivity.class).putExtra(
+		context.startActivity(new Intent(context, PostDetailActivity.class).putExtra(
 				"itemInfo", itemInfo));
 	}
 
-	private void goUserPage(Integer userId) {
+	private void goUserPage(String userId) {
 		context.startActivity(new Intent(context, OtherUserActivity.class)
 				.putExtra("userId", userId));
 	}
@@ -163,7 +167,6 @@ public class SpotAdapter extends BaseAdapter {
 	private class ViewHolder {
 		TextView message;
 		TextView nickName;
-		TextView date;
 		CircularImageView usericon;
 		ImageView image;
 		TextView goPostDetail;

@@ -1,27 +1,22 @@
 package com.zifei.corebeau.my.ui.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.zifei.corebeau.R;
-import com.zifei.corebeau.common.ui.OnFragmentInteractionListener;
 import com.zifei.corebeau.my.ui.FollowActivity;
+import com.zifei.corebeau.my.ui.MyInfoActivity;
 import com.zifei.corebeau.my.ui.MyPostActivity;
 import com.zifei.corebeau.post.ui.CommentActivity;
-import com.zifei.corebeau.post.ui.PostActivity;
 
 public class MyFragment extends Fragment implements View.OnClickListener {
 
-	private OnFragmentInteractionListener mListener;
-	private TextView ibMyPost, ibMyLike, ibMyMail, ibMyLogout, ibMyFollow;
+	private TextView ibMyPost, ibMyLike, ibMyMail, ibMyInfo, ibMyFollow;
 
 	public static MyFragment newInstance(String param1, String param2) {
 		MyFragment fragment = new MyFragment();
@@ -46,38 +41,14 @@ public class MyFragment extends Fragment implements View.OnClickListener {
 		ibMyLike = (TextView) view.findViewById(R.id.ib_my_like);
 		ibMyMail = (TextView) view.findViewById(R.id.ib_my_mail);
 		ibMyFollow = (TextView) view.findViewById(R.id.ib_my_follow);
-		ibMyLogout = (TextView) view.findViewById(R.id.ib_my_logout);
+		ibMyInfo = (TextView) view.findViewById(R.id.ib_my_info);
 
 		ibMyPost.setOnClickListener(this);
 		ibMyLike.setOnClickListener(this);
 		ibMyMail.setOnClickListener(this);
 		ibMyFollow.setOnClickListener(this);
-		ibMyLogout.setOnClickListener(this);
+		ibMyInfo.setOnClickListener(this);
 		return view;
-	}
-
-	// TODO: Rename method, update argument and hook method into UI event
-	public void onButtonPressed(Uri uri) {
-		if (mListener != null) {
-			mListener.onFragmentInteraction(uri);
-		}
-	}
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		try {
-			mListener = (OnFragmentInteractionListener) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement OnFragmentInteractionListener");
-		}
-	}
-
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		mListener = null;
 	}
 
 	@Override
@@ -99,7 +70,10 @@ public class MyFragment extends Fragment implements View.OnClickListener {
 			Intent intent4 = new Intent(getActivity(), FollowActivity.class);
 			startActivity(intent4);
 			break;
-			
+		case R.id.ib_my_info:
+			Intent intent5 = new Intent(getActivity(), MyInfoActivity.class);
+			startActivity(intent5);
+			break;
 		default:
 			break;
 		}

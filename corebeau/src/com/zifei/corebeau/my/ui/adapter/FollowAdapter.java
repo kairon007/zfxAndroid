@@ -3,25 +3,19 @@ package com.zifei.corebeau.my.ui.adapter;
 import java.util.List;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.zifei.corebeau.R;
-import com.zifei.corebeau.User.ui.OtherUserActivity;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
 import com.zifei.corebeau.my.bean.FollowUser;
-import com.zifei.corebeau.post.ui.PostActivity;
-import com.zifei.corebeau.spot.bean.SpotList;
 import com.zifei.corebeau.utils.StringUtil;
 
 public class FollowAdapter extends BaseAdapter {

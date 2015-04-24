@@ -12,7 +12,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">@color/common_dark_grey</item>
         <item name="android:textSize">20sp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:drawablePadding">10dp</item>
@@ -23,6 +23,18 @@
         <item name="android:background">#FFFFFF</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.5dp</item>
+    </style>
+    
+    <style name="my_info_divider">
+        <item name="android:background">@color/common_dark_grey</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+    </style>
+    
+     <style name="holizontal_divider">
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:layout_width">0.5dp</item>
+        <item name="android:layout_height">match_parent</item>
     </style>
 
     <style name="search_divider">

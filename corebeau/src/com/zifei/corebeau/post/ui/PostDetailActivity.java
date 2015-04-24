@@ -32,7 +32,7 @@ import com.zifei.corebeau.utils.Utils;
 /**
  * Created by im14s_000 on 2015/3/28.
  */
-public class PostActivity extends FragmentActivity implements OnClickListener {
+public class PostDetailActivity extends FragmentActivity implements OnClickListener {
 
     private PostViewPager mPager;
     private PostTask postTask;
@@ -238,7 +238,7 @@ public class PostActivity extends FragmentActivity implements OnClickListener {
 
             @Override
             public void onError(String msg) {
-                Utils.showToast(PostActivity.this, msg);
+                Utils.showToast(PostDetailActivity.this, msg);
             }
         });
     }
@@ -254,7 +254,7 @@ public class PostActivity extends FragmentActivity implements OnClickListener {
 
             @Override
             public void onError(String msg) {
-                Utils.showToast(PostActivity.this, msg);
+                Utils.showToast(PostDetailActivity.this, msg);
             }
         });
     }
@@ -265,7 +265,7 @@ public class PostActivity extends FragmentActivity implements OnClickListener {
          case R.id.iv_post_like:
              break;
          case R.id.iv_post_comment:
-        	 Intent intent = new Intent(PostActivity.this, CommentActivity.class);
+        	 Intent intent = new Intent(PostDetailActivity.this, CommentActivity.class);
              startActivity(intent);
         	 break;
          default:

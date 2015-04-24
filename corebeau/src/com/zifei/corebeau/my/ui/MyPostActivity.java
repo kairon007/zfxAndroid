@@ -42,7 +42,6 @@ public class MyPostActivity extends Activity implements OnClickListener {
 	private ImageView backgroundImageView;
 	private ImageView write;
 	private ProgressBar progressBar;
-	private UploadTask uploadTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +49,6 @@ public class MyPostActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_my_post);
 		initLoader();
 		init();
-		
 	}
 
 	private void initLoader() {
@@ -65,7 +63,6 @@ public class MyPostActivity extends Activity implements OnClickListener {
 
 	private void init() {
 		myTask = new MyTask(this);
-		uploadTask = new UploadTask(this);
 		postList = (ListView) findViewById(R.id.lv_my_post);
 		write = (ImageView) findViewById(R.id.iv_write);
 		progressBar = (ProgressBar) findViewById(R.id.pb_my_post);
@@ -80,18 +77,44 @@ public class MyPostActivity extends Activity implements OnClickListener {
 		backgroundImageView = (ImageView) findViewById(R.id.iv_my_post_background);
 		postListTask();
 		setDefault();
-		
-		
+
 		backgroundImageView.setOnClickListener(this);
 	}
-	
-	private void setDefault(){
-		 imageLoader.displayImage("drawable://" + R.drawable.my_default, circularImageView,
-		 imageOptions);
+
+	private void setDefault() {
+		imageLoader.displayImage("drawable://" + R.drawable.my_default,
+				circularImageView, imageOptions);
 	}
-	
-	private void getUserInfo(){
-//		myTask.get
+
+	private void getUserInfo() {
+		// myTask.get
+
+		// String urlThumb = response.;
+		// if (!StringUtil.isEmpty(urlThumb)) {
+		// imageLoader.displayImage(urlThumb, circularImageView,
+		// imageOptions);
+		// } else {
+		// }
+		// // if(data.size() > 0){
+		// myPostAdapter.addData(TestData.getSpotList(), false);
+		// myPostAdapter.notifyDataSetChanged();
+		// // }else{
+		// postList.setEmptyView(findViewById(android.R.id.empty));
+		//
+		// String urlThumb =
+		// "http://e0.vingle.net/t_us_m/opdr3ab94hxosfpwyl2x";
+		// if (!StringUtil.isEmpty(urlThumb)) {
+		// imageLoader.displayImage(urlThumb, circularImageView,
+		// imageOptions);
+		// } else {
+		// }
+		//
+		// String urlBackground =
+		// "http://e1.vingle.net/t_ca_xl/h3t1sdj903oevpovb1q6.jpg";
+		// if (!StringUtil.isEmpty(urlBackground)) {
+		// imageLoader.displayImage(urlBackground,
+		// backgroundImageView, imageOptions);
+		// } else {}
 	}
 
 	private void postListTask() {
@@ -101,13 +124,6 @@ public class MyPostActivity extends Activity implements OnClickListener {
 			@Override
 			public void onSuccess(MyPostListResponse response) {
 				progressBar.setVisibility(View.GONE);
-
-				// String urlThumb = response.;
-				// if (!StringUtil.isEmpty(urlThumb)) {
-				// imageLoader.displayImage(urlThumb, circularImageView,
-				// imageOptions);
-				// } else {
-				// }
 
 				PageBean<ItemInfo> pageBean = (PageBean<ItemInfo>) response
 						.getPageBean();
@@ -122,54 +138,30 @@ public class MyPostActivity extends Activity implements OnClickListener {
 			@Override
 			public void onError(String msg) {
 				progressBar.setVisibility(View.GONE);
-
-				// // if(data.size() > 0){
-				// myPostAdapter.addData(TestData.getSpotList(), false);
-				// myPostAdapter.notifyDataSetChanged();
-				// // }else{
-				// postList.setEmptyView(findViewById(android.R.id.empty));
-				//
-				// String urlThumb =
-				// "http://e0.vingle.net/t_us_m/opdr3ab94hxosfpwyl2x";
-				// if (!StringUtil.isEmpty(urlThumb)) {
-				// imageLoader.displayImage(urlThumb, circularImageView,
-				// imageOptions);
-				// } else {
-				// }
-				//
-				// String urlBackground =
-				// "http://e1.vingle.net/t_ca_xl/h3t1sdj903oevpovb1q6.jpg";
-				// if (!StringUtil.isEmpty(urlBackground)) {
-				// imageLoader.displayImage(urlBackground,
-				// backgroundImageView, imageOptions);
-				// } else {
-			}
-
-		});
-	}
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-			// 갤러리의 경우 곧바로 data 에 uri가 넘어옴.
-			Uri uri = data.getData();
-			submit(uri);
-	}
-	
-	private void submit(Uri uri){
-		myTask.getToken(uri.getPath(), new AsyncCallBacks.TwoTwo<Integer, String, Integer, String>() {
-
-			@Override
-			public void onSuccess(Integer state, String msg) {
-				
-			}
-
-			@Override
-			public void onError(Integer state, String msg) {
-				progressBar.setVisibility(View.GONE);
 				Utils.showToast(MyPostActivity.this, msg);
 			}
+
 		});
 	}
+
+	private void submit(Uri uri) {
+		myTask.getToken(uri.getPath(),
+				new AsyncCallBacks.TwoTwo<Integer, String, Integer, String>() {
+
+					@Override
+					public void onSuccess(Integer state, String msg) {
+
+					}
+
+					@Override
+					public void onError(Integer state, String msg) {
+						progressBar.setVisibility(View.GONE);
+						Utils.showToast(MyPostActivity.this, msg);
+					}
+				});
+	}
+
+	private final int REQ_CODE_PICK_GALLERY = 900001;
 
 	@Override
 	public void onClick(View v) {
@@ -179,11 +171,20 @@ public class MyPostActivity extends Activity implements OnClickListener {
 			startActivity(intent);
 			break;
 		case R.id.civ_my_post_icon:
-			Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-			intent1.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(getTempImageFile()));
-			intent1.putExtra("return-data", true);
-			startActivityForResult(intent1, REQ_CODE_PICK_CAMERA);
+			Intent i = new Intent(Intent.ACTION_PICK);
+			i.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
+			i.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+			startActivityForResult(i, REQ_CODE_PICK_GALLERY);
 			break;
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == REQ_CODE_PICK_GALLERY
+				&& resultCode == Activity.RESULT_OK) {
+			Uri uri = data.getData();
+			submit(uri);
 		}
 	}
 }

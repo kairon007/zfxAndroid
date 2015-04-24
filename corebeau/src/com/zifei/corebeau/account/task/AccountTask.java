@@ -5,6 +5,8 @@ import java.util.Map;
 import android.content.Context;
 
 import com.zifei.corebeau.account.bean.UserInfo;
+import com.zifei.corebeau.account.bean.response.CheckAccountResponse;
+import com.zifei.corebeau.account.bean.response.CheckNicknameResponse;
 import com.zifei.corebeau.account.bean.response.FindPasswordResponse;
 import com.zifei.corebeau.account.bean.response.LoginByDeviceResponse;
 import com.zifei.corebeau.account.bean.response.LoginResponse;
@@ -17,9 +19,6 @@ import com.zifei.corebeau.common.task.NetworkExecutor;
 import com.zifei.corebeau.utils.DeviceUtils;
 import com.zifei.corebeau.utils.Utils;
 
-/**
- * Created by im14s_000 on 2015/3/23.
- */
 public class AccountTask {
 
 	private UserInfoService userInfoService;
@@ -27,6 +26,70 @@ public class AccountTask {
 	public AccountTask(Context context) {
 		userInfoService = new UserInfoService(context);
 	}
+	
+	public void checkAccount(final String account,
+			final AsyncCallBacks.TwoOne<Integer, String, String> callback) {
+
+		Map<String, Object> params = Utils.buildMap("account", account);
+
+		NetworkExecutor.post(UrlConstants.CHECK_ACCOUNT, params, CheckAccountResponse.class,
+				new NetworkExecutor.CallBack<CheckAccountResponse>() {
+					@Override
+					public void onSuccess(CheckAccountResponse response) {
+
+						int status = response.getStatusCode();
+						String msg = response.getMsg();
+
+						if (status == CheckAccountResponse.ACCOUNT_NOT_EXIST) {
+							callback.onSuccess(status, null);
+						} else if (status == CheckAccountResponse.ACCOUNT_EXIST) {
+							callback.onError(msg);
+						} else {
+							callback.onError(msg);
+						}
+					}
+
+					@Override
+					public void onError(Integer status, String msg) {
+
+						callback.onError(msg);
+					}
+
+				});
+
+	}
+	
+	public void checkNickname(final String nickname,
+			final AsyncCallBacks.TwoOne<Integer, String, String> callback) {
+
+		Map<String, Object> params = Utils.buildMap("nickname", nickname);
+
+		NetworkExecutor.post(UrlConstants.CHECK_NICKNAME, params, CheckNicknameResponse.class,
+				new NetworkExecutor.CallBack<CheckNicknameResponse>() {
+					@Override
+					public void onSuccess(CheckNicknameResponse response) {
+
+						int status = response.getStatusCode();
+						String msg = response.getMsg();
+
+						if (status == CheckNicknameResponse.NICKNAME_NOT_EXIST) {
+
+							callback.onSuccess(status, null);
+						} else if (status == CheckNicknameResponse.NICKNAME_EXIST) {
+							callback.onError(msg);
+						} else {
+							callback.onError(msg);
+						}
+					}
+
+					@Override
+					public void onError(Integer status, String msg) {
+
+						callback.onError(msg);
+					}
+				});
+	}
+
 
 	public void login(final String account, final String password,
 			final AsyncCallBacks.TwoOne<Integer, String, String> callback) {

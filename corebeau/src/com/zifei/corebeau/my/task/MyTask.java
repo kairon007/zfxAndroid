@@ -105,37 +105,6 @@ public class MyTask {
 					}
 				});
 	}
-	
-//	public void getQiniuToken(
-//			final AsyncCallBacks.OneOne<QiniuResponse, String> callback) {
-//
-//		Map<String, Object> params = new HashMap<String, Object>();
-//
-//		NetworkExecutor.post(UrlConstants.GET_QINIU_TOKEN, params,
-//				QiniuResponse.class,
-//				new NetworkExecutor.CallBack<QiniuResponse>() {
-//			
-//					@Override
-//					public void onSuccess(QiniuResponse response) {
-//
-//						int status = response.getStatusCode();
-//						String msg = response.getMsg();
-//
-//						if (status == QiniuResponse.SUCCESS) {
-//							callback.onSuccess(response);
-//						} else if (status == QiniuResponse.FAILED) {
-//							callback.onError(msg);
-//						} else {
-//							callback.onError(msg);
-//						}
-//					}
-//
-//					@Override
-//					public void onError(Integer status, String msg) {
-//						callback.onError(msg);
-//					}
-//				});
-//	}
 
 	public void insertPost(
 			final AsyncCallBacks.OneOne<Response, String> callback) {

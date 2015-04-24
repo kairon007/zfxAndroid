@@ -24,24 +24,19 @@ import com.zifei.corebeau.account.bean.response.RegisterResponse;
 import com.zifei.corebeau.account.task.AccountTask;
 import com.zifei.corebeau.account.task.UserInfoService;
 import com.zifei.corebeau.common.AsyncCallBacks;
-import com.zifei.corebeau.common.CorebeauApp;
-import com.zifei.corebeau.common.PreferenceManager;
 import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
 
-/**
- * Created by im14s_000 on 2015/3/26.
- */
 public class SplashActivity extends CommonFragmentActvity implements
 		View.OnClickListener {
 
 	private final int DELAY_MILLIS = 1000;
-	private EditText email, password, nickname;
+	private EditText email, password, nickname ,passwordCheck;
 	private TextView typeChange, submit, findpassType;
 	private AccountTask accountTask;
 	private ProgressBar progressBar;
 	private TaskType taskType;
-	private TextView logo;
+	private TextView logo,tvCheckAccount,tvCheckNickname;
 	private UserInfoService userInfoService;
 
 	private enum TaskType {
@@ -114,8 +109,11 @@ public class SplashActivity extends CommonFragmentActvity implements
 	}
 	
 	private void lauchLoginPage(){
+		tvCheckAccount = (TextView) findViewById(R.id.tv_check_account);
+		tvCheckNickname = (TextView) findViewById(R.id.tv_check_nickname);
 		email = (EditText) findViewById(R.id.et_login_email);
 		password = (EditText) findViewById(R.id.et_login_pass);
+		passwordCheck = (EditText) findViewById(R.id.et_login_pass_check);
 		nickname = (EditText) findViewById(R.id.et_login_nickname);
 		findpassType = (TextView) findViewById(R.id.tv_change_findpass);
 		typeChange = (TextView) findViewById(R.id.tv_type_change);
@@ -132,6 +130,8 @@ public class SplashActivity extends CommonFragmentActvity implements
 		email.setAnimation(appear1);
 		password.setVisibility(View.VISIBLE);
 		password.setAnimation(appear1);
+		passwordCheck.setVisibility(View.VISIBLE);
+		passwordCheck.setAnimation(appear1);
 		nickname.setVisibility(View.VISIBLE);
 		nickname.setAnimation(appear1);
 
@@ -185,7 +185,8 @@ public class SplashActivity extends CommonFragmentActvity implements
 			typeChange.setText("register");
 			submit.setText("login");
 			password.setVisibility(View.VISIBLE);
-			nickname.setVisibility(View.GONE);
+			passwordCheck.setVisibility(View.VISIBLE);
+			nickname.setVisibility(View.INVISIBLE);
 
 			break;
 
@@ -194,6 +195,7 @@ public class SplashActivity extends CommonFragmentActvity implements
 			typeChange.setText("are you already joined?");
 			submit.setText("register");
 			password.setVisibility(View.VISIBLE);
+			passwordCheck.setVisibility(View.VISIBLE);
 			nickname.setVisibility(View.VISIBLE);
 			break;
 
@@ -201,8 +203,9 @@ public class SplashActivity extends CommonFragmentActvity implements
 			findpassType.setVisibility(View.GONE);
 			typeChange.setText("are you already joined?");
 			submit.setText("send");
-			password.setVisibility(View.GONE);
-			nickname.setVisibility(View.GONE);
+			password.setVisibility(View.INVISIBLE);
+			passwordCheck.setVisibility(View.INVISIBLE);
+			nickname.setVisibility(View.INVISIBLE);
 
 			break;
 		}
@@ -292,6 +295,44 @@ public class SplashActivity extends CommonFragmentActvity implements
 			return false;
 		}
 		return true;
+	}
+	
+	// call 시점 잘 생각해보기
+	private void checkAccount(String account) {
+		accountTask.checkAccount(account,
+				new AsyncCallBacks.TwoOne<Integer, String, String>() {
+
+					@Override
+					public void onSuccess(Integer state, String msg) {
+						tvCheckAccount.setText("you can use this account");
+						tvCheckAccount.setTextColor(Color.GREEN);
+					}
+
+					@Override
+					public void onError(String errorMsg) {
+						tvCheckAccount.setText("already existed account, plz set another account");
+						tvCheckAccount.setTextColor(Color.RED);
+					}
+				});
+	}
+	
+	// call 시점 잘 생각해보기
+	private void checkNickname(String nickName) {
+		accountTask.checkAccount(nickName,
+				new AsyncCallBacks.TwoOne<Integer, String, String>() {
+
+					@Override
+					public void onSuccess(Integer state, String msg) {
+						tvCheckNickname.setText("you can use this nickname");
+						tvCheckNickname.setTextColor(Color.GREEN);
+					}
+
+					@Override
+					public void onError(String errorMsg) {
+						tvCheckNickname.setText("already existed nickname, plz set another nickname");
+						tvCheckNickname.setTextColor(Color.RED);
+					}
+				});
 	}
 
 	private void loginTask(String account, String password) {

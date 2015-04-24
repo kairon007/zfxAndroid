@@ -2,78 +2,115 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffff6528" >
+    android:background="@color/common_bar_navy" >
 
+    <TextView
+        android:id="@+id/logo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-        <TextView
-            android:id="@+id/logo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
     <LinearLayout
         android:id="@+id/ll_login_form"
-        android:gravity="center_vertical|center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical"
         android:paddingLeft="50dp"
-        android:paddingRight="50dp"
-        android:orientation="vertical">
+        android:paddingRight="50dp" >
+
         <EditText
             android:id="@+id/et_login_email"
-            android:hint="email"
-            android:textColorHint="#BDBDBD"
-            android:textColorHighlight="#FFFFFF"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:hint="email or phonenum"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#BDBDBD"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tv_check_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="10sp" />
+
         <EditText
             android:id="@+id/et_login_pass"
-            android:textColor="#BDBDBD"
-            android:textColorHint="#BDBDBD"
-            android:textColorHighlight="#FFFFFF"
-            android:hint="password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:hint="password"
+            android:textColor="#BDBDBD"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#BDBDBD"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tv_check_pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="10sp" />
+
+        <EditText
+            android:id="@+id/et_login_pass_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="repassword"
+            android:textColor="#BDBDBD"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#BDBDBD"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tv_check_pass_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="10sp" />
+
         <EditText
             android:id="@+id/et_login_nickname"
-            android:textColorHint="#BDBDBD"
-            android:textColorHighlight="#FFFFFF"
-            android:hint="nickname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            />
+            android:hint="nickname"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#BDBDBD"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tv_check_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="10sp" />
+
         <TextView
             android:id="@+id/tv_change_findpass"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#FFFFFF"
             android:textSize="20dp"
-            android:visibility="gone"/>
-     </LinearLayout>
+            android:visibility="gone" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:textColor="#FFFFFF"
         android:textSize="20dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_type_change"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="10dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
         android:textColor="#FFFFFF"
         android:textSize="20dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/pb_splash"

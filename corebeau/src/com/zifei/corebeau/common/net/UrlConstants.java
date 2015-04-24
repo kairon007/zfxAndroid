@@ -4,12 +4,16 @@ public class UrlConstants {
 
 	// public static final String BASE_URL = "http://api.huaqianapp.com";
 
-	 public static final String BASE_URL =
-	 "http://115.28.175.29:8080/frontend";
+	public static final String BASE_URL = "http://115.28.175.29:8080/frontend";
 
-//	public static final String BASE_URL = "http://192.168.91.104:8080/frontend";
+	// public static final String BASE_URL =
+	// "http://192.168.91.104:8080/frontend";
 
 	// account
+
+	public static String CHECK_ACCOUNT = BASE_URL + "/login/checkaccoint";
+
+	public static String CHECK_NICKNAME = BASE_URL + "/login/checknickname";
 
 	public static String LOGIN = BASE_URL + "/login/account";
 
@@ -51,15 +55,18 @@ public class UrlConstants {
 	public static String LIKE = BASE_URL + "/like";
 
 	public static String LIKE_DEL = BASE_URL + "/comment";
-	
-	
+
 	public static String ADD_SCRAP = BASE_URL + "/post/addFollowItem";
 
 	// my
 
 	public static String GET_MY_POST = BASE_URL + "/post/getItemInfoByUserId";
-	
+
 	public static String UPLOAD_MY_ICON_IMAGE = BASE_URL + "/.../...";
+	
+	// my info
+	
+	public static String UPDATE_USERINFO = BASE_URL + "/.../...";
 
 	// comment
 
