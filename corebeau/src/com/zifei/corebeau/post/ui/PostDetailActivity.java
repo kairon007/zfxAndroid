@@ -54,6 +54,7 @@ public class PostDetailActivity extends FragmentActivity implements OnClickListe
         setContentView(R.layout.activity_post);
         Intent intent = getIntent();
         itemInfo = (ItemInfo) intent.getSerializableExtra("itemInfo");
+        itemId = itemInfo.getItemId();
         init();
     }
 
