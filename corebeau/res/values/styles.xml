@@ -26,7 +26,7 @@
     </style>
     
     <style name="my_info_divider">
-        <item name="android:background">@color/common_dark_grey</item>
+        <item name="android:background">@color/spot_inner_divider</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.5dp</item>
     </style>

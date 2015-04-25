@@ -21,9 +21,6 @@ import com.zifei.corebeau.common.ui.view.CircularImageView;
 import com.zifei.corebeau.post.ui.PostDetailActivity;
 import com.zifei.corebeau.utils.StringUtil;
 
-/**
- * Created by im14s_000 on 2015/3/25.
- */
 public class MyPostAdapter extends BaseAdapter {
 
 	private Context context;

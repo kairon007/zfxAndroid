@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,10 +23,10 @@ import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
 import com.zifei.corebeau.common.ui.widget.indicator.CirclePageIndicator;
 import com.zifei.corebeau.common.ui.widget.indicator.PageIndicator;
-import com.zifei.corebeau.post.bean.Post;
 import com.zifei.corebeau.post.bean.response.PostResponse;
 import com.zifei.corebeau.post.task.PostTask;
 import com.zifei.corebeau.post.ui.adapter.ImageAdapter;
+import com.zifei.corebeau.post.ui.view.BottomBar;
 import com.zifei.corebeau.post.ui.view.PostViewPager;
 import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
@@ -38,15 +40,11 @@ public class PostDetailActivity extends FragmentActivity implements OnClickListe
     private PostTask postTask;
     private ItemInfo itemInfo;
     private String itemId;
-    private DisplayImageOptions imageOptions;
     private ImageLoader imageLoader;
     private ImageLoaderConfiguration config;
-    private CircularImageView userIcon;
-    private TextView tvNickname, tvLikeCnt, tvCommentCnt, tvMsg; 
+    private TextView tvMsg; 
     private PageIndicator mIndicator;
-    private ImageView ivLike, ivComment, ivScrap;
-    private boolean isScrap = false;
-    private boolean isLike = false;
+    private BottomBar bottomBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +54,7 @@ public class PostDetailActivity extends FragmentActivity implements OnClickListe
         itemInfo = (ItemInfo) intent.getSerializableExtra("itemInfo");
         itemId = itemInfo.getItemId();
         init();
+        
     }
 
     private void init() {
@@ -64,20 +63,16 @@ public class PostDetailActivity extends FragmentActivity implements OnClickListe
         mPager = (PostViewPager) findViewById(R.id.vp_post_image);
         mIndicator = (CirclePageIndicator)findViewById(R.id.indicator);
         mIndicator.setOnPageChangeListener(new PageChangeListener());
-        userIcon = (CircularImageView)findViewById(R.id.iv_post_icon);
-        userIcon.setBorderWidth(0);
-        ivLike = (ImageView)findViewById(R.id.iv_post_like);
-        ivComment = (ImageView)findViewById(R.id.iv_post_comment);
-        tvNickname = (TextView)findViewById(R.id.tv_post_nickname);
-        tvLikeCnt = (TextView)findViewById(R.id.tv_post_like);
-        tvCommentCnt = (TextView)findViewById(R.id.tv_post_comment);
         tvMsg = (TextView)findViewById(R.id.tv_post_msg);
-        ivScrap = (ImageView)findViewById(R.id.iv_post_scrap);
         
-        ivLike.setOnClickListener(this);
-        ivComment.setOnClickListener(this);
-        
-        initImageLoader();
+        bottomBar = new BottomBar(this);
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
+				FrameLayout.LayoutParams.MATCH_PARENT,
+				FrameLayout.LayoutParams.WRAP_CONTENT);
+		lp.gravity = Gravity.BOTTOM;
+		((FrameLayout) findViewById(android.R.id.content)).addView(bottomBar,
+				lp);
+		bottomBar.setCurrentItem(itemInfo);
         setPostData();
        
     }
@@ -110,17 +105,6 @@ public class PostDetailActivity extends FragmentActivity implements OnClickListe
 //                 });
 //    }
     
-    private void initImageLoader(){
-    	imageLoader = ImageLoader.getInstance();
-        config = new ImageLoaderConfiguration.Builder(this).threadPoolSize(3).build();
-        imageLoader.init(config);
-        imageOptions = new DisplayImageOptions.Builder()
-                .delayBeforeLoading(200) 
-                .cacheInMemory(false)
-                .cacheOnDisk(true)
-                .build();
-    }
-
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -144,19 +128,6 @@ public class PostDetailActivity extends FragmentActivity implements OnClickListe
             	List<String> urlList = response.getPictureUrls();
             	setPostImage(urlList);
             	
-//            	ivScrap = response.get...;
-            	if(isScrap){
-            		ivScrap.setBackgroundResource(R.drawable.scrap_on);
-            	}else{
-            		ivScrap.setBackgroundResource(R.drawable.scrap_off);
-            	}
-            	
-//            	ivlike = response.get...;
-            	if(isLike){
-            		ivLike.setBackgroundResource(R.drawable.dashboard_post_control_like_selected);
-            	}else{
-            		ivLike.setBackgroundResource(R.drawable.dashboard_post_control_like);
-            	}
             }
 
             @Override
@@ -168,21 +139,11 @@ public class PostDetailActivity extends FragmentActivity implements OnClickListe
     
     private void setPostImage(List<String> urlList){
     	mPager.setAdapter(new ImageAdapter(this, urlList));
-//    	userIcon.set
-    	String iconUrl = itemInfo.getUserImageUrl();
-    	if (!StringUtil.isEmpty(iconUrl)) {
-            imageLoader.displayImage(iconUrl, userIcon, imageOptions);
-        } else {
-        	// default image
-        }
     	mIndicator.setViewPager(mPager);
     }
 
     private void setPostData() {
     	
-    	tvNickname.setText(itemInfo.getNickName());
-        tvLikeCnt.setText(String.valueOf(itemInfo.getLikeCnt()));
-        tvCommentCnt.setText(String.valueOf(itemInfo.getCommentCnt()));
         tvMsg.setText(itemInfo.getTitle());
         
     }
@@ -263,12 +224,6 @@ public class PostDetailActivity extends FragmentActivity implements OnClickListe
 	@Override
 	public void onClick(View v) {
 	       switch (v.getId()) {
-         case R.id.iv_post_like:
-             break;
-         case R.id.iv_post_comment:
-        	 Intent intent = new Intent(PostDetailActivity.this, CommentActivity.class);
-             startActivity(intent);
-        	 break;
          default:
              break;
      }		
