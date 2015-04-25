@@ -16,10 +16,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
+import com.zifei.corebeau.common.AsyncCallBacks;
+import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
 import com.zifei.corebeau.post.task.PostTask;
 import com.zifei.corebeau.post.ui.CommentActivity;
 import com.zifei.corebeau.utils.StringUtil;
+import com.zifei.corebeau.utils.Utils;
 
 public class BottomBar extends RelativeLayout implements OnClickListener {
 
@@ -27,10 +30,11 @@ public class BottomBar extends RelativeLayout implements OnClickListener {
 	private CircularImageView userIcon;
 	private ImageView ivLike, ivComment, ivScrap;
 	private TextView tvNickname, tvLikeCnt, tvCommentCnt;
-    private boolean isScrap = false;
-    private boolean isLike = false;
-    private ItemInfo itemInfo;
-    private DisplayImageOptions iconImageOptions;
+	private boolean isScrap = false;
+	private boolean isLike = false;
+	private ItemInfo itemInfo;
+	private String itemId;
+	private DisplayImageOptions iconImageOptions;
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
 	private PostTask postTask;
@@ -38,7 +42,7 @@ public class BottomBar extends RelativeLayout implements OnClickListener {
 	public BottomBar(Context context) {
 		super(context);
 		init(context);
-		
+
 	}
 
 	public BottomBar(Context context, AttributeSet attrs) {
@@ -67,45 +71,55 @@ public class BottomBar extends RelativeLayout implements OnClickListener {
 		initLoader();
 		setDefault();
 	}
-	
-	private void initLoader(){
-		
+
+	private void initLoader() {
+
 		imageLoader = ImageLoader.getInstance();
 		config = new ImageLoaderConfiguration.Builder(context)
 				.threadPoolSize(3).build();
 		imageLoader.init(config);
 		iconImageOptions = new DisplayImageOptions.Builder() //
-		.cacheInMemory(false).cacheOnDisk(true)
-		.build();
+				.cacheInMemory(false).cacheOnDisk(true).build();
 	}
-	
-	private void setDefault(){
-		imageLoader.displayImage("drawable://" + R.drawable.my_default, userIcon, iconImageOptions);
+
+	private void setDefault() {
+		imageLoader.displayImage("drawable://" + R.drawable.my_default,
+				userIcon, iconImageOptions);
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.iv_post_like:
+			if (isLike) {
+				deleteLike();
+			} else {
+				insertLike();
+			}
 			break;
 		case R.id.iv_post_comment:
-			Intent intent = new Intent(context,
-					CommentActivity.class);
+			Intent intent = new Intent(context, CommentActivity.class);
+			intent.putExtra("itemId", itemId);
 			context.startActivity(intent);
 			break;
 		case R.id.iv_post_scrap:
-			
+			if (isScrap) {
+				cancelScrap();
+			} else {
+				addScrap();
+			}
 			break;
 		}
 	}
 
 	public void setCurrentItem(ItemInfo itemInfo) {
 		this.itemInfo = itemInfo;
+		this.itemId = itemInfo.getItemId();
 		setWigetImageView();
 		setIconImage();
 	}
-	
-	private void setWigetImageView(){
+
+	private void setWigetImageView() {
 		// ivScrap = response.get...;
 		if (isScrap) {
 			ivScrap.setBackgroundResource(R.drawable.bottom_scrap_on);
@@ -119,21 +133,128 @@ public class BottomBar extends RelativeLayout implements OnClickListener {
 		} else {
 			ivLike.setBackgroundResource(R.drawable.bottom_like_normal);
 		}
-		
+
 		ivComment.setBackgroundResource(R.drawable.bottom_comment_normal);
-		
+
 		tvNickname.setText(itemInfo.getNickName());
 		tvLikeCnt.setText(String.valueOf(itemInfo.getLikeCnt()));
 		tvCommentCnt.setText(String.valueOf(itemInfo.getCommentCnt()));
 	}
-	
-	private void setIconImage(){
+
+	private void setIconImage() {
 		String iconUrl = itemInfo.getUserImageUrl();
-		
+
 		if (!StringUtil.isEmpty(iconUrl)) {
 			imageLoader.displayImage(iconUrl, userIcon, iconImageOptions);
 		} else {
 		}
+	}
+
+	private void addScrap() {
+
+		postTask.addScrap(itemId,
+				new AsyncCallBacks.OneOne<Response, String>() {
+
+					@Override
+					public void onSuccess(Response response) {
+						if (isScrap == false) {
+							isScrap = true;
+							ivScrap.setBackgroundResource(R.drawable.bottom_scrap_on);
+						}
+						// DB set data
+						// delete add data
+						Utils.showToast(context, response.getMsg());
+					}
+
+					@Override
+					public void onError(String msg) {
+						// remain add data
+						if (isScrap == true) {
+							isScrap = false;
+							ivScrap.setBackgroundResource(R.drawable.bottom_scrap_off);
+						}
+						Utils.showToast(context, msg);
+					}
+				});
+	}
+
+	private void cancelScrap() {
+
+		postTask.addScrap(itemId,
+				new AsyncCallBacks.OneOne<Response, String>() {
+
+					@Override
+					public void onSuccess(Response response) {
+
+						// DB set data
+						// delete add data
+						if (isScrap == true) {
+							isScrap = false;
+							ivScrap.setBackgroundResource(R.drawable.bottom_scrap_off);
+						}
+						Utils.showToast(context, response.getMsg());
+					}
+
+					@Override
+					public void onError(String msg) {
+
+						// remain add data
+						if (isScrap == false) {
+							isScrap = true;
+							ivScrap.setBackgroundResource(R.drawable.bottom_scrap_on);
+						}
+						Utils.showToast(context, msg);
+					}
+				});
+	}
+
+	// 해놓고 백그라운드에서 돌린다
+	private void insertLike() {
+		postTask.insertLike(itemId,
+				new AsyncCallBacks.OneOne<Response, String>() {
+
+					@Override
+					public void onSuccess(Response response) {
+						if (isLike == false) {
+							isLike = true;
+							ivLike.setBackgroundResource(R.drawable.bottom_like_pressed);
+						}
+						Utils.showToast(context, response.getMsg());
+					}
+
+					@Override
+					public void onError(String msg) {
+						if (isLike == true) {
+							isLike = false;
+							ivLike.setBackgroundResource(R.drawable.bottom_like_normal);
+						}
+						Utils.showToast(context, msg);
+					}
+				});
+	}
+
+	private void deleteLike() {
+		postTask.deleteLike(itemId,
+				new AsyncCallBacks.OneOne<Response, String>() {
+
+					@Override
+					public void onSuccess(Response response) {
+						if (isLike == true) {
+							isLike = false;
+							ivLike.setBackgroundResource(R.drawable.bottom_like_normal);
+						}
+						Utils.showToast(context, response.getMsg());
+					}
+
+					@Override
+					public void onError(String msg) {
+						if (isLike == false) {
+							isLike = true;
+							ivLike.setBackgroundResource(R.drawable.bottom_like_pressed);
+						}
+						Utils.showToast(context, msg);
+					}
+				});
 	}
 
 }

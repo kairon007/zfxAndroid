@@ -21,13 +21,15 @@
         <EditText
             android:id="@+id/et_comment"
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="50dp"
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/btn_comment"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="submit" />
+            android:text="submit"
+             android:layout_weight="5" />
     </LinearLayout>
 
 </RelativeLayout>

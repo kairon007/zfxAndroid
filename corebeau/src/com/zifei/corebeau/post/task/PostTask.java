@@ -1,17 +1,17 @@
 package com.zifei.corebeau.post.task;
 
+import java.util.Map;
+
 import android.content.Context;
 
+import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.Response;
+import com.zifei.corebeau.common.net.UrlConstants;
+import com.zifei.corebeau.common.task.NetworkExecutor;
 import com.zifei.corebeau.post.bean.response.CommentListResponse;
 import com.zifei.corebeau.post.bean.response.CommentResponse;
 import com.zifei.corebeau.post.bean.response.PostResponse;
-import com.zifei.corebeau.common.AsyncCallBacks;
-import com.zifei.corebeau.common.net.UrlConstants;
-import com.zifei.corebeau.common.task.NetworkExecutor;
 import com.zifei.corebeau.utils.Utils;
-
-import java.util.Map;
 
 /**
  * Created by im14s_000 on 2015/3/23.
@@ -180,6 +180,31 @@ public class PostTask {
             }
         });
     }
+    
+    // db에 쌓아놓고 나중에 서버와 싱크 맞춤
+    public void cancelScrap(String itemId, final AsyncCallBacks.OneOne<Response, String> callback) {
+        Map<String, Object> params = Utils.buildMap("itemId",itemId);
+
+        NetworkExecutor.post(UrlConstants.CANCEL_SCRAP, params, Response.class, new NetworkExecutor.CallBack<Response>() {
+            @Override
+            public void onSuccess(Response response) {
+
+                int status = response.getStatusCode();
+                String msg = response.getMsg();
+
+                if(status == Response.SUCCESS){
+                    callback.onSuccess(response);
+                }else{
+                    callback.onError(msg);
+                }
+            }
+
+            @Override
+            public void onError(Integer status, String msg) {
+                callback.onError(msg);
+            }
+        });
+    }
 
     // db에 쌓아놓고 나중에 서버와 싱크 맞춤
     public void insertLike(String itemId, final AsyncCallBacks.OneOne<Response, String> callback) {
@@ -206,8 +231,8 @@ public class PostTask {
         });
     }
 
-    public void deleteLike(String postId, final AsyncCallBacks.OneOne<Response, String> callback) {
-        Map<String, Object> params = Utils.buildMap("postId",postId);
+    public void deleteLike(String itemId, final AsyncCallBacks.OneOne<Response, String> callback) {
+        Map<String, Object> params = Utils.buildMap("itemId",itemId);
 
         NetworkExecutor.post(UrlConstants.DELETE_COMMENT, params, Response.class, new NetworkExecutor.CallBack<Response>() {
             @Override

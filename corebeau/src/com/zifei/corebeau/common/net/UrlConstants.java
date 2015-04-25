@@ -55,8 +55,12 @@ public class UrlConstants {
 	public static String LIKE = BASE_URL + "/like";
 
 	public static String LIKE_DEL = BASE_URL + "/comment";
+	
+	
 
 	public static String ADD_SCRAP = BASE_URL + "/post/addFollowItem";
+	
+	public static String CANCEL_SCRAP = BASE_URL + "/post/addFollowItem";
 
 	// my
 
@@ -70,11 +74,11 @@ public class UrlConstants {
 
 	// comment
 
-	public static String GET_COMMENT = BASE_URL + "/comment";
+	public static String GET_COMMENT = BASE_URL + "/post/getItemCommentsByItemId";
 
-	public static String INSERT_COMMENT = BASE_URL + "/comment";
+	public static String INSERT_COMMENT = BASE_URL + "/post/saveComment";
 
-	public static String DELETE_COMMENT = BASE_URL + "/comment";
+	public static String DELETE_COMMENT = BASE_URL + "/post/deleteComment";
 
 	// follow
 

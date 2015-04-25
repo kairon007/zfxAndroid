@@ -1,6 +1,7 @@
 package com.zifei.corebeau.post.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -35,11 +36,9 @@ public class CommentActivity extends Activity implements View.OnClickListener{
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_comment);
         
-        
-//        Intent intent = getIntent();
-//        String stringPostId = intent.getStringExtra("postId");
-//        postId = Integer.parseInt(stringPostId);
-
+        Intent intent = getIntent();
+        String stringPostId = intent.getStringExtra("itemId");
+        postId = Integer.parseInt(stringPostId);
         init();
 
     }

@@ -163,62 +163,6 @@ public class PostDetailActivity extends FragmentActivity implements OnClickListe
 		}
 	}
     
-    private void addScrap(){
-    	
-    	postTask.addScrap(itemId, new AsyncCallBacks.OneOne<Response, String>() {
-
-            @Override
-            public void onSuccess(Response response) {
-
-                
-                // DB set data
-                
-                // delete add data
-            }
-
-            @Override
-            public void onError(String msg) {
-            	
-            	
-                
-                // remain add data
-            }
-        });
-    }
-
-    // 해놓고 백그라운드에서 돌린다
-    private void insertLikeTask() {
-        postTask.insertLike(itemId, new AsyncCallBacks.OneOne<Response, String>() {
-
-            @Override
-            public void onSuccess(Response response) {
-
-//                Utils.showToast(PostActivity.this, msg);
-            }
-
-            @Override
-            public void onError(String msg) {
-                Utils.showToast(PostDetailActivity.this, msg);
-            }
-        });
-    }
-
-    private void deleteLikeTask() {
-        postTask.deleteLike(itemId, new AsyncCallBacks.OneOne<Response, String>() {
-
-            @Override
-            public void onSuccess(Response response) {
-
-//                Utils.showToast(PostActivity.this, msg);
-            }
-
-            @Override
-            public void onError(String msg) {
-                Utils.showToast(PostDetailActivity.this, msg);
-            }
-        });
-    }
-
 	@Override
 	public void onClick(View v) {
 	       switch (v.getId()) {
