@@ -11,9 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.zifei.corebeau.R;
-import com.zifei.corebeau.User.task.PostTask;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.post.bean.response.CommentListResponse;
+import com.zifei.corebeau.post.task.PostTask;
 import com.zifei.corebeau.post.ui.adapter.CommentAdapter;
 import com.zifei.corebeau.utils.Utils;
 

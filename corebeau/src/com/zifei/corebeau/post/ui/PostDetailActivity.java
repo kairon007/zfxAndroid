@@ -2,6 +2,7 @@ package com.zifei.corebeau.post.ui;
 
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -10,25 +11,20 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.Response;
-import com.zifei.corebeau.common.ui.view.CircularImageView;
 import com.zifei.corebeau.common.ui.widget.indicator.CirclePageIndicator;
-import com.zifei.corebeau.common.ui.widget.indicator.PageIndicator;
 import com.zifei.corebeau.post.bean.response.PostResponse;
 import com.zifei.corebeau.post.task.PostTask;
 import com.zifei.corebeau.post.ui.adapter.ImageAdapter;
 import com.zifei.corebeau.post.ui.view.BottomBar;
 import com.zifei.corebeau.post.ui.view.PostViewPager;
-import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
 
 /**
@@ -43,7 +39,7 @@ public class PostDetailActivity extends FragmentActivity implements OnClickListe
     private ImageLoader imageLoader;
     private ImageLoaderConfiguration config;
     private TextView tvMsg; 
-    private PageIndicator mIndicator;
+    private CirclePageIndicator mIndicator;
     private BottomBar bottomBar;
 
     @Override
@@ -57,12 +53,14 @@ public class PostDetailActivity extends FragmentActivity implements OnClickListe
         
     }
 
-    private void init() {
+    @SuppressLint("ResourceAsColor")
+	private void init() {
 
         postTask = new PostTask(this);
         mPager = (PostViewPager) findViewById(R.id.vp_post_image);
         mIndicator = (CirclePageIndicator)findViewById(R.id.indicator);
         mIndicator.setOnPageChangeListener(new PageChangeListener());
+        mIndicator.setFillColor(R.color.spot_inner_divider);
         tvMsg = (TextView)findViewById(R.id.tv_post_msg);
         
         bottomBar = new BottomBar(this);

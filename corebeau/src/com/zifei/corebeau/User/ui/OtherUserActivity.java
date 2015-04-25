@@ -6,10 +6,10 @@ import android.widget.ListView;
 
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.User.bean.response.PostResponse;
-import com.zifei.corebeau.User.task.PostTask;
 import com.zifei.corebeau.User.ui.adapter.OtherUserPostAdapter;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.Response;
+import com.zifei.corebeau.post.task.PostTask;
 import com.zifei.corebeau.utils.Utils;
 
 /**
@@ -53,51 +53,13 @@ public class OtherUserActivity extends Activity {
     }
 
     private void getPostTask() {
-        postTask.getPost(postId, new AsyncCallBacks.OneOne<PostResponse, String>() {
-            @Override
-            public void onSuccess(PostResponse result) {
-
-//                imageAdapter = new ImageAdapter(OtherUserActivity.this,imageListView);
-
-            }
-
-            @Override
-            public void onError(String result) {
-            }
-        });
     }
 
 
     // 해놓고 백그라운드에서 돌린다
     private void insertLikeTask() {
-        postTask.insertLike(postId, new AsyncCallBacks.OneOne<Response, String>() {
-
-            @Override
-            public void onSuccess(Response response) {
-
-//                Utils.showToast(PostActivity.this, msg);
-            }
-
-            @Override
-            public void onError(String msg) {
-                Utils.showToast(OtherUserActivity.this, msg);
-            }
-        });
     }
 
     private void deleteLikeTask() {
-        postTask.deleteLike(postId, new AsyncCallBacks.OneOne<Response, String>() {
-
-            @Override
-            public void onSuccess(Response response) {
-
-//                Utils.showToast(PostActivity.this, msg);
-            }
-
-            @Override
-            public void onError(String msg) {
-                Utils.showToast(OtherUserActivity.this, msg);
-            }
-        });
     }
 }

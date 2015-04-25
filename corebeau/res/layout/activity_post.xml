@@ -11,33 +11,27 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <FrameLayout
+        <com.zifei.corebeau.post.ui.view.PostViewPager
+            android:id="@+id/vp_post_image"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </com.zifei.corebeau.post.ui.view.PostViewPager>
+
+        <com.zifei.corebeau.common.ui.widget.indicator.CirclePageIndicator
+            android:id="@+id/indicator"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@color/common_item_inner" >
-
-            <com.zifei.corebeau.post.ui.view.PostViewPager
-                android:id="@+id/vp_post_image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-            </com.zifei.corebeau.post.ui.view.PostViewPager>
-
-            <com.zifei.corebeau.common.ui.widget.indicator.CirclePageIndicator
-                android:id="@+id/indicator"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|bottom" />
-        </FrameLayout>
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp" />
 
         <TextView
             android:id="@+id/tv_post_msg"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-        >
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp" >
         </TextView>
     </LinearLayout>
 

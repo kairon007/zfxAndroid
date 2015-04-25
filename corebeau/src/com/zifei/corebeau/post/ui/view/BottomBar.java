@@ -17,6 +17,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
+import com.zifei.corebeau.post.task.PostTask;
 import com.zifei.corebeau.post.ui.CommentActivity;
 import com.zifei.corebeau.utils.StringUtil;
 
@@ -32,6 +33,7 @@ public class BottomBar extends RelativeLayout implements OnClickListener {
     private DisplayImageOptions iconImageOptions;
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
+	private PostTask postTask;
 
 	public BottomBar(Context context) {
 		super(context);
@@ -61,7 +63,7 @@ public class BottomBar extends RelativeLayout implements OnClickListener {
 
 		ivLike.setOnClickListener(this);
 		ivComment.setOnClickListener(this);
-		
+		ivScrap.setOnClickListener(this);
 		initLoader();
 		setDefault();
 	}
@@ -91,13 +93,19 @@ public class BottomBar extends RelativeLayout implements OnClickListener {
 					CommentActivity.class);
 			context.startActivity(intent);
 			break;
+		case R.id.iv_post_scrap:
+			
+			break;
 		}
 	}
 
 	public void setCurrentItem(ItemInfo itemInfo) {
-
 		this.itemInfo = itemInfo;
-		
+		setWigetImageView();
+		setIconImage();
+	}
+	
+	private void setWigetImageView(){
 		// ivScrap = response.get...;
 		if (isScrap) {
 			ivScrap.setBackgroundResource(R.drawable.bottom_scrap_on);
@@ -107,11 +115,13 @@ public class BottomBar extends RelativeLayout implements OnClickListener {
 
 		// ivlike = response.get...;
 		if (isLike) {
-			ivLike.setBackgroundResource(R.drawable.dashboard_post_control_like_selected);
+			ivLike.setBackgroundResource(R.drawable.bottom_like_pressed);
 		} else {
-			ivLike.setBackgroundResource(R.drawable.dashboard_post_control_like);
+			ivLike.setBackgroundResource(R.drawable.bottom_like_normal);
 		}
-
+		
+		ivComment.setBackgroundResource(R.drawable.bottom_comment_normal);
+		
 		tvNickname.setText(itemInfo.getNickName());
 		tvLikeCnt.setText(String.valueOf(itemInfo.getLikeCnt()));
 		tvCommentCnt.setText(String.valueOf(itemInfo.getCommentCnt()));

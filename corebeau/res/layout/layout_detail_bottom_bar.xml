@@ -39,10 +39,9 @@
 
         <ImageView
             android:id="@+id/iv_post_like"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/post_icon_likes" />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical" />
 
         <TextView
             android:id="@+id/tv_post_like"
@@ -53,10 +52,10 @@
 
         <ImageView
             android:id="@+id/iv_post_comment"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="center_vertical"
-            android:background="@drawable/bottom_comment" />
+            />
 
         <TextView
             android:id="@+id/tv_post_comment"
@@ -67,10 +66,9 @@
 
         <ImageView
             android:id="@+id/iv_post_scrap"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/scrap_off" />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical" />
     </LinearLayout>
 
 </RelativeLayout>
