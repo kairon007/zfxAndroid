@@ -15,14 +15,14 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
-import com.zifei.corebeau.my.bean.FollowUser;
+import com.zifei.corebeau.my.bean.FollowUserInfo;
 import com.zifei.corebeau.utils.StringUtil;
 
 public class FollowAdapter extends BaseAdapter {
 
 	private Context context;
 	private LayoutInflater inflater;
-	private List<FollowUser> data = null;
+	private List<FollowUserInfo> data = null;
 	private DisplayImageOptions imageOptions;
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
@@ -45,7 +45,7 @@ public class FollowAdapter extends BaseAdapter {
 				.build();
 	}
 
-	public void addData(List<FollowUser> data, boolean append) {
+	public void addData(List<FollowUserInfo> data, boolean append) {
 		if (append) {
 			this.data.addAll(data);
 		} else {
@@ -54,7 +54,7 @@ public class FollowAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 
-	public List<FollowUser> getData() {
+	public List<FollowUserInfo> getData() {
 		return this.data;
 	}
 
@@ -99,15 +99,15 @@ public class FollowAdapter extends BaseAdapter {
 		holder.nickName = (TextView) convertView
 				.findViewById(R.id.tv_follow_nickname);
 
-		final FollowUser p = data.get(position);
+		final FollowUserInfo p = data.get(position);
 
-		String urlThumb = p.getUserIcon();
+		String urlThumb = p.getUrl();
 		if (!StringUtil.isEmpty(urlThumb)) {
 			imageLoader.displayImage(urlThumb, holder.usericon, imageOptions);
 		} else {
 		}
 
-		holder.nickName.setText(p.getNickname());
+		holder.nickName.setText(p.getNickName());
 
 		convertView.setTag(position);
 		return convertView;

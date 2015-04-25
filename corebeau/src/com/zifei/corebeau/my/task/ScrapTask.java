@@ -9,6 +9,7 @@ import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.UrlConstants;
 import com.zifei.corebeau.common.task.NetworkExecutor;
 import com.zifei.corebeau.my.bean.response.MyPostListResponse;
+import com.zifei.corebeau.my.bean.response.ScrapItemListResponse;
 
 public class ScrapTask {
 	
@@ -19,22 +20,22 @@ public class ScrapTask {
 	}
 	
 	public void getScrapList(
-			final AsyncCallBacks.OneOne<MyPostListResponse, String> callback) {
+			final AsyncCallBacks.OneOne<ScrapItemListResponse, String> callback) {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 
-		NetworkExecutor.post(UrlConstants.GET_SPOT_LIST, params,
-				MyPostListResponse.class,
-				new NetworkExecutor.CallBack<MyPostListResponse>() {
+		NetworkExecutor.post(UrlConstants.GET_SCRAP_LIST, params,
+				ScrapItemListResponse.class,
+				new NetworkExecutor.CallBack<ScrapItemListResponse>() {
 					@Override
-					public void onSuccess(MyPostListResponse response) {
+					public void onSuccess(ScrapItemListResponse response) {
 
 						int status = response.getStatusCode();
 						String msg = response.getMsg();
 
-						if (status == MyPostListResponse.SUCCESS) {
+						if (status == ScrapItemListResponse.SUCCESS) {
 							callback.onSuccess(response);
-						} else if (status == MyPostListResponse.FAILED) {
+						} else if (status == ScrapItemListResponse.FAILED) {
 							callback.onError(msg);
 						} else {
 							callback.onError(msg);
@@ -48,64 +49,5 @@ public class ScrapTask {
 				});
 	}
 
-	public void doScrap(
-			final AsyncCallBacks.OneOne<MyPostListResponse, String> callback) {
-
-		Map<String, Object> params = new HashMap<String, Object>();
-
-		NetworkExecutor.post(UrlConstants.GET_SPOT_LIST, params,
-				MyPostListResponse.class,
-				new NetworkExecutor.CallBack<MyPostListResponse>() {
-					@Override
-					public void onSuccess(MyPostListResponse response) {
-
-						int status = response.getStatusCode();
-						String msg = response.getMsg();
-
-						if (status == MyPostListResponse.SUCCESS) {
-							callback.onSuccess(response);
-						} else if (status == MyPostListResponse.FAILED) {
-							callback.onError(msg);
-						} else {
-							callback.onError(msg);
-						}
-					}
-
-					@Override
-					public void onError(Integer status, String msg) {
-						callback.onError(msg);
-					}
-				});
-	}
 	
-	public void cancelScrap(
-			final AsyncCallBacks.OneOne<MyPostListResponse, String> callback) {
-
-		Map<String, Object> params = new HashMap<String, Object>();
-
-		NetworkExecutor.post(UrlConstants.GET_SPOT_LIST, params,
-				MyPostListResponse.class,
-				new NetworkExecutor.CallBack<MyPostListResponse>() {
-					@Override
-					public void onSuccess(MyPostListResponse response) {
-
-						int status = response.getStatusCode();
-						String msg = response.getMsg();
-
-						if (status == MyPostListResponse.SUCCESS) {
-							callback.onSuccess(response);
-						} else if (status == MyPostListResponse.FAILED) {
-							callback.onError(msg);
-						} else {
-							callback.onError(msg);
-						}
-					}
-
-					@Override
-					public void onError(Integer status, String msg) {
-						callback.onError(msg);
-					}
-				});
-	}
-
 }

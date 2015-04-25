@@ -24,7 +24,7 @@ public class FollowTask {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 
-		NetworkExecutor.post(UrlConstants.GET_SPOT_LIST, params,
+		NetworkExecutor.post(UrlConstants.GET_FOLLOW_LIST, params,
 				FollowListResponse.class,
 				new NetworkExecutor.CallBack<FollowListResponse>() {
 					@Override
@@ -49,12 +49,12 @@ public class FollowTask {
 				});
 	}
 
-	public void doFollow(
+	public void addFollow(
 			final AsyncCallBacks.OneOne<Response, String> callback) {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 
-		NetworkExecutor.post(UrlConstants.GET_SPOT_LIST, params,
+		NetworkExecutor.post(UrlConstants.FOLLOW_ADD, params,
 				Response.class,
 				new NetworkExecutor.CallBack<Response>() {
 					@Override

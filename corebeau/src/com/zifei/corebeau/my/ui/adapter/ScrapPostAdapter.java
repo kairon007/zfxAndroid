@@ -17,10 +17,11 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
+import com.zifei.corebeau.common.ui.view.CircularImageView;
 import com.zifei.corebeau.post.ui.PostDetailActivity;
 import com.zifei.corebeau.utils.StringUtil;
 
-public class MyPostAdapter extends BaseAdapter {
+public class ScrapPostAdapter  extends BaseAdapter {
 
 	private Context context;
 	private LayoutInflater inflater;
@@ -29,7 +30,7 @@ public class MyPostAdapter extends BaseAdapter {
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
 
-	public MyPostAdapter(Context context, ListView listView) {
+	public ScrapPostAdapter(Context context, ListView listView) {
 		inflater = LayoutInflater.from(context);
 		this.context = context;
 		imageLoader = ImageLoader.getInstance();
@@ -93,40 +94,50 @@ public class MyPostAdapter extends BaseAdapter {
 		}
 
 		ViewHolder holder = new ViewHolder();
+		holder.usericon.setBorderWidth(5);
 		holder.message = (TextView) convertView
 				.findViewById(R.id.tv_spot_message);
 		holder.image = (ImageView) convertView.findViewById(R.id.spot_image);
+		holder.nickName = (TextView)convertView.findViewById(R.id.spot_user_nickname);
 		holder.goPostDetail = (TextView) convertView
 				.findViewById(R.id.tv_go_detail);
 
 		final ItemInfo p = data.get(position);
 
 		holder.message.setText(p.getTitle());
-
+		holder.nickName.setText(p.getNickName());
+		
 		String url = p.getShowUrl();
 		if (!StringUtil.isEmpty(url)) {
-			imageLoader.displayImage(url, holder.image, imageOptions);
+			imageLoader.displayImage(url+"", holder.image, imageOptions);
 		} else {
-			// holder.image.setBackgroundColor(color.blue);
 		}
-
+		
+		String iconUrl = p.getUserImageUrl();
+		if (!StringUtil.isEmpty(iconUrl)) {
+			imageLoader.displayImage(iconUrl, holder.image, imageOptions);
+		} else {
+		}
+		
 		holder.goPostDetail.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				goPostPage(p);
+				goPostPage(p.getItemId());
 			}
 		});
 		convertView.setTag(position);
 		return convertView;
 	}
 
-	private void goPostPage(ItemInfo itemInfo) {
-		context.startActivity(new Intent(context, PostDetailActivity.class)
-				.putExtra("itemInfo", itemInfo));
+	private void goPostPage(String itemId) {
+		context.startActivity(new Intent(context, PostDetailActivity.class).putExtra(
+				"itemId", itemId));
 	}
 
 	private class ViewHolder {
 		TextView message;
+		TextView nickName;
+		CircularImageView usericon;
 		ImageView image;
 		TextView goPostDetail;
 	}

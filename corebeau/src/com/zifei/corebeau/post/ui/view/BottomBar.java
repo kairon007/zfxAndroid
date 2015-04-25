@@ -68,6 +68,7 @@ public class BottomBar extends RelativeLayout implements OnClickListener {
 		ivLike.setOnClickListener(this);
 		ivComment.setOnClickListener(this);
 		ivScrap.setOnClickListener(this);
+		postTask = new PostTask(context);
 		initLoader();
 		setDefault();
 	}

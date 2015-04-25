@@ -57,6 +57,8 @@ public class UrlConstants {
 	public static String LIKE_DEL = BASE_URL + "/comment";
 	
 	
+	
+	public static String GET_SCRAP_LIST = BASE_URL + "/post/getUserScrapItemInfo";
 
 	public static String ADD_SCRAP = BASE_URL + "/post/addFollowItem";
 	
@@ -82,9 +84,9 @@ public class UrlConstants {
 
 	// follow
 
-	public static String GET_FOLLOW = BASE_URL + "/comment";
+	public static String GET_FOLLOW_LIST = BASE_URL + "/post/getUserFollowUserInfoList";
 
-	public static String FOLLOW = BASE_URL + "/comment";
+	public static String FOLLOW_ADD = BASE_URL + "/post/addFollowUser";
 
 	public static String FOLLOW_DEL = BASE_URL + "/comment";
 

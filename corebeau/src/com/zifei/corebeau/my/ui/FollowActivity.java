@@ -29,6 +29,7 @@ public class FollowActivity extends BarActivity{
 	}
 	
 	private void init(){
+		setNavTitle("follow");
 		progressBar = (ProgressBar)findViewById(R.id.pb_follow);
 		followList = (ListView) findViewById(R.id.lv_follow);
 		followTask = new FollowTask(this);
@@ -43,7 +44,7 @@ public class FollowActivity extends BarActivity{
 			@Override
 			public void onSuccess(FollowListResponse response) {
 				progressBar.setVisibility(View.INVISIBLE);
-				followAdapter.addData(response.getFollowUserList(), false);
+				followAdapter.addData(response.getPageBean().getList(), false);
 			}
 
 			@Override

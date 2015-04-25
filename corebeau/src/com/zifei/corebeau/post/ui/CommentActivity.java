@@ -23,7 +23,7 @@ import com.zifei.corebeau.utils.Utils;
 public class CommentActivity extends Activity implements View.OnClickListener{
 
     private PostTask postTask;
-    private Integer postId;
+    private String itemId;
     private CommentAdapter commentAdapter;
     private ListView listView;
     private EditText commentEditText;
@@ -37,8 +37,7 @@ public class CommentActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.activity_comment);
         
         Intent intent = getIntent();
-        String stringPostId = intent.getStringExtra("itemId");
-        postId = Integer.parseInt(stringPostId);
+        itemId = intent.getStringExtra("itemId");
         init();
 
     }
@@ -51,6 +50,8 @@ public class CommentActivity extends Activity implements View.OnClickListener{
         commentEditText = (EditText)findViewById(R.id.et_comment);
         commentInsertBtn = (Button)findViewById(R.id.btn_comment);
         getCommentTask();
+        
+        commentInsertBtn.setOnClickListener(this);
     }
 
     @Override
@@ -83,7 +84,7 @@ public class CommentActivity extends Activity implements View.OnClickListener{
 
     // endless listview  20개 부르고 10개 넘어가면 10개 더부르고 이런식이 되어야함
     private void getCommentTask(){
-        postTask.getComment(postId, new AsyncCallBacks.OneOne<CommentListResponse, String>() {
+        postTask.getComment(itemId, new AsyncCallBacks.OneOne<CommentListResponse, String>() {
 
             @Override
             public void onSuccess(CommentListResponse result) {
@@ -93,13 +94,12 @@ public class CommentActivity extends Activity implements View.OnClickListener{
             @Override
             public void onError(String msg) {
                 Utils.showToast(CommentActivity.this, msg);
-//                commentAdapter.addData(TestData.getCommentList(), false);
             }
         });
     }
 
     private void insertComment() {
-        postTask.insertComment(postId, message, new AsyncCallBacks.OneOne<String, String>() {
+        postTask.insertComment(itemId, message, new AsyncCallBacks.OneOne<String, String>() {
 
             @Override
             public void onSuccess(String msg) {
@@ -116,21 +116,21 @@ public class CommentActivity extends Activity implements View.OnClickListener{
     }
 
 
-//    private void deletePost(){
-//        postTask.insertComment(commentId, new AsyncCallBacks.OneOne<String, String>() {
-//
-//            @Override
-//            public void onSuccess(String msg) {
-//                commentAdapter.notifyDataSetChanged();
-//                // 리스트뷰 해당 리스트 만 삭제하기...재요청 하지말고
-//                Utils.showToast(CommentActivity.this, msg);
-//            }
-//
-//            @Override
-//            public void onError(String msg) {
-//                Utils.showToast(CommentActivity.this, msg);
-//            }
-//        });
-//    }
+    private void deletePost(String commentId){
+        postTask.deleteComment(commentId, new AsyncCallBacks.OneOne<String, String>() {
+
+            @Override
+            public void onSuccess(String msg) {
+                commentAdapter.notifyDataSetChanged();
+                // 리스트뷰 해당 리스트 만 삭제하기...재요청 하지말고
+                Utils.showToast(CommentActivity.this, msg);
+            }
+
+            @Override
+            public void onError(String msg) {
+                Utils.showToast(CommentActivity.this, msg);
+            }
+        });
+    }
 
 }

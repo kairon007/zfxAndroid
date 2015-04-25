@@ -1,20 +1,18 @@
 package com.zifei.corebeau.my.bean.response;
 
-import java.util.List;
-
+import com.zifei.corebeau.bean.PageBean;
 import com.zifei.corebeau.common.net.Response;
-import com.zifei.corebeau.my.bean.FollowUser;
+import com.zifei.corebeau.my.bean.FollowUserInfo;
 
 public class FollowListResponse extends Response {
 	
-	private List<FollowUser> followUserList;
+	private PageBean<FollowUserInfo> pageBean;
 
-	public List<FollowUser> getFollowUserList() {
-		return followUserList;
+	public PageBean<FollowUserInfo> getPageBean() {
+		return pageBean;
 	}
 
-	public void setFollowUserList(List<FollowUser> followUserList) {
-		this.followUserList = followUserList;
+	public void setPageBean(PageBean<FollowUserInfo> pageBean) {
+		this.pageBean = pageBean;
 	}
-	
 }

@@ -77,8 +77,8 @@ public class PostTask {
 
 
     // endless comment  // 서버에 어떤식으로 구별해서 보낼지 생각해보기
-    public void getComment(Integer postId, final AsyncCallBacks.OneOne<CommentListResponse, String> callback) {
-        Map<String, Object> params = Utils.buildMap("postId",postId);
+    public void getComment(String itemId, final AsyncCallBacks.OneOne<CommentListResponse, String> callback) {
+        Map<String, Object> params = Utils.buildMap("itemId",itemId);
 
         NetworkExecutor.post(UrlConstants.GET_COMMENT, params, CommentListResponse.class, new NetworkExecutor.CallBack<CommentListResponse>() {
             @Override
@@ -103,19 +103,19 @@ public class PostTask {
         });
     }
 
-    public void insertComment(Integer postId, String message, final AsyncCallBacks.OneOne<String, String> callback) {
-        Map<String, Object> params = Utils.buildMap("postId",postId,"message",message);
+    public void insertComment(String itemId, String message, final AsyncCallBacks.OneOne<String, String> callback) {
+        Map<String, Object> params = Utils.buildMap("itemId",itemId,"message",message);
 
-        NetworkExecutor.post(UrlConstants.INSERT_COMMENT, params, CommentResponse.class, new NetworkExecutor.CallBack<CommentResponse>() {
+        NetworkExecutor.post(UrlConstants.INSERT_COMMENT, params, Response.class, new NetworkExecutor.CallBack<Response>() {
             @Override
-            public void onSuccess(CommentResponse response) {
+            public void onSuccess(Response response) {
 
                 int status = response.getStatusCode();
                 String msg = response.getMsg();
 
-                if(status == CommentResponse.SUCCESS){
+                if(status == Response.SUCCESS){
                     callback.onSuccess(msg);
-                }else if(status == CommentResponse.FAILED){
+                }else if(status == Response.FAILED){
                     callback.onError(msg);
                 }else{
                     callback.onError(msg);
@@ -129,19 +129,19 @@ public class PostTask {
         });
     }
 
-    public void deleteComment(Integer commentId, final AsyncCallBacks.OneOne<CommentResponse, String> callback) {
+    public void deleteComment(String commentId, final AsyncCallBacks.OneOne<String, String> callback) {
         Map<String, Object> params = Utils.buildMap("commentId", commentId);
 
-        NetworkExecutor.post(UrlConstants.DELETE_COMMENT, params, CommentResponse.class, new NetworkExecutor.CallBack<CommentResponse>() {
+        NetworkExecutor.post(UrlConstants.DELETE_COMMENT, params, Response.class, new NetworkExecutor.CallBack<Response>() {
             @Override
-            public void onSuccess(CommentResponse response) {
+            public void onSuccess(Response response) {
 
                 int status = response.getStatusCode();
                 String msg = response.getMsg();
 
-                if(status == CommentResponse.SUCCESS){
-                    callback.onSuccess(response);
-                }else if(status == CommentResponse.FAILED){
+                if(status == Response.SUCCESS){
+                    callback.onSuccess(msg);
+                }else if(status == Response.FAILED){
                     callback.onError(msg);
                 }else{
                     callback.onError(msg);
