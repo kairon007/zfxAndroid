@@ -77,6 +77,7 @@ public class SearchFragment extends Fragment implements
 		staggeredGridView = (StaggeredGridView) view
 				.findViewById(R.id.sgv_search);
 		staggeredGridView.setOnItemClickListener(this);
+		
 		LayoutInflater layoutInflater = getActivity().getLayoutInflater();
 		View header = layoutInflater.inflate(R.layout.layout_search_header,
 				null);
@@ -104,6 +105,13 @@ public class SearchFragment extends Fragment implements
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		((CircularProgressDrawable) progressBar
+				.getIndeterminateDrawable()).progressiveStop();
 	}
 
 	@Override
@@ -201,7 +209,7 @@ public class SearchFragment extends Fragment implements
 						} else {
 							mAdapter = new SampleAdapter(getActivity(),
 									android.R.layout.simple_list_item_1, list);
-
+							mAdapter.setColumnWidth(staggeredGridView.getColumnWidth());
 							staggeredGridView.setAdapter(mAdapter);
 
 						}

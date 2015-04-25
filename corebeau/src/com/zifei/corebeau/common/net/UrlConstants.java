@@ -4,10 +4,14 @@ public class UrlConstants {
 
 	// public static final String BASE_URL = "http://api.huaqianapp.com";
 
-	public static final String BASE_URL = "http://115.28.175.29:8080/frontend";
+//	 public static final String BASE_URL =
+//	 "http://115.28.175.29:8080/frontend";
 
-	// public static final String BASE_URL =
-	// "http://192.168.91.104:8080/frontend";
+	public static final String BASE_URL = "http://192.168.91.102:8080/frontend";
+
+	// config
+	
+	public static String GET_CONFIG = BASE_URL + "/config/fetch";
 
 	// account
 
@@ -55,13 +59,12 @@ public class UrlConstants {
 	public static String LIKE = BASE_URL + "/like";
 
 	public static String LIKE_DEL = BASE_URL + "/comment";
-	
-	
-	
-	public static String GET_SCRAP_LIST = BASE_URL + "/post/getUserScrapItemInfo";
+
+	public static String GET_SCRAP_LIST = BASE_URL
+			+ "/post/getUserScrapItemInfo";
 
 	public static String ADD_SCRAP = BASE_URL + "/post/addFollowItem";
-	
+
 	public static String CANCEL_SCRAP = BASE_URL + "/post/addFollowItem";
 
 	// my
@@ -69,14 +72,15 @@ public class UrlConstants {
 	public static String GET_MY_POST = BASE_URL + "/post/getItemInfoByUserId";
 
 	public static String UPLOAD_MY_ICON_IMAGE = BASE_URL + "/.../...";
-	
+
 	// my info
-	
+
 	public static String UPDATE_USERINFO = BASE_URL + "/.../...";
 
 	// comment
 
-	public static String GET_COMMENT = BASE_URL + "/post/getItemCommentsByItemId";
+	public static String GET_COMMENT = BASE_URL
+			+ "/post/getItemCommentsByItemId";
 
 	public static String INSERT_COMMENT = BASE_URL + "/post/saveComment";
 
@@ -84,7 +88,8 @@ public class UrlConstants {
 
 	// follow
 
-	public static String GET_FOLLOW_LIST = BASE_URL + "/post/getUserFollowUserInfoList";
+	public static String GET_FOLLOW_LIST = BASE_URL
+			+ "/post/getUserFollowUserInfoList";
 
 	public static String FOLLOW_ADD = BASE_URL + "/post/addFollowUser";
 

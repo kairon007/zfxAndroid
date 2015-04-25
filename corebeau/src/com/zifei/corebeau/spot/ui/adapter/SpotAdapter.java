@@ -8,19 +8,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.User.ui.OtherUserActivity;
 import com.zifei.corebeau.bean.ItemInfo;
+import com.zifei.corebeau.common.CorebeauApp;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
 import com.zifei.corebeau.post.ui.PostDetailActivity;
 import com.zifei.corebeau.utils.StringUtil;
+import com.zifei.corebeau.utils.Utils;
 
 public class SpotAdapter extends BaseAdapter {
 
@@ -31,10 +36,12 @@ public class SpotAdapter extends BaseAdapter {
 	private DisplayImageOptions iconImageOptions;
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
+	private String bigImageConfig;
 
 	public SpotAdapter(Context context, ListView listView) {
 		inflater = LayoutInflater.from(context);
 		this.context = context;
+		getConfig();
 		imageLoader = ImageLoader.getInstance();
 		config = new ImageLoaderConfiguration.Builder(context)
 				.threadPoolSize(3).build();
@@ -42,7 +49,8 @@ public class SpotAdapter extends BaseAdapter {
 
 		imageOptions = new DisplayImageOptions.Builder() //
 				.delayBeforeLoading(200) // 载入之前的延迟时间
-				.cacheInMemory(false).cacheOnDisk(true)
+				.cacheInMemory(true)
+				.imageScaleType(ImageScaleType.NONE)
 				.build();
 		
 		iconImageOptions = new DisplayImageOptions.Builder() //
@@ -50,8 +58,12 @@ public class SpotAdapter extends BaseAdapter {
 		.showImageForEmptyUri(R.drawable.my_default)
 		.showImageOnFail(R.drawable.my_default)
 		.showImageOnLoading(R.drawable.my_default)
-		.cacheInMemory(false).cacheOnDisk(true)
+		.cacheInMemory(true)
 		.build();
+	}
+	
+	private void getConfig(){
+		bigImageConfig = CorebeauApp.getBigImageConfig();
 	}
 
 	public void addData(List<ItemInfo> data, boolean append) {
@@ -100,6 +112,12 @@ public class SpotAdapter extends BaseAdapter {
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.item_spot, parent, false);
 		}
+		
+		final ItemInfo p = data.get(position);
+		
+		int bigImgHeight = p.getBheight();
+		int bigIwidth = p.getBwidth();
+		int screenWidth = Utils.getScreenWidth(context);
 
 		ViewHolder holder = new ViewHolder();
 		holder.usericon = (CircularImageView) convertView
@@ -109,13 +127,19 @@ public class SpotAdapter extends BaseAdapter {
 				.findViewById(R.id.spot_user_nickname);
 		holder.message = (TextView) convertView
 				.findViewById(R.id.tv_spot_message);
+		
+
 		holder.image = (ImageView) convertView.findViewById(R.id.spot_image);
+		if(bigImgHeight!=0 && bigIwidth!=0 && screenWidth!=0){
+		holder.image.getLayoutParams().height = (int) (((double)screenWidth)*((double)bigImgHeight/(double)bigIwidth));
+		}
+		
 		holder.goPostDetail = (TextView) convertView
 				.findViewById(R.id.tv_go_detail);
 		holder.commentCnt = (TextView)convertView.findViewById(R.id.tv_spot_comment_cnt);
 		
 
-		final ItemInfo p = data.get(position);
+		
 		imageLoader.displayImage("drawable://" + R.drawable.my_default, holder.usericon, iconImageOptions);
 		String urlThumb = p.getUserImageUrl();
 		if (!StringUtil.isEmpty(urlThumb)) {
@@ -126,9 +150,15 @@ public class SpotAdapter extends BaseAdapter {
 		holder.nickName.setText(p.getNickName());
 		holder.message.setText(p.getTitle());
 		holder.commentCnt.setText(String.valueOf(p.getCommentCnt()));
+		
 		String url = p.getShowUrl();
+		
 		if (!StringUtil.isEmpty(url)) {
-			imageLoader.displayImage(url, holder.image, imageOptions);
+			if(bigImageConfig!=null && !StringUtil.isEmpty(bigImageConfig)){
+				imageLoader.displayImage(url + bigImageConfig, holder.image, imageOptions);
+			} else {
+				imageLoader.displayImage(url, holder.image, imageOptions);
+			}
 		} else {
 
 		}

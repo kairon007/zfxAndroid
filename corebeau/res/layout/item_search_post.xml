@@ -28,9 +28,9 @@
    <ImageView
         android:id="@+id/comment_icon"
         android:layout_below="@id/search_image_bottom_divider"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/search_list_reply"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:background="@drawable/search_comment_normal"
         android:layout_alignParentLeft="true"
          />
     
@@ -47,9 +47,9 @@
         android:layout_alignLeft="@id/tv_comment_cnt"
         android:layout_below="@id/iv_search_post"
         android:layout_marginLeft="50dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/search_list_like" />
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:background="@drawable/search_like_normal" />
     
     <TextView
         android:id="@+id/tv_search_like"

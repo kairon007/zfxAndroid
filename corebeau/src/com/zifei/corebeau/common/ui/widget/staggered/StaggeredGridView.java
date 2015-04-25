@@ -1303,4 +1303,5 @@ public class StaggeredGridView extends ExtendableListView {
         mNeedSync = true;
         super.onRestoreInstanceState(ss);
     }
+    
 }

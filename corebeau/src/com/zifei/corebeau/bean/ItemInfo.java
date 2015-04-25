@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 public class ItemInfo implements Serializable {
 
+
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = -1050659549389928060L;
 
 	private String userId;
@@ -15,6 +19,61 @@ public class ItemInfo implements Serializable {
 	private int likeCnt;
 	private String showUrl;
 	private int commentCnt;
+	private int bwidth;
+	private int bheight;
+	private int mwidth;
+	private int mheight;
+	private int swidth;
+	private int sheight;
+	
+
+	public int getBwidth() {
+		return bwidth;
+	}
+
+	public void setBwidth(int bwidth) {
+		this.bwidth = bwidth;
+	}
+
+	public int getBheight() {
+		return bheight;
+	}
+
+	public void setBheight(int bheight) {
+		this.bheight = bheight;
+	}
+
+	public int getMwidth() {
+		return mwidth;
+	}
+
+	public void setMwidth(int mwidth) {
+		this.mwidth = mwidth;
+	}
+
+	public int getMheight() {
+		return mheight;
+	}
+
+	public void setMheight(int mheight) {
+		this.mheight = mheight;
+	}
+
+	public int getSwidth() {
+		return swidth;
+	}
+
+	public void setSwidth(int swidth) {
+		this.swidth = swidth;
+	}
+
+	public int getSheight() {
+		return sheight;
+	}
+
+	public void setSheight(int sheight) {
+		this.sheight = sheight;
+	}
 
 	public ItemInfo() {
 

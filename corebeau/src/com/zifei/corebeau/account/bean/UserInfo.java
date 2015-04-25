@@ -31,6 +31,16 @@ public class UserInfo {
     
     private Long userRegtime;
     
+    private short state;
+    
+	public short getState() {
+		return state;
+	}
+
+	public void setState(short state) {
+		this.state = state;
+	}
+
 	public Long getUserRegtime() {
 		return userRegtime;
 	}

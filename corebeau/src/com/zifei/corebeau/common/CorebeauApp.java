@@ -16,6 +16,8 @@ import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.zifei.corebeau.account.bean.ConfigInfo;
+import com.zifei.corebeau.account.task.ConfigTask;
 import com.zifei.corebeau.account.task.UserInfoService;
 
 /**
@@ -23,29 +25,32 @@ import com.zifei.corebeau.account.task.UserInfoService;
  */
 public class CorebeauApp extends Application {
 
-    public static CorebeauApp app;
-    private LocationManager locationManager;
-    private Location currentLocation;
-    private Map<String, Integer> appNotifications;
-    private ArrayList<Activity> activities;
-    private Map<String, Long> enterAppTimeMap;
+	public static CorebeauApp app;
+	private LocationManager locationManager;
+	private Location currentLocation;
+	private Map<String, Integer> appNotifications;
+	private ArrayList<Activity> activities;
+	private Map<String, Long> enterAppTimeMap;
+	private static Map<String, String> config;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        app = this;
-        activities = new ArrayList<Activity>();
-        appNotifications = new HashMap<String, Integer>();
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		app = this;
+		activities = new ArrayList<Activity>();
+		appNotifications = new HashMap<String, Integer>();
 
-        initLocation();
-        enterAppTimeMap = new HashMap<String, Long>();
-        initImageLoader(getApplicationContext());
-        loadInitData();
-        initObservers();
-    }
-    
-    private void loadInitData() {
-		final UserInfoService userInfoService = new UserInfoService(this.getApplicationContext());
+		initLocation();
+		enterAppTimeMap = new HashMap<String, Long>();
+		initImageLoader(getApplicationContext());
+		loadInitData();
+		loadConfigData();
+		initObservers();
+	}
+
+	private void loadInitData() {
+		final UserInfoService userInfoService = new UserInfoService(
+				this.getApplicationContext());
 		new Thread() {
 			@Override
 			public void run() {
@@ -53,62 +58,90 @@ public class CorebeauApp extends Application {
 			}
 		};
 	}
-    
-    private void initObservers() {
-//		ObserverCenter.register(AccountService.LOGIN_EVENT, new EnbleLockScreenObserver());
-//		ObserverCenter.register(AccountService.LOGIN_EVENT, new UpdateBaiduIdObserver(this.getApplicationContext()));
+
+	private void loadConfigData() {
+		final ConfigTask configTask = new ConfigTask(
+				this.getApplicationContext());
+		new Thread() {
+			@Override
+			public void run() {
+				config = configTask.getCurrentConfig();
+			}
+		};
 	}
 
-    private void initImageLoader(Context context) {
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
-                getApplicationContext()).threadPriority(Thread.MAX_PRIORITY)
-                .memoryCache(new WeakMemoryCache())
-                .denyCacheImageMultipleSizesInMemory().threadPoolSize(5)
-                .tasksProcessingOrder(QueueProcessingType.LIFO)// .enableLogging()
-                .build();
+	public static String getBigImageConfig() {
+		return config!=null ? config.get(ConfigInfo.BIG_PIC_STYLE_URL) : "";
+	}
 
-        ImageLoader.getInstance().init(config);
-    }
+	public static String getMiddleImageConfig() {
+		return config!=null ? config.get(ConfigInfo.MID_PIC_STYLE_URL) : "";
+	}
 
-    private void initLocation() {
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10 * 60 * 1000, 1000, locationListener);
-            currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        }
-    }
+	public static String getSmallImageConfig() {
+		return config!=null ? config.get(ConfigInfo.SMALL_PIC_STYLE_URL) : "";
+	}
 
-    public Location getLocation() {
+	private void initObservers() {
+		// ObserverCenter.register(AccountService.LOGIN_EVENT, new
+		// EnbleLockScreenObserver());
+		// ObserverCenter.register(AccountService.LOGIN_EVENT, new
+		// UpdateBaiduIdObserver(this.getApplicationContext()));
+	}
 
-        return currentLocation;
-    }
+	private void initImageLoader(Context context) {
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+				getApplicationContext()).threadPriority(Thread.MAX_PRIORITY)
+				.memoryCache(new WeakMemoryCache())
+				.denyCacheImageMultipleSizesInMemory().threadPoolSize(5)
+				.tasksProcessingOrder(QueueProcessingType.LIFO)// .enableLogging()
+				.build();
 
-    private LocationListener locationListener = new LocationListener() {
+		ImageLoader.getInstance().init(config);
+	}
 
-        @Override
-        public void onLocationChanged(Location location) {
-            currentLocation = location;
-        }
+	private void initLocation() {
+		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			locationManager.requestLocationUpdates(
+					LocationManager.NETWORK_PROVIDER, 10 * 60 * 1000, 1000,
+					locationListener);
+			currentLocation = locationManager
+					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		}
+	}
 
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
+	public Location getLocation() {
 
-        @Override
-        public void onProviderEnabled(String provider) {
-        }
+		return currentLocation;
+	}
 
-        @Override
-        public void onProviderDisabled(String provider) {
-        }
-    };
-    
-    public void add(Activity activity) {
+	private LocationListener locationListener = new LocationListener() {
+
+		@Override
+		public void onLocationChanged(Location location) {
+			currentLocation = location;
+		}
+
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+		}
+
+		@Override
+		public void onProviderEnabled(String provider) {
+		}
+
+		@Override
+		public void onProviderDisabled(String provider) {
+		}
+	};
+
+	public void add(Activity activity) {
 		activities.add(activity);
 	}
 
 	public void remove(Activity activity) {
 		activities.remove(activity);
 	}
-    
+
 }

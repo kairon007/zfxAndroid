@@ -22,6 +22,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.account.bean.response.RegisterResponse;
 import com.zifei.corebeau.account.task.AccountTask;
+import com.zifei.corebeau.account.task.ConfigTask;
 import com.zifei.corebeau.account.task.UserInfoService;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.utils.StringUtil;
@@ -54,7 +55,9 @@ public class SplashActivity extends CommonFragmentActvity implements
 		logo.setTextColor(Color.WHITE);
 		logo.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 		logo.setTextSize(50);
-
+		
+		new ConfigTask(this).getConfig();
+		
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -109,6 +112,7 @@ public class SplashActivity extends CommonFragmentActvity implements
 	}
 	
 	private void lauchLoginPage(){
+		
 		tvCheckAccount = (TextView) findViewById(R.id.tv_check_account);
 		tvCheckNickname = (TextView) findViewById(R.id.tv_check_nickname);
 		email = (EditText) findViewById(R.id.et_login_email);
@@ -422,5 +426,4 @@ public class SplashActivity extends CommonFragmentActvity implements
 			}
 		});
 	}
-
 }

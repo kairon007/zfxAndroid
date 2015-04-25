@@ -5,7 +5,7 @@ public class Response {
     private int statusCode;
     
     private String msg;
-
+    
     public int getStatusCode() {
         return statusCode;
     }

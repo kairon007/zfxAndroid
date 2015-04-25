@@ -4,6 +4,7 @@ import com.zifei.corebeau.account.bean.UserInfo;
 import com.zifei.corebeau.common.net.Response;
 
 public class LoginByDeviceResponse extends Response {
+	
 	private UserInfo userInfo;
 
 	private String loginId;

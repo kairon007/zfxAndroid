@@ -3,9 +3,6 @@ package com.zifei.corebeau.account.bean.response;
 import com.zifei.corebeau.account.bean.UserInfo;
 import com.zifei.corebeau.common.net.Response;
 
-/**
- * Created by im14s_000 on 2015/3/24.
- */
 public class LoginResponse extends Response {
 
     private UserInfo userInfo;
@@ -27,7 +24,6 @@ public class LoginResponse extends Response {
     public void setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
     }
-
 
     public static final int PASSWORD_INCORRECT = -200; //密码错误
 

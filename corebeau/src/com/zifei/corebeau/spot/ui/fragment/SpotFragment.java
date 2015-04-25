@@ -17,8 +17,6 @@ import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.bean.PageBean;
 import com.zifei.corebeau.common.AsyncCallBacks;
-import com.zifei.corebeau.common.ui.OnFragmentInteractionListener;
-import com.zifei.corebeau.spot.bean.SpotList;
 import com.zifei.corebeau.spot.bean.response.SpotListResponse;
 import com.zifei.corebeau.spot.task.SpotTask;
 import com.zifei.corebeau.spot.ui.adapter.SpotAdapter;
@@ -48,9 +46,7 @@ public class SpotFragment extends Fragment implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		spotTask = new SpotTask(getActivity());
-
 		spotAdapter = new SpotAdapter(getActivity(), listview);
-
 	}
 
 	@Override
@@ -64,6 +60,7 @@ public class SpotFragment extends Fragment implements
 		getSpotTask();
 		return view;
 	}
+	
 
 	@Override
 	public void onAttach(Activity activity) {
