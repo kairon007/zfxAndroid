@@ -19,19 +19,22 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.zifei.corebeau.R;
+import com.zifei.corebeau.common.CorebeauApp;
+import com.zifei.corebeau.post.bean.UserUploadPicture;
+import com.zifei.corebeau.utils.Utils;
 
 /**
  * Created by im14s_000 on 2015/3/25.
  */
 public class ImageAdapter extends PagerAdapter {
 
-	private List<String> data = null;
+	private List<UserUploadPicture> data = null;
 	private DisplayImageOptions imageOptions;
 	private ImageLoader imageLoader = ImageLoader.getInstance();
 	private ImageLoadingListener imageListener;
 	private Activity activity;
 
-	public ImageAdapter(Activity activity, List<String> data) {
+	public ImageAdapter(Activity activity, List<UserUploadPicture> data) {
 		this.activity = activity;
 		this.data = data;
 		imageOptions = new DisplayImageOptions.Builder() //
@@ -51,11 +54,18 @@ public class ImageAdapter extends PagerAdapter {
 				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.item_post_image, container, false);
 
+		UserUploadPicture picData = data.get(position);
+		int bigImgHeight = picData.getBheight();
+		int bigIwidth = picData.getBwidth();
+		int screenWidth = Utils.getScreenWidth(CorebeauApp.app);
+		
 		ImageView mImageView = (ImageView) view
 				.findViewById(R.id.image_display);
-		
+		if(bigImgHeight!=0 && bigIwidth!=0 && screenWidth!=0){
+			mImageView.getLayoutParams().height = (int) (((double)screenWidth)*((double)bigImgHeight/(double)bigIwidth));
+			}
 		imageLoader.displayImage(
-				data.get(position), mImageView,
+				data.get(position).getUrl(), mImageView,
 				imageOptions, imageListener);
 		container.addView(view);
 		return view;

@@ -42,23 +42,21 @@ public class UrlConstants {
 
 	public static String SEARCH = BASE_URL + "/spot_post";
 
-	// post
+	// item
 
 	public static String GET_UPLOAD_TOKEN = BASE_URL + "/post/getUploadToken";
 
-	public static String UPLOAD = BASE_URL + "/post/uploadItem";
+	public static String UPLOAD_ITEM = BASE_URL + "/post/uploadItem";
 
 	public static String GET_ITEM_DETAIL = BASE_URL + "/post/getItemDetails";
 
-	public static String DELETE_POST = BASE_URL + "/delete_post";
+	public static String DELETE_ITEM = BASE_URL + "/post/deleteUploadItem";
 
-	public static String INSERT_POST = BASE_URL + "modify";
+	
 
-	public static String MODIFY_POST = BASE_URL + "modify";
+	public static String LIKE = BASE_URL + "/post/doLikeItem";
 
-	public static String LIKE = BASE_URL + "/like";
-
-	public static String LIKE_DEL = BASE_URL + "/comment";
+	public static String LIKE_DEL = BASE_URL + "/post/disLikeItem";
 
 	public static String GET_SCRAP_LIST = BASE_URL
 			+ "/post/getUserScrapItemInfo";
@@ -72,7 +70,9 @@ public class UrlConstants {
 	public static String GET_MY_POST = BASE_URL + "/post/getItemInfoByUserId";
 
 	public static String UPLOAD_MY_ICON_IMAGE = BASE_URL + "/.../...";
-
+	
+	public static String MODIFY_NICKNAME = BASE_URL + "/.../...";
+	
 	// my info
 
 	public static String UPDATE_USERINFO = BASE_URL + "/.../...";
@@ -112,8 +112,6 @@ public class UrlConstants {
 	// setting
 
 	public static String MODIFY_PASSWORD = BASE_URL + "get_user_page";
-
-	public static String MODIFY_NICKNAME = BASE_URL + "get_user_page";
 
 	public static String DELETE_ACCOUNT = BASE_URL + "get_user_page";
 

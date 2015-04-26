@@ -1,6 +1,6 @@
 package com.zifei.corebeau.account.bean.response;
 
-import com.zifei.corebeau.account.bean.UserInfo;
+import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.common.net.Response;
 
 public class LoginResponse extends Response {

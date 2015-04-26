@@ -6,7 +6,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import android.content.Context;
 
-import com.zifei.corebeau.account.bean.UserInfo;
+import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.utils.FileUtils;
 
 public class UserInfoService {

@@ -19,8 +19,9 @@ import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.post.ui.PostDetailActivity;
 import com.zifei.corebeau.utils.StringUtil;
+import com.zifei.corebeau.utils.Utils;
 
-public class MyPostAdapter extends BaseAdapter {
+public class MyItemListAdapter extends BaseAdapter {
 
 	private Context context;
 	private LayoutInflater inflater;
@@ -29,7 +30,7 @@ public class MyPostAdapter extends BaseAdapter {
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
 
-	public MyPostAdapter(Context context, ListView listView) {
+	public MyItemListAdapter(Context context, ListView listView) {
 		inflater = LayoutInflater.from(context);
 		this.context = context;
 		imageLoader = ImageLoader.getInstance();
@@ -39,7 +40,7 @@ public class MyPostAdapter extends BaseAdapter {
 
 		imageOptions = new DisplayImageOptions.Builder() //
 				.delayBeforeLoading(200) // 载入之前的延迟时间
-				.cacheInMemory(false).cacheOnDisk(true)
+				.cacheInMemory(true)
 				// .imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
 				// .displayer(new FadeInBitmapDisplayer(500))
 				.build();
@@ -89,17 +90,22 @@ public class MyPostAdapter extends BaseAdapter {
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.item_spot, parent, false);
+			convertView = inflater.inflate(R.layout.item_my_item, parent, false);
 		}
+		final ItemInfo p = data.get(position);
+		int bigImgHeight = p.getBheight();
+		int bigIwidth = p.getBwidth();
+		int screenWidth = Utils.getScreenWidth(context);
 
 		ViewHolder holder = new ViewHolder();
 		holder.message = (TextView) convertView
-				.findViewById(R.id.tv_spot_message);
-		holder.image = (ImageView) convertView.findViewById(R.id.spot_image);
+				.findViewById(R.id.tv_my_item_message);
+		holder.image = (ImageView) convertView.findViewById(R.id.iv_my_item_image);
+		if(bigImgHeight!=0 && bigIwidth!=0 && screenWidth!=0){
+			holder.image.getLayoutParams().height = (int) (((double)screenWidth)*((double)bigImgHeight/(double)bigIwidth));
+			}
 		holder.goPostDetail = (TextView) convertView
-				.findViewById(R.id.tv_go_detail);
-
-		final ItemInfo p = data.get(position);
+				.findViewById(R.id.tv_go_my_detail);
 
 		holder.message.setText(p.getTitle());
 

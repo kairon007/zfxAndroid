@@ -10,7 +10,7 @@ import com.zifei.corebeau.common.net.UrlConstants;
 import com.zifei.corebeau.common.task.NetworkExecutor;
 import com.zifei.corebeau.post.bean.response.CommentListResponse;
 import com.zifei.corebeau.post.bean.response.CommentResponse;
-import com.zifei.corebeau.post.bean.response.PostResponse;
+import com.zifei.corebeau.post.bean.response.ItemDetailResponse;
 import com.zifei.corebeau.utils.Utils;
 
 /**
@@ -23,19 +23,44 @@ public class PostTask {
     public PostTask(Context context) {
         this.context = context;
     }
-
-    public void getItem(String itemId, final AsyncCallBacks.OneOne<PostResponse, String> callback) {
+    
+    public void deleteItem(String itemId, final AsyncCallBacks.OneOne<Response, String> callback) {
 
         Map<String, Object> params = Utils.buildMap("itemId",itemId);
 
-        NetworkExecutor.post(UrlConstants.GET_ITEM_DETAIL, params, PostResponse.class, new NetworkExecutor.CallBack<PostResponse>() {
+        NetworkExecutor.post(UrlConstants.DELETE_ITEM, params, ItemDetailResponse.class, new NetworkExecutor.CallBack<ItemDetailResponse>() {
             @Override
-            public void onSuccess(PostResponse response) {
+            public void onSuccess(ItemDetailResponse response) {
 
                 int status = response.getStatusCode();
                 String msg = response.getMsg();
 
-                if(status == PostResponse.SUCCESS){
+                if(status == ItemDetailResponse.SUCCESS){
+                    callback.onSuccess(response);
+                }else{
+                    callback.onError(msg);
+                }
+            }
+
+            @Override
+            public void onError(Integer status, String msg) {
+                callback.onError(msg);
+            }
+        });
+    }
+
+    public void getItemDetail(String itemId, final AsyncCallBacks.OneOne<ItemDetailResponse, String> callback) {
+
+        Map<String, Object> params = Utils.buildMap("itemId",itemId);
+
+        NetworkExecutor.post(UrlConstants.GET_ITEM_DETAIL, params, ItemDetailResponse.class, new NetworkExecutor.CallBack<ItemDetailResponse>() {
+            @Override
+            public void onSuccess(ItemDetailResponse response) {
+
+                int status = response.getStatusCode();
+                String msg = response.getMsg();
+
+                if(status == ItemDetailResponse.SUCCESS){
                     callback.onSuccess(response);
                 }else{
                     callback.onError(msg);
@@ -210,7 +235,7 @@ public class PostTask {
     public void insertLike(String itemId, final AsyncCallBacks.OneOne<Response, String> callback) {
         Map<String, Object> params = Utils.buildMap("itemId",itemId);
 
-        NetworkExecutor.post(UrlConstants.ADD_SCRAP, params, Response.class, new NetworkExecutor.CallBack<Response>() {
+        NetworkExecutor.post(UrlConstants.LIKE, params, Response.class, new NetworkExecutor.CallBack<Response>() {
             @Override
             public void onSuccess(Response response) {
 
@@ -234,7 +259,7 @@ public class PostTask {
     public void deleteLike(String itemId, final AsyncCallBacks.OneOne<Response, String> callback) {
         Map<String, Object> params = Utils.buildMap("itemId",itemId);
 
-        NetworkExecutor.post(UrlConstants.DELETE_COMMENT, params, Response.class, new NetworkExecutor.CallBack<Response>() {
+        NetworkExecutor.post(UrlConstants.LIKE_DEL, params, Response.class, new NetworkExecutor.CallBack<Response>() {
             @Override
             public void onSuccess(Response response) {
 

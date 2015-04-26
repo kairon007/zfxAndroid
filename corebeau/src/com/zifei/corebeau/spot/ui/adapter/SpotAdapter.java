@@ -50,7 +50,7 @@ public class SpotAdapter extends BaseAdapter {
 		imageOptions = new DisplayImageOptions.Builder() //
 				.delayBeforeLoading(200) // 载入之前的延迟时间
 				.cacheInMemory(true)
-				.imageScaleType(ImageScaleType.NONE)
+				.imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
 				.build();
 		
 		iconImageOptions = new DisplayImageOptions.Builder() //

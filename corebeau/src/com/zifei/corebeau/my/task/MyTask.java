@@ -49,36 +49,8 @@ public class MyTask {
 	public void getUserInfo(){
 		
 	}
-	
-	public void setMyImage(
-		final AsyncCallBacks.OneOne<Response, String> callback) {
 
-			Map<String, Object> params = new HashMap<String, Object>();
-
-			NetworkExecutor.post(UrlConstants.GET_MY_POST, params,
-					MyPostListResponse.class,
-					new NetworkExecutor.CallBack<MyPostListResponse>() {
-						@Override
-						public void onSuccess(MyPostListResponse response) {
-
-							int status = response.getStatusCode();
-							String msg = response.getMsg();
-
-							if (status == MyPostListResponse.SUCCESS) {
-								callback.onSuccess(response);
-							} else {
-								callback.onError(msg);
-							}
-						}
-
-						@Override
-						public void onError(Integer status, String msg) {
-							callback.onError(msg);
-						}
-					});
-	}
-
-	public void getMyPostList(
+	public void getMyItemList(
 			final AsyncCallBacks.OneOne<MyPostListResponse, String> callback) {
 
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -106,73 +78,16 @@ public class MyTask {
 				});
 	}
 
-	public void insertPost(
-			final AsyncCallBacks.OneOne<Response, String> callback) {
-
-		Map<String, Object> params = new HashMap<String, Object>();
-
-		NetworkExecutor.post(UrlConstants.INSERT_POST, params, Response.class,
-				new NetworkExecutor.CallBack<Response>() {
-					@Override
-					public void onSuccess(Response response) {
-
-						int status = response.getStatusCode();
-						String msg = response.getMsg();
-
-						if (status == MyPostListResponse.SUCCESS) {
-							callback.onSuccess(response);
-						} else if (status == MyPostListResponse.FAILED) {
-							callback.onError(msg);
-						} else {
-							callback.onError(msg);
-						}
-					}
-
-					@Override
-					public void onError(Integer status, String msg) {
-						callback.onError(msg);
-					}
-				});
-	}
-
-	public void modifyPost(
-			final AsyncCallBacks.OneOne<Response, String> callback) {
-
-		Map<String, Object> params = new HashMap<String, Object>();
-
-		NetworkExecutor.post(UrlConstants.INSERT_POST, params, Response.class,
-				new NetworkExecutor.CallBack<Response>() {
-					@Override
-					public void onSuccess(Response response) {
-
-						int status = response.getStatusCode();
-						String msg = response.getMsg();
-
-						if (status == MyPostListResponse.SUCCESS) {
-							callback.onSuccess(response);
-						} else if (status == MyPostListResponse.FAILED) {
-							callback.onError(msg);
-						} else {
-							callback.onError(msg);
-						}
-					}
-
-					@Override
-					public void onError(Integer status, String msg) {
-						callback.onError(msg);
-					}
-				});
-	}
 
 	public void deletePost(
-			final AsyncCallBacks.OneOne<Response, String> callback) {
+			final AsyncCallBacks.OneOne<MyPostListResponse, String> callback) {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 
-		NetworkExecutor.post(UrlConstants.INSERT_POST, params, Response.class,
-				new NetworkExecutor.CallBack<Response>() {
+		NetworkExecutor.post(UrlConstants.DELETE_ITEM, params, MyPostListResponse.class,
+				new NetworkExecutor.CallBack<MyPostListResponse>() {
 					@Override
-					public void onSuccess(Response response) {
+					public void onSuccess(MyPostListResponse response) {
 
 						int status = response.getStatusCode();
 						String msg = response.getMsg();
@@ -198,7 +113,7 @@ public class MyTask {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 
-		NetworkExecutor.post(UrlConstants.INSERT_POST, params, Response.class,
+		NetworkExecutor.post(UrlConstants.UPLOAD_MY_ICON_IMAGE, params, Response.class,
 				new NetworkExecutor.CallBack<Response>() {
 					@Override
 					public void onSuccess(Response response) {
@@ -227,7 +142,7 @@ public class MyTask {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 
-		NetworkExecutor.post(UrlConstants.INSERT_POST, params, Response.class,
+		NetworkExecutor.post(UrlConstants.MODIFY_NICKNAME, params, Response.class,
 				new NetworkExecutor.CallBack<Response>() {
 					@Override
 					public void onSuccess(Response response) {

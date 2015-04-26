@@ -4,13 +4,13 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -25,17 +25,14 @@ import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
 import com.zifei.corebeau.my.bean.response.MyPostListResponse;
 import com.zifei.corebeau.my.task.MyTask;
-import com.zifei.corebeau.my.task.UploadTask;
-import com.zifei.corebeau.my.ui.adapter.MyPostAdapter;
-import com.zifei.corebeau.search.ui.adapter.SampleAdapter;
-import com.zifei.corebeau.utils.StringUtil;
+import com.zifei.corebeau.my.ui.adapter.MyItemListAdapter;
 import com.zifei.corebeau.utils.Utils;
 
-public class MyPostActivity extends Activity implements OnClickListener {
+public class MyItemListActivity extends Activity implements OnClickListener, OnItemClickListener {
 	private ListView postList;
 	private CircularImageView circularImageView;
 	private MyTask myTask;
-	private MyPostAdapter myPostAdapter;
+	private MyItemListAdapter myPostAdapter;
 	private DisplayImageOptions imageOptions;
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
@@ -71,7 +68,7 @@ public class MyPostActivity extends Activity implements OnClickListener {
 		View header = layoutInflater.inflate(R.layout.layout_my_post_header,
 				postList, false);
 		postList.addHeaderView(header, null, false);
-		myPostAdapter = new MyPostAdapter(this, postList);
+		myPostAdapter = new MyItemListAdapter(this, postList);
 		postList.setAdapter(myPostAdapter);
 		circularImageView = (CircularImageView) findViewById(R.id.civ_my_post_icon);
 		backgroundImageView = (ImageView) findViewById(R.id.iv_my_post_background);
@@ -119,7 +116,7 @@ public class MyPostActivity extends Activity implements OnClickListener {
 
 	private void postListTask() {
 		progressBar.setVisibility(View.VISIBLE);
-		myTask.getMyPostList(new AsyncCallBacks.OneOne<MyPostListResponse, String>() {
+		myTask.getMyItemList(new AsyncCallBacks.OneOne<MyPostListResponse, String>() {
 
 			@Override
 			public void onSuccess(MyPostListResponse response) {
@@ -138,7 +135,7 @@ public class MyPostActivity extends Activity implements OnClickListener {
 			@Override
 			public void onError(String msg) {
 				progressBar.setVisibility(View.GONE);
-				Utils.showToast(MyPostActivity.this, msg);
+				Utils.showToast(MyItemListActivity.this, msg);
 			}
 
 		});
@@ -156,7 +153,7 @@ public class MyPostActivity extends Activity implements OnClickListener {
 					@Override
 					public void onError(Integer state, String msg) {
 						progressBar.setVisibility(View.GONE);
-						Utils.showToast(MyPostActivity.this, msg);
+						Utils.showToast(MyItemListActivity.this, msg);
 					}
 				});
 	}
@@ -186,5 +183,11 @@ public class MyPostActivity extends Activity implements OnClickListener {
 			Uri uri = data.getData();
 			submit(uri);
 		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+//		view.get
 	}
 }

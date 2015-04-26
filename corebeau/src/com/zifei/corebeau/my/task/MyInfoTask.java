@@ -3,7 +3,7 @@ package com.zifei.corebeau.my.task;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.zifei.corebeau.account.bean.UserInfo;
+import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.common.net.UrlConstants;

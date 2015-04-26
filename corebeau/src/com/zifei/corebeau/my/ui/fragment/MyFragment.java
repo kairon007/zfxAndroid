@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.my.ui.FollowActivity;
 import com.zifei.corebeau.my.ui.MyInfoActivity;
-import com.zifei.corebeau.my.ui.MyPostActivity;
+import com.zifei.corebeau.my.ui.MyItemListActivity;
 import com.zifei.corebeau.my.ui.ScrapPostActivity;
 import com.zifei.corebeau.post.ui.CommentActivity;
 
@@ -54,7 +54,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.ib_my_post:
-			Intent intent1 = new Intent(getActivity(), MyPostActivity.class);
+			Intent intent1 = new Intent(getActivity(), MyItemListActivity.class);
 			startActivity(intent1);
 			break;
 		case R.id.ib_my_scrap:

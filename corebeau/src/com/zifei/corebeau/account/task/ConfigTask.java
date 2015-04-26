@@ -7,8 +7,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import android.content.Context;
 
-import com.zifei.corebeau.account.bean.ConfigInfo;
 import com.zifei.corebeau.account.bean.response.ConfigResponse;
+import com.zifei.corebeau.bean.ConfigInfo;
+import com.zifei.corebeau.common.CorebeauApp;
 import com.zifei.corebeau.common.net.UrlConstants;
 import com.zifei.corebeau.common.task.NetworkExecutor;
 import com.zifei.corebeau.utils.FileUtils;
@@ -42,13 +43,13 @@ public class ConfigTask {
 						if (status == ConfigResponse.UPDATE) {
 							updateCurrentConfig(response.getConfMap());
 						} else {
-
+							CorebeauApp.app.setConfigData(getCurrentConfig());
 						}
 					}
 
 					@Override
 					public void onError(Integer status, String msg) {
-
+						CorebeauApp.app.setConfigData(getCurrentConfig());
 					}
 
 				});
@@ -61,24 +62,16 @@ public class ConfigTask {
 
 	private static final Lock userInfoWriteLock = userInfoLock.writeLock();
 
-	private static volatile Map<String, String> configInfo = null;
-
-	private static volatile boolean userInfoLoaded = false;
-
 	private static final String CONFIG_INFO_FILE = ".afeg.tjrj.wwee";
 
 	@SuppressWarnings("unchecked")
 	public Map<String, String> getCurrentConfig() {
 		userInfoReadLock.lock();
+		Map<String, String> configInfo = null;
 		try {
-			if (configInfo == null && userInfoLoaded == false) {
-				synchronized (userInfoLock) {
-					if (configInfo == null && userInfoLoaded == false) {
-						configInfo = FileUtils.readJSON(CONFIG_INFO_FILE, true,
-								Map.class);
-						userInfoLoaded = true;
-					}
-				}
+			synchronized (userInfoLock) {
+				configInfo = FileUtils.readJSON(CONFIG_INFO_FILE, true,
+						Map.class);
 			}
 		} finally {
 			userInfoReadLock.unlock();
@@ -90,28 +83,13 @@ public class ConfigTask {
 		userInfoWriteLock.lock();
 		try {
 			if (configInfo != null) {
-				ConfigTask.configInfo = configInfo;
 				FileUtils.storeJSON(CONFIG_INFO_FILE, configInfo, true);
+				CorebeauApp.app.setConfigData(configInfo);
 			}
 		} finally {
 			userInfoWriteLock.unlock();
 		}
 
-		reloadLocalConfFile();
-	}
-
-	@SuppressWarnings("unchecked")
-	public void reloadLocalConfFile() {
-		userInfoReadLock.lock();
-		try {
-			synchronized (userInfoLock) {
-				configInfo = FileUtils.readJSON(CONFIG_INFO_FILE, true,
-						Map.class);
-				userInfoLoaded = true;
-			}
-		} finally {
-			userInfoReadLock.unlock();
-		}
 	}
 
 }

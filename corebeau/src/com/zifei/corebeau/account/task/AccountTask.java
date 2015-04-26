@@ -4,13 +4,13 @@ import java.util.Map;
 
 import android.content.Context;
 
-import com.zifei.corebeau.account.bean.UserInfo;
 import com.zifei.corebeau.account.bean.response.CheckAccountResponse;
 import com.zifei.corebeau.account.bean.response.CheckNicknameResponse;
 import com.zifei.corebeau.account.bean.response.FindPasswordResponse;
 import com.zifei.corebeau.account.bean.response.LoginByDeviceResponse;
 import com.zifei.corebeau.account.bean.response.LoginResponse;
 import com.zifei.corebeau.account.bean.response.RegisterResponse;
+import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.CorebeauApp;
 import com.zifei.corebeau.common.net.Response;

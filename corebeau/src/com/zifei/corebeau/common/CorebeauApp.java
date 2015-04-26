@@ -16,9 +16,9 @@ import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.zifei.corebeau.account.bean.ConfigInfo;
 import com.zifei.corebeau.account.task.ConfigTask;
 import com.zifei.corebeau.account.task.UserInfoService;
+import com.zifei.corebeau.bean.ConfigInfo;
 
 /**
  * Created by im14s_000 on 2015/3/23.
@@ -44,7 +44,6 @@ public class CorebeauApp extends Application {
 		enterAppTimeMap = new HashMap<String, Long>();
 		initImageLoader(getApplicationContext());
 		loadInitData();
-		loadConfigData();
 		initObservers();
 	}
 
@@ -59,15 +58,8 @@ public class CorebeauApp extends Application {
 		};
 	}
 
-	private void loadConfigData() {
-		final ConfigTask configTask = new ConfigTask(
-				this.getApplicationContext());
-		new Thread() {
-			@Override
-			public void run() {
-				config = configTask.getCurrentConfig();
-			}
-		};
+	public void setConfigData(Map<String, String> cfg){
+		config = cfg;
 	}
 
 	public static String getBigImageConfig() {

@@ -1,4 +1,4 @@
-package com.zifei.corebeau.account.bean;
+package com.zifei.corebeau.bean;
 
 public class ConfigInfo {
 	

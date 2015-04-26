@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.zifei.corebeau.R;
-import com.zifei.corebeau.account.bean.UserInfo;
+import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.common.ui.BarActivity;

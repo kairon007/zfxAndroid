@@ -189,7 +189,7 @@ public class SplashActivity extends CommonFragmentActvity implements
 			typeChange.setText("register");
 			submit.setText("login");
 			password.setVisibility(View.VISIBLE);
-			passwordCheck.setVisibility(View.VISIBLE);
+			passwordCheck.setVisibility(View.INVISIBLE);
 			nickname.setVisibility(View.INVISIBLE);
 
 			break;

@@ -53,6 +53,25 @@ public class UploadTask {
 	public void uploadImageQiniu() {
 	}
 
+	private static int IMAGE_MAX_WIDTH = 480;
+	private static int IMAGE_MAX_HEIGHT = 960;
+
+	private static int getImageScale(String imagePath) {
+		BitmapFactory.Options option = new BitmapFactory.Options();
+		// set inJustDecodeBounds to true, allowing the caller to query the
+		// bitmap info without having to allocate the
+		// memory for its pixels.
+		option.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(imagePath, option);
+
+		int scale = 1;
+		while (option.outWidth / scale >= IMAGE_MAX_WIDTH
+				|| option.outHeight / scale >= IMAGE_MAX_HEIGHT) {
+			scale *= 2;
+		}
+		return scale;
+	}
+
 	public void getToken(
 			final ArrayList<String> stringPathList,
 			final AsyncCallBacks.TwoTwo<Integer, String, Integer, String> callback) {
@@ -72,10 +91,12 @@ public class UploadTask {
 							for (String stringPath : stringPathList) {
 								Bitmap bitmap;
 								try {
+									BitmapFactory.Options option = new BitmapFactory.Options();
+									option.inSampleSize = getImageScale(stringPath);
 									bitmap = BitmapFactory.decodeStream(cr
 											.openInputStream(Uri
 													.fromFile(new File(
-															stringPath))));
+															stringPath))),null,option);
 									Uri uri = Uri.parse(MediaStore.Images.Media
 											.insertImage(cr,
 													compressImage(bitmap),
@@ -100,47 +121,45 @@ public class UploadTask {
 				});
 	}
 
-//	public void imageReset(final ArrayList<String> stringPath,
-//			final ImageCropListener listener) {
-//		for (String p : stringPath) {
-//			File file = new File(p);
-//			uriToBitmap(Uri.fromFile(file), listener, file.getName());
-//		}
-//		// TODO enable submit
-//	}
-	
-	
+	// public void imageReset(final ArrayList<String> stringPath,
+	// final ImageCropListener listener) {
+	// for (String p : stringPath) {
+	// File file = new File(p);
+	// uriToBitmap(Uri.fromFile(file), listener, file.getName());
+	// }
+	// // TODO enable submit
+	// }
 
-//	public void imageReset(final ArrayList<String> stringPath,
-//			final ImageCropListener listener) {
-//		for (String p : stringPath) {
-//			File file = new File(p);
-//			uriToBitmap(Uri.fromFile(file), listener, file.getName());
-//		}
-//		// TODO enable submit
-//	}
+	// public void imageReset(final ArrayList<String> stringPath,
+	// final ImageCropListener listener) {
+	// for (String p : stringPath) {
+	// File file = new File(p);
+	// uriToBitmap(Uri.fromFile(file), listener, file.getName());
+	// }
+	// // TODO enable submit
+	// }
 
 	public interface ImageCropListener {
-		
+
 		public void onSucess(String fileUrl);
 
 		public void onError();
 	}
 
-//	private void uriToBitmap(Uri uri, ImageCropListener listener,
-//			String fileName) {
-//		ContentResolver cr = context.getContentResolver();
-//		String filePath = null;
-//		try {
-//			Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-//			filePath = saveBitmapToJpegFile(compressImage(bitmap),
-//					TEMP_ROOT_PATH + fileName);
-//			listener.onSucess(filePath);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			listener.onError();
-//		}
-//	}
+	// private void uriToBitmap(Uri uri, ImageCropListener listener,
+	// String fileName) {
+	// ContentResolver cr = context.getContentResolver();
+	// String filePath = null;
+	// try {
+	// Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+	// filePath = saveBitmapToJpegFile(compressImage(bitmap),
+	// TEMP_ROOT_PATH + fileName);
+	// listener.onSucess(filePath);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// listener.onError();
+	// }
+	// }
 
 	@SuppressLint("NewApi")
 	private Bitmap compressImage(Bitmap image) {
@@ -239,7 +258,7 @@ public class UploadTask {
 		Map<String, Object> params = Utils.buildMap("title", content,
 				"picUrls", names);
 
-		NetworkExecutor.post(UrlConstants.UPLOAD, params, TokenResponse.class,
+		NetworkExecutor.post(UrlConstants.UPLOAD_ITEM, params, TokenResponse.class,
 				new NetworkExecutor.CallBack<TokenResponse>() {
 					@Override
 					public void onSuccess(TokenResponse response) {
@@ -253,17 +272,17 @@ public class UploadTask {
 
 				});
 	}
-	
-	public void upload(String message){
-		
+
+	public void upload(String message) {
+
 		upload(message, new AsyncCallBacks.ZeroOne<String>() {
-	
+
 			@Override
 			public void onSuccess() {
 				Utils.showToast(CorebeauApp.app, "upload success!!");
-				
+
 			}
-	
+
 			@Override
 			public void onError(String msg) {
 				Utils.showToast(CorebeauApp.app, "upload failed");

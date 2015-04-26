@@ -15,6 +15,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.zifei.corebeau.R;
+import com.zifei.corebeau.account.task.UserInfoService;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.Response;
@@ -24,7 +25,7 @@ import com.zifei.corebeau.post.ui.CommentActivity;
 import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
 
-public class BottomBar extends RelativeLayout implements OnClickListener {
+public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 
 	private Context context;
 	private CircularImageView userIcon;
@@ -39,13 +40,13 @@ public class BottomBar extends RelativeLayout implements OnClickListener {
 	private ImageLoaderConfiguration config;
 	private PostTask postTask;
 
-	public BottomBar(Context context) {
+	public DetailBottomBar(Context context) {
 		super(context);
 		init(context);
 
 	}
 
-	public BottomBar(Context context, AttributeSet attrs) {
+	public DetailBottomBar(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init(context);
 	}
@@ -64,7 +65,6 @@ public class BottomBar extends RelativeLayout implements OnClickListener {
 		tvLikeCnt = (TextView) findViewById(R.id.tv_post_like);
 		tvCommentCnt = (TextView) findViewById(R.id.tv_post_comment);
 		ivScrap = (ImageView) findViewById(R.id.iv_post_scrap);
-
 		ivLike.setOnClickListener(this);
 		ivComment.setOnClickListener(this);
 		ivScrap.setOnClickListener(this);
@@ -109,7 +109,6 @@ public class BottomBar extends RelativeLayout implements OnClickListener {
 			} else {
 				addScrap();
 			}
-			break;
 		}
 	}
 
@@ -122,6 +121,7 @@ public class BottomBar extends RelativeLayout implements OnClickListener {
 
 	private void setWigetImageView() {
 		// ivScrap = response.get...;
+		
 		if (isScrap) {
 			ivScrap.setBackgroundResource(R.drawable.bottom_scrap_on);
 		} else {
@@ -257,5 +257,5 @@ public class BottomBar extends RelativeLayout implements OnClickListener {
 					}
 				});
 	}
-
+	
 }
