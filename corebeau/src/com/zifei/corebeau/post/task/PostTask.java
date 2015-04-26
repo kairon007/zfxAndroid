@@ -24,31 +24,6 @@ public class PostTask {
         this.context = context;
     }
     
-    public void deleteItem(String itemId, final AsyncCallBacks.OneOne<Response, String> callback) {
-
-        Map<String, Object> params = Utils.buildMap("itemId",itemId);
-
-        NetworkExecutor.post(UrlConstants.DELETE_ITEM, params, ItemDetailResponse.class, new NetworkExecutor.CallBack<ItemDetailResponse>() {
-            @Override
-            public void onSuccess(ItemDetailResponse response) {
-
-                int status = response.getStatusCode();
-                String msg = response.getMsg();
-
-                if(status == ItemDetailResponse.SUCCESS){
-                    callback.onSuccess(response);
-                }else{
-                    callback.onError(msg);
-                }
-            }
-
-            @Override
-            public void onError(Integer status, String msg) {
-                callback.onError(msg);
-            }
-        });
-    }
-
     public void getItemDetail(String itemId, final AsyncCallBacks.OneOne<ItemDetailResponse, String> callback) {
 
         Map<String, Object> params = Utils.buildMap("itemId",itemId);

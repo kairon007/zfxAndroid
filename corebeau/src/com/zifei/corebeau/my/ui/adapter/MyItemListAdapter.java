@@ -3,9 +3,9 @@ package com.zifei.corebeau.my.ui.adapter;
 import java.util.List;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -17,11 +17,10 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
-import com.zifei.corebeau.post.ui.PostDetailActivity;
 import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
 
-public class MyItemListAdapter extends BaseAdapter {
+public class MyItemListAdapter extends BaseAdapter implements OnClickListener {
 
 	private Context context;
 	private LayoutInflater inflater;
@@ -58,6 +57,11 @@ public class MyItemListAdapter extends BaseAdapter {
 	public List<ItemInfo> getData() {
 		return this.data;
 	}
+	
+	public void clearAdapter(){
+		this.data.clear();
+//		notifyDataSetChanged();
+	}
 
 	public void startLoading() {
 		notifyDataSetChanged();
@@ -90,7 +94,8 @@ public class MyItemListAdapter extends BaseAdapter {
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.item_my_item, parent, false);
+			convertView = inflater
+					.inflate(R.layout.item_my_item, parent, false);
 		}
 		final ItemInfo p = data.get(position);
 		int bigImgHeight = p.getBheight();
@@ -100,13 +105,14 @@ public class MyItemListAdapter extends BaseAdapter {
 		ViewHolder holder = new ViewHolder();
 		holder.message = (TextView) convertView
 				.findViewById(R.id.tv_my_item_message);
-		holder.image = (ImageView) convertView.findViewById(R.id.iv_my_item_image);
-		if(bigImgHeight!=0 && bigIwidth!=0 && screenWidth!=0){
-			holder.image.getLayoutParams().height = (int) (((double)screenWidth)*((double)bigImgHeight/(double)bigIwidth));
-			}
+		holder.image = (ImageView) convertView
+				.findViewById(R.id.iv_my_item_image);
+		if (bigImgHeight != 0 && bigIwidth != 0 && screenWidth != 0) {
+			holder.image.getLayoutParams().height = (int) (((double) screenWidth) * ((double) bigImgHeight / (double) bigIwidth));
+		}
 		holder.goPostDetail = (TextView) convertView
 				.findViewById(R.id.tv_go_my_detail);
-
+		holder.goPostDetail.setOnClickListener(this);
 		holder.message.setText(p.getTitle());
 
 		String url = p.getShowUrl();
@@ -116,25 +122,36 @@ public class MyItemListAdapter extends BaseAdapter {
 			// holder.image.setBackgroundColor(color.blue);
 		}
 
-		holder.goPostDetail.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				goPostPage(p);
-			}
-		});
 		convertView.setTag(position);
 		return convertView;
-	}
-
-	private void goPostPage(ItemInfo itemInfo) {
-		context.startActivity(new Intent(context, PostDetailActivity.class)
-				.putExtra("itemInfo", itemInfo));
 	}
 
 	private class ViewHolder {
 		TextView message;
 		ImageView image;
 		TextView goPostDetail;
+	}
+
+	private OnMyDetailStartClickListener onMyDetailStartClickListener;
+
+	public interface OnMyDetailStartClickListener {
+		public void onMyDetailStartClicked(View view, int position);
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.tv_go_my_detail) {
+			Integer position = (Integer) v.getTag();
+			if (onMyDetailStartClickListener != null) {
+				onMyDetailStartClickListener
+						.onMyDetailStartClicked(v, position);
+			}
+		}
+	}
+
+	public void setOnMyDetailStartClickListener(
+			OnMyDetailStartClickListener onMyDetailStartClickListener) {
+		this.onMyDetailStartClickListener = onMyDetailStartClickListener;
 	}
 
 }

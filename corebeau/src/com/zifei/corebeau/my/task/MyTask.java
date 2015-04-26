@@ -79,10 +79,11 @@ public class MyTask {
 	}
 
 
-	public void deletePost(
+	public void deleteItem(String itemId,
 			final AsyncCallBacks.OneOne<MyPostListResponse, String> callback) {
 
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = Utils.buildMap(
+				"itemId", itemId);
 
 		NetworkExecutor.post(UrlConstants.DELETE_ITEM, params, MyPostListResponse.class,
 				new NetworkExecutor.CallBack<MyPostListResponse>() {

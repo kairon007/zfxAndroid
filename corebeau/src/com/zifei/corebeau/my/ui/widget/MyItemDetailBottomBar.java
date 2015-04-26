@@ -1,5 +1,7 @@
 package com.zifei.corebeau.my.ui.widget;
 
+import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +22,9 @@ import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
+import com.zifei.corebeau.my.bean.response.MyPostListResponse;
+import com.zifei.corebeau.my.task.MyTask;
+import com.zifei.corebeau.my.ui.adapter.MyItemListAdapter.OnMyDetailStartClickListener;
 import com.zifei.corebeau.post.task.PostTask;
 import com.zifei.corebeau.post.ui.CommentActivity;
 import com.zifei.corebeau.utils.StringUtil;
@@ -40,6 +45,7 @@ public class MyItemDetailBottomBar extends RelativeLayout implements OnClickList
 	private ImageLoaderConfiguration config;
 	private PostTask postTask;
 	private UserInfoService userInfoService;
+	private MyTask myTask;
 
 	public MyItemDetailBottomBar(Context context) {
 		super(context);
@@ -270,12 +276,14 @@ public class MyItemDetailBottomBar extends RelativeLayout implements OnClickList
 	}
 	
 	private void deleteItem() {
-		postTask.deleteItem(itemId,
-				new AsyncCallBacks.OneOne<Response, String>() {
+		myTask.deleteItem(itemId,
+				new AsyncCallBacks.OneOne<MyPostListResponse, String>() {
 
 					@Override
-					public void onSuccess(Response response) {
+					public void onSuccess(MyPostListResponse response) {
 						Utils.showToast(context, response.getMsg());
+						List<ItemInfo> list = response.getPageBean().getList();
+						onMyItemDeleteListener.onMyListDataChanged(list);
 					}
 
 					@Override
@@ -284,5 +292,15 @@ public class MyItemDetailBottomBar extends RelativeLayout implements OnClickList
 					}
 				});
 	}
-
+	
+	private OnMyItemDeleteListener onMyItemDeleteListener;
+	
+	public interface OnMyItemDeleteListener {
+		public void onMyListDataChanged(List<ItemInfo> list);
+	}
+	
+	public void setOnMyItemDeleteListener(
+			OnMyItemDeleteListener onMyItemDeleteListener) {
+		this.onMyItemDeleteListener = onMyItemDeleteListener;
+	}
 }

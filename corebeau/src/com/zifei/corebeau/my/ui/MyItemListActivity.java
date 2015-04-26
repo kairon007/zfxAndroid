@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -26,9 +24,12 @@ import com.zifei.corebeau.common.ui.view.CircularImageView;
 import com.zifei.corebeau.my.bean.response.MyPostListResponse;
 import com.zifei.corebeau.my.task.MyTask;
 import com.zifei.corebeau.my.ui.adapter.MyItemListAdapter;
+import com.zifei.corebeau.my.ui.adapter.MyItemListAdapter.OnMyDetailStartClickListener;
+import com.zifei.corebeau.my.ui.widget.MyItemDetailBottomBar.OnMyItemDeleteListener;
 import com.zifei.corebeau.utils.Utils;
 
-public class MyItemListActivity extends Activity implements OnClickListener, OnItemClickListener {
+public class MyItemListActivity extends Activity implements OnClickListener,
+		OnMyDetailStartClickListener, OnMyItemDeleteListener {
 	private ListView postList;
 	private CircularImageView circularImageView;
 	private MyTask myTask;
@@ -72,7 +73,9 @@ public class MyItemListActivity extends Activity implements OnClickListener, OnI
 		postList.setAdapter(myPostAdapter);
 		circularImageView = (CircularImageView) findViewById(R.id.civ_my_post_icon);
 		backgroundImageView = (ImageView) findViewById(R.id.iv_my_post_background);
+
 		postListTask();
+
 		setDefault();
 
 		backgroundImageView.setOnClickListener(this);
@@ -186,8 +189,17 @@ public class MyItemListActivity extends Activity implements OnClickListener, OnI
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-//		view.get
+	public void onMyDetailStartClicked(View view, int position) {
+		ItemInfo itemInfo = myPostAdapter.getData().get(position);
+
+		Intent intent = new Intent(this, MyItemDetailActivity.class);
+		intent.putExtra("itemInfo", itemInfo);
+		startActivity(intent);
+	}
+
+	@Override
+	public void onMyListDataChanged(List<ItemInfo> list) {
+		myPostAdapter.clearAdapter();
+		myPostAdapter.addData(list, false);
 	}
 }

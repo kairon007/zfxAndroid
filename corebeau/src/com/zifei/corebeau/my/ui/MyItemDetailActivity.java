@@ -18,6 +18,7 @@ import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.widget.indicator.CirclePageIndicator;
 import com.zifei.corebeau.my.ui.widget.MyItemDetailBottomBar;
+import com.zifei.corebeau.my.ui.widget.MyItemDetailBottomBar.OnMyItemDeleteListener;
 import com.zifei.corebeau.post.bean.UserUploadPicture;
 import com.zifei.corebeau.post.bean.response.ItemDetailResponse;
 import com.zifei.corebeau.post.task.PostTask;
@@ -25,7 +26,7 @@ import com.zifei.corebeau.post.ui.adapter.ImageAdapter;
 import com.zifei.corebeau.post.ui.view.PostViewPager;
 
 public class MyItemDetailActivity extends FragmentActivity implements
-		OnClickListener {
+		OnClickListener,OnMyItemDeleteListener {
 
 	private PostViewPager mPager;
 	private PostTask postTask;
@@ -136,5 +137,10 @@ public class MyItemDetailActivity extends FragmentActivity implements
 		default:
 			break;
 		}
+	}
+	
+	@Override
+	public void onMyListDataChanged(List<ItemInfo> list) {
+		this.finish();
 	}
 }
