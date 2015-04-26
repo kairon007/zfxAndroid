@@ -1,11 +1,12 @@
 package com.zifei.corebeau.post.ui.adapter;
 
+import java.util.List;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,10 +16,8 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
-import com.zifei.corebeau.post.bean.Comment;
+import com.zifei.corebeau.post.bean.ItemComment;
 import com.zifei.corebeau.utils.StringUtil;
-
-import java.util.List;
 
 /**
  * Created by im14s_000 on 2015/3/28.
@@ -26,7 +25,7 @@ import java.util.List;
 public class CommentAdapter extends BaseAdapter {
 
 	private LayoutInflater inflater;
-	private List<Comment> data = null;
+	private List<ItemComment> data = null;
 	private DisplayImageOptions imageOptions;
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
@@ -44,7 +43,7 @@ public class CommentAdapter extends BaseAdapter {
 				.displayer(new RoundedBitmapDisplayer(10)).build();
 	}
 
-	public void addData(List<Comment> data, boolean append) {
+	public void addData(List<ItemComment> data, boolean append) {
 		if (append) {
 			this.data.addAll(data);
 		} else {
@@ -53,8 +52,12 @@ public class CommentAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 
-	public List<Comment> getData() {
+	public List<ItemComment> getData() {
 		return this.data;
+	}
+	
+	public void clearAdapter() {
+		data.clear();
 	}
 
 	public void startLoading() {
@@ -98,11 +101,11 @@ public class CommentAdapter extends BaseAdapter {
 		holder.message = (TextView) convertView
 				.findViewById(R.id.tv_comment_message);
 
-		Comment p = data.get(position);
+		ItemComment p = data.get(position);
 
-		holder.message.setText(p.getMessage());
+		holder.message.setText(p.getContent());
 
-		String url = p.getUserIcon();
+		String url = p.getUserImageUrl();
 		if (!StringUtil.isEmpty(url)) {
 			imageLoader.displayImage(url, holder.image, imageOptions);
 		} else {

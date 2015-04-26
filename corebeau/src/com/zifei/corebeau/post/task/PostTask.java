@@ -4,12 +4,13 @@ import java.util.Map;
 
 import android.content.Context;
 
+import com.zifei.corebeau.account.task.UserInfoService;
+import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.common.net.UrlConstants;
 import com.zifei.corebeau.common.task.NetworkExecutor;
 import com.zifei.corebeau.post.bean.response.CommentListResponse;
-import com.zifei.corebeau.post.bean.response.CommentResponse;
 import com.zifei.corebeau.post.bean.response.ItemDetailResponse;
 import com.zifei.corebeau.utils.Utils;
 
@@ -19,9 +20,11 @@ import com.zifei.corebeau.utils.Utils;
 public class PostTask {
 
     private Context context;
+    private UserInfoService userInfoService;
 
     public PostTask(Context context) {
         this.context = context;
+        userInfoService = new UserInfoService(context);
     }
     
     public void getItemDetail(String itemId, final AsyncCallBacks.OneOne<ItemDetailResponse, String> callback) {
@@ -49,33 +52,6 @@ public class PostTask {
         });
     }
 
-    public void getPostComment(Integer postId, final AsyncCallBacks.OneOne<CommentListResponse, String> callback) {
-        Map<String, Object> params = Utils.buildMap("postId",postId);
-
-        NetworkExecutor.post(UrlConstants.GET_COMMENT, params, CommentListResponse.class, new NetworkExecutor.CallBack<CommentListResponse>() {
-            @Override
-            public void onSuccess(CommentListResponse response) {
-
-                int status = response.getStatusCode();
-                String msg = response.getMsg();
-
-                if(status == CommentListResponse.SUCCESS){
-                    callback.onSuccess(response);
-                }else if(status == CommentResponse.FAILED){
-                    callback.onError(msg);
-                }else{
-                    callback.onError(msg);
-                }
-            }
-
-            @Override
-            public void onError(Integer status, String msg) {
-                callback.onError(msg);
-            }
-        });
-    }
-
-
     // endless comment  // 서버에 어떤식으로 구별해서 보낼지 생각해보기
     public void getComment(String itemId, final AsyncCallBacks.OneOne<CommentListResponse, String> callback) {
         Map<String, Object> params = Utils.buildMap("itemId",itemId);
@@ -102,19 +78,26 @@ public class PostTask {
             }
         });
     }
+    
+    public void insertComment(String itemId, String content, String replyUserId, String replyUserNickName, final AsyncCallBacks.OneOne<CommentListResponse, String> callback) {
+		
+		UserInfo userInfo = userInfoService.getCurentUserInfo();
+		
+        Map<String, Object> params = Utils.buildMap("itemId",itemId,"content",content,
+        		"userNickName",userInfo.getNickName() !=null ? userInfo.getNickName() : "",
+        		"userImageUrl",userInfo.getPicThumbUrl() !=null ? userInfo.getPicThumbUrl() : "",
+        		"replyUserId",replyUserId !=null ? replyUserId : "",
+        		"replyUserNickName",replyUserNickName !=null ? replyUserNickName : "");
 
-    public void insertComment(String itemId, String message, final AsyncCallBacks.OneOne<String, String> callback) {
-        Map<String, Object> params = Utils.buildMap("itemId",itemId,"message",message);
-
-        NetworkExecutor.post(UrlConstants.INSERT_COMMENT, params, Response.class, new NetworkExecutor.CallBack<Response>() {
+        NetworkExecutor.post(UrlConstants.INSERT_COMMENT, params, CommentListResponse.class, new NetworkExecutor.CallBack<CommentListResponse>() {
             @Override
-            public void onSuccess(Response response) {
+            public void onSuccess(CommentListResponse response) {
 
                 int status = response.getStatusCode();
                 String msg = response.getMsg();
 
                 if(status == Response.SUCCESS){
-                    callback.onSuccess(msg);
+                    callback.onSuccess(response);
                 }else if(status == Response.FAILED){
                     callback.onError(msg);
                 }else{

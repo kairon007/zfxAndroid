@@ -61,7 +61,8 @@
         <activity
             android:name=".my.ui.UploadActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name="com.zifei.corebeau.my.ui.selector.MultiImageSelectorActivity"

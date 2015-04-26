@@ -1,21 +1,21 @@
 package com.zifei.corebeau.post.bean.response;
 
-import com.zifei.corebeau.post.bean.Comment;
-
-import java.util.List;
+import com.zifei.corebeau.bean.PageBean;
+import com.zifei.corebeau.common.net.Response;
+import com.zifei.corebeau.post.bean.ItemComment;
 
 /**
  * Created by im14s_000 on 2015/3/28.
  */
-public class CommentListResponse extends CommentResponse{
+public class CommentListResponse extends Response{
 
-    private List<Comment> commentList;
+	private PageBean<ItemComment> pageBean;
 
-    public List<Comment> getCommentList() {
-        return commentList;
-    }
+	public PageBean<ItemComment> getPageBean() {
+		return pageBean;
+	}
 
-    public void setCommentList(List<Comment> commentList) {
-        this.commentList = commentList;
-    }
+	public void setPageBean(PageBean<ItemComment> pageBean) {
+		this.pageBean = pageBean;
+	}
 }

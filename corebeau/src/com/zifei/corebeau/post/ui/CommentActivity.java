@@ -1,26 +1,32 @@
 package com.zifei.corebeau.post.ui;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.common.AsyncCallBacks;
+import com.zifei.corebeau.post.bean.ItemComment;
 import com.zifei.corebeau.post.bean.response.CommentListResponse;
 import com.zifei.corebeau.post.task.PostTask;
 import com.zifei.corebeau.post.ui.adapter.CommentAdapter;
+import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
 
 /**
  * Created by im14s_000 on 2015/3/28.
  */
-public class CommentActivity extends Activity implements View.OnClickListener{
+public class CommentActivity extends Activity implements View.OnClickListener, OnItemClickListener{
 
     private PostTask postTask;
     private String itemId;
@@ -28,7 +34,8 @@ public class CommentActivity extends Activity implements View.OnClickListener{
     private ListView listView;
     private EditText commentEditText;
     private Button commentInsertBtn;
-    private String message;
+    private String replyUserId;
+    private String replyUserNickName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +56,7 @@ public class CommentActivity extends Activity implements View.OnClickListener{
         listView.setAdapter(commentAdapter);
         commentEditText = (EditText)findViewById(R.id.et_comment);
         commentInsertBtn = (Button)findViewById(R.id.btn_comment);
-        getCommentTask();
+        getComment();
         
         commentInsertBtn.setOnClickListener(this);
     }
@@ -66,29 +73,31 @@ public class CommentActivity extends Activity implements View.OnClickListener{
     }
 
     private void checkCommentMsg() {
-        message = commentEditText.getText().toString().trim();
+        String message = commentEditText.getText().toString();
         if (TextUtils.isEmpty(message)) {
             Utils.showToast(CommentActivity.this, "comment empty");
         } else if (message.length() > 100) {
             Utils.showToast(CommentActivity.this, "comment too long");
         }else{
-            insertComment();
+        	
+//        	if(!StringUtil.isEmail(replyUserId)){
+        		insertComment(message,replyUserId,replyUserNickName);
+//        	}
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        getCommentTask();
     }
 
     // endless listview  20개 부르고 10개 넘어가면 10개 더부르고 이런식이 되어야함
-    private void getCommentTask(){
+    private void getComment(){
         postTask.getComment(itemId, new AsyncCallBacks.OneOne<CommentListResponse, String>() {
 
             @Override
             public void onSuccess(CommentListResponse result) {
-                commentAdapter.addData(result.getCommentList(),false);
+                commentAdapter.addData(result.getPageBean().getList(),false);
             }
 
             @Override
@@ -98,14 +107,15 @@ public class CommentActivity extends Activity implements View.OnClickListener{
         });
     }
 
-    private void insertComment() {
-        postTask.insertComment(itemId, message, new AsyncCallBacks.OneOne<String, String>() {
+    private void insertComment(String message, String replyUserId, String replyUserNickName) {
+        postTask.insertComment(itemId, message, replyUserId, replyUserNickName , new AsyncCallBacks.OneOne<CommentListResponse, String>() {
 
             @Override
-            public void onSuccess(String msg) {
-                commentAdapter.notifyDataSetChanged();
-                // 재요청하기
-                Utils.showToast(CommentActivity.this, msg);
+            public void onSuccess(CommentListResponse response) {
+            	List<ItemComment> list = response.getPageBean().getList();
+            	commentAdapter.clearAdapter();
+            	commentAdapter.addData(list, false);
+            	commentAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -116,7 +126,7 @@ public class CommentActivity extends Activity implements View.OnClickListener{
     }
 
 
-    private void deletePost(String commentId){
+    private void deleteComment(String commentId){
         postTask.deleteComment(commentId, new AsyncCallBacks.OneOne<String, String>() {
 
             @Override
@@ -132,5 +142,15 @@ public class CommentActivity extends Activity implements View.OnClickListener{
             }
         });
     }
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		ItemComment itemComment = commentAdapter.getData().get(position);
+		replyUserId = itemComment.getUserId();
+		replyUserNickName = itemComment.getUserNickName();
+		commentEditText.requestFocus();
+		commentEditText.setHint(replyUserNickName +" : ");
+	}
 
 }

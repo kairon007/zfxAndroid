@@ -163,10 +163,8 @@ public class AccountTask {
 						String msg = response.getMsg();
 
 						if (status == LoginByDeviceResponse.SUCCESS || status == LoginByDeviceResponse.ACCOUNT_EXIST) {
-
-							UserInfo userInfo = new UserInfo();
-							userInfo.setUserId(response.getUserInfo()
-									.getUserId());
+							
+							UserInfo userInfo = response.getUserInfo();
 							userInfo.setLoginId(response.getLoginId());
 							userInfoService.updateCurentUserInfo(userInfo);
 							callback.onSuccess(status, msg);
