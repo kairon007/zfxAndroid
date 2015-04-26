@@ -90,15 +90,17 @@ public class ScrapPostAdapter  extends BaseAdapter {
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.item_spot, parent, false);
+			convertView = inflater.inflate(R.layout.item_scrap, parent, false);
 		}
 
 		ViewHolder holder = new ViewHolder();
-		holder.usericon.setBorderWidth(5);
+		holder.usericon = (CircularImageView) convertView
+				.findViewById(R.id.scrap_user_thumb);
+		holder.usericon.setBorderWidth(1);
 		holder.message = (TextView) convertView
-				.findViewById(R.id.tv_spot_message);
-		holder.image = (ImageView) convertView.findViewById(R.id.spot_image);
-		holder.nickName = (TextView)convertView.findViewById(R.id.spot_user_nickname);
+				.findViewById(R.id.tv_scrap_message);
+		holder.image = (ImageView) convertView.findViewById(R.id.scrap_image);
+		holder.nickName = (TextView)convertView.findViewById(R.id.scrap_user_nickname);
 		holder.goPostDetail = (TextView) convertView
 				.findViewById(R.id.tv_go_detail);
 

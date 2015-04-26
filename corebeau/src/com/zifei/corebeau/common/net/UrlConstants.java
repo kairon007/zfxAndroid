@@ -63,7 +63,7 @@ public class UrlConstants {
 
 	public static String ADD_SCRAP = BASE_URL + "/post/addFollowItem";
 
-	public static String CANCEL_SCRAP = BASE_URL + "/post/addFollowItem";
+	public static String CANCEL_SCRAP = BASE_URL + "/post/deleteFollowItem";
 
 	// my
 

@@ -119,9 +119,10 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 		setIconImage();
 	}
 
-	public void setLikeStatus(boolean isLike) {
+	public void setLikeScrapStatus(boolean isLike,boolean isScrap) {
 		this.isLike = isLike;
-		likeStatus(isLike);
+		this.isScrap = isScrap;
+		likeScrapStatus(isLike,isScrap);
 	}
 
 	private void setWigetImageView() {
@@ -157,7 +158,7 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 	}
 
 	private void addScrap() {
-
+		ivScrap.setClickable(false);
 		postTask.addScrap(itemId,
 				new AsyncCallBacks.OneOne<Response, String>() {
 
@@ -169,7 +170,8 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 						}
 						// DB set data
 						// delete add data
-						Utils.showToast(context, response.getMsg());
+						ivScrap.setClickable(true);
+						Utils.showToast(context, "scrap success !");
 					}
 
 					@Override
@@ -179,14 +181,15 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 							isScrap = false;
 							ivScrap.setBackgroundResource(R.drawable.bottom_scrap_off);
 						}
-						Utils.showToast(context, msg);
+						ivScrap.setClickable(true);
+						Utils.showToast(context, "scrap fail...");
 					}
 				});
 	}
 
 	private void cancelScrap() {
-
-		postTask.addScrap(itemId,
+		ivScrap.setClickable(false);
+		postTask.cancelScrap(itemId,
 				new AsyncCallBacks.OneOne<Response, String>() {
 
 					@Override
@@ -198,7 +201,8 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 							isScrap = false;
 							ivScrap.setBackgroundResource(R.drawable.bottom_scrap_off);
 						}
-						Utils.showToast(context, response.getMsg());
+						ivScrap.setClickable(true);
+						Utils.showToast(context, "scrap cancel success !");
 					}
 
 					@Override
@@ -209,13 +213,15 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 							isScrap = true;
 							ivScrap.setBackgroundResource(R.drawable.bottom_scrap_on);
 						}
-						Utils.showToast(context, msg);
+						ivScrap.setClickable(true);
+						Utils.showToast(context, "scrap cancel fail");
 					}
 				});
 	}
 
 	// 해놓고 백그라운드에서 돌린다
 	private void insertLike() {
+		ivLike.setClickable(false);
 		postTask.insertLike(itemId,
 				new AsyncCallBacks.OneOne<Response, String>() {
 
@@ -225,6 +231,7 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 							isLike = true;
 							ivLike.setBackgroundResource(R.drawable.bottom_like_pressed);
 						}
+						ivLike.setClickable(true);
 						Utils.showToast(context, "like success!");
 					}
 
@@ -234,20 +241,28 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 							isLike = false;
 							ivLike.setBackgroundResource(R.drawable.bottom_like_normal);
 						}
+						ivLike.setClickable(true);
 						Utils.showToast(context, "like fail..");
 					}
 				});
 	}
 
-	private void likeStatus(boolean isLike) {
+	private void likeScrapStatus(boolean isLike, boolean isScrap) {
 		if (isLike == true) {
 			ivLike.setBackgroundResource(R.drawable.bottom_like_pressed);
 		} else {
 			ivLike.setBackgroundResource(R.drawable.bottom_like_normal);
 		}
+		
+		if (isScrap == true) {
+			ivScrap.setBackgroundResource(R.drawable.bottom_scrap_on);
+		} else {
+			ivScrap.setBackgroundResource(R.drawable.bottom_scrap_off);
+		}
 	}
 
 	private void deleteLike() {
+		ivLike.setClickable(false);
 		postTask.deleteLike(itemId,
 				new AsyncCallBacks.OneOne<Response, String>() {
 
@@ -257,7 +272,8 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 							isLike = false;
 							ivLike.setBackgroundResource(R.drawable.bottom_like_normal);
 						}
-						Utils.showToast(context, response.getMsg());
+						ivLike.setClickable(true);
+						Utils.showToast(context, "like cancel success!");
 					}
 
 					@Override
@@ -266,7 +282,8 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 							isLike = true;
 							ivLike.setBackgroundResource(R.drawable.bottom_like_pressed);
 						}
-						Utils.showToast(context, msg);
+						ivLike.setClickable(true);
+						Utils.showToast(context, "like cancel fail...");
 					}
 				});
 	}

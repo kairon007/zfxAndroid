@@ -5,11 +5,21 @@ import java.util.List;
 import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.post.bean.UserUploadPicture;
 
-public class ItemDetailResponse extends Response{
-	
+public class ItemDetailResponse extends Response {
+
 	private List<UserUploadPicture> pictureUrls;
-	
+
 	private boolean like;
+
+	private boolean scrap;
+
+	public boolean isScrap() {
+		return scrap;
+	}
+
+	public void setScrap(boolean scrap) {
+		this.scrap = scrap;
+	}
 
 	public boolean isLike() {
 		return like;
