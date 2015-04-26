@@ -24,13 +24,13 @@ import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
 import com.zifei.corebeau.my.bean.response.MyPostListResponse;
 import com.zifei.corebeau.my.task.MyTask;
-import com.zifei.corebeau.my.ui.adapter.MyItemListAdapter.OnMyDetailStartClickListener;
 import com.zifei.corebeau.post.task.PostTask;
 import com.zifei.corebeau.post.ui.CommentActivity;
 import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
 
-public class MyItemDetailBottomBar extends RelativeLayout implements OnClickListener {
+public class MyItemDetailBottomBar extends RelativeLayout implements
+		OnClickListener {
 
 	private Context context;
 	private CircularImageView userIcon;
@@ -46,6 +46,7 @@ public class MyItemDetailBottomBar extends RelativeLayout implements OnClickList
 	private PostTask postTask;
 	private UserInfoService userInfoService;
 	private MyTask myTask;
+	private OnMyItemDeleteListener onMyItemDeleteListener;
 
 	public MyItemDetailBottomBar(Context context) {
 		super(context);
@@ -60,8 +61,8 @@ public class MyItemDetailBottomBar extends RelativeLayout implements OnClickList
 
 	@SuppressLint("ResourceAsColor")
 	private void init(Context context) {
-		LayoutInflater.from(context).inflate(R.layout.layout_detail_bottom_bar_my,
-				this);
+		LayoutInflater.from(context).inflate(
+				R.layout.layout_detail_bottom_bar_my, this);
 		this.context = context;
 		userIcon = (CircularImageView) findViewById(R.id.iv_post_icon);
 		userIcon.setBorderWidth(1);
@@ -77,7 +78,9 @@ public class MyItemDetailBottomBar extends RelativeLayout implements OnClickList
 		ivLike.setOnClickListener(this);
 		ivComment.setOnClickListener(this);
 		ivScrap.setOnClickListener(this);
+		userInfoService = new UserInfoService(context);
 		postTask = new PostTask(context);
+		myTask = new MyTask(context);
 		initLoader();
 		setDefault();
 	}
@@ -133,12 +136,12 @@ public class MyItemDetailBottomBar extends RelativeLayout implements OnClickList
 
 	private void setWigetImageView() {
 		// ivScrap = response.get...;
-		if(itemInfo.getUserId()==userInfoService.getUserId()){
+		if (itemInfo.getUserId().equals(userInfoService.getUserId())) {
 			ivDelete.setBackgroundResource(R.drawable.bottom_delete_normal);
 			ivDelete.setVisibility(View.VISIBLE);
 			ivDelete.setOnClickListener(this);
 		}
-		
+
 		if (isScrap) {
 			ivScrap.setBackgroundResource(R.drawable.bottom_scrap_on);
 		} else {
@@ -274,7 +277,7 @@ public class MyItemDetailBottomBar extends RelativeLayout implements OnClickList
 					}
 				});
 	}
-	
+
 	private void deleteItem() {
 		myTask.deleteItem(itemId,
 				new AsyncCallBacks.OneOne<MyPostListResponse, String>() {
@@ -292,14 +295,12 @@ public class MyItemDetailBottomBar extends RelativeLayout implements OnClickList
 					}
 				});
 	}
-	
-	private OnMyItemDeleteListener onMyItemDeleteListener;
-	
+
 	public interface OnMyItemDeleteListener {
 		public void onMyListDataChanged(List<ItemInfo> list);
 	}
-	
-	public void setOnMyItemDeleteListener(
+
+	public void registerOnMyItemDeleteListener(
 			OnMyItemDeleteListener onMyItemDeleteListener) {
 		this.onMyItemDeleteListener = onMyItemDeleteListener;
 	}

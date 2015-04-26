@@ -88,7 +88,7 @@ public class MyItemListAdapter extends BaseAdapter implements OnClickListener {
 
 	@Override
 	public long getItemId(int position) {
-		return 0;
+		return position;
 	}
 
 	@Override
@@ -112,6 +112,7 @@ public class MyItemListAdapter extends BaseAdapter implements OnClickListener {
 		}
 		holder.goPostDetail = (TextView) convertView
 				.findViewById(R.id.tv_go_my_detail);
+		holder.goPostDetail.setTag(position);
 		holder.goPostDetail.setOnClickListener(this);
 		holder.message.setText(p.getTitle());
 

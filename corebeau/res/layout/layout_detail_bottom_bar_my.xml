@@ -48,7 +48,8 @@
             android:id="@+id/iv_post_like"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp" />
 
         <TextView
             android:id="@+id/tv_post_like"

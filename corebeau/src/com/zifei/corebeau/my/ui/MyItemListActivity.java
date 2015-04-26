@@ -25,11 +25,10 @@ import com.zifei.corebeau.my.bean.response.MyPostListResponse;
 import com.zifei.corebeau.my.task.MyTask;
 import com.zifei.corebeau.my.ui.adapter.MyItemListAdapter;
 import com.zifei.corebeau.my.ui.adapter.MyItemListAdapter.OnMyDetailStartClickListener;
-import com.zifei.corebeau.my.ui.widget.MyItemDetailBottomBar.OnMyItemDeleteListener;
 import com.zifei.corebeau.utils.Utils;
 
 public class MyItemListActivity extends Activity implements OnClickListener,
-		OnMyDetailStartClickListener, OnMyItemDeleteListener {
+		OnMyDetailStartClickListener{
 	private ListView postList;
 	private CircularImageView circularImageView;
 	private MyTask myTask;
@@ -73,11 +72,11 @@ public class MyItemListActivity extends Activity implements OnClickListener,
 		postList.setAdapter(myPostAdapter);
 		circularImageView = (CircularImageView) findViewById(R.id.civ_my_post_icon);
 		backgroundImageView = (ImageView) findViewById(R.id.iv_my_post_background);
-
+		
 		postListTask();
 
 		setDefault();
-
+		myPostAdapter.setOnMyDetailStartClickListener(this);
 		backgroundImageView.setOnClickListener(this);
 	}
 
@@ -162,6 +161,7 @@ public class MyItemListActivity extends Activity implements OnClickListener,
 	}
 
 	private final int REQ_CODE_PICK_GALLERY = 900001;
+	private final int REQ_CODE_MY_DETAIL = 900002;
 
 	@Override
 	public void onClick(View v) {
@@ -179,27 +179,26 @@ public class MyItemListActivity extends Activity implements OnClickListener,
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQ_CODE_PICK_GALLERY
 				&& resultCode == Activity.RESULT_OK) {
 			Uri uri = data.getData();
 			submit(uri);
+		}else if(requestCode ==REQ_CODE_MY_DETAIL){
+			List<ItemInfo> list =  (List<ItemInfo>) data.getSerializableExtra("itemList");
+			myPostAdapter.clearAdapter();
+			myPostAdapter.addData(list, false);
 		}
 	}
 
 	@Override
 	public void onMyDetailStartClicked(View view, int position) {
 		ItemInfo itemInfo = myPostAdapter.getData().get(position);
-
 		Intent intent = new Intent(this, MyItemDetailActivity.class);
 		intent.putExtra("itemInfo", itemInfo);
-		startActivity(intent);
+		startActivityForResult(intent,REQ_CODE_MY_DETAIL);
 	}
 
-	@Override
-	public void onMyListDataChanged(List<ItemInfo> list) {
-		myPostAdapter.clearAdapter();
-		myPostAdapter.addData(list, false);
-	}
 }

@@ -1,5 +1,6 @@
 package com.zifei.corebeau.my.ui;
 
+import java.io.Serializable;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -17,6 +18,7 @@ import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.widget.indicator.CirclePageIndicator;
+import com.zifei.corebeau.my.task.MyTask;
 import com.zifei.corebeau.my.ui.widget.MyItemDetailBottomBar;
 import com.zifei.corebeau.my.ui.widget.MyItemDetailBottomBar.OnMyItemDeleteListener;
 import com.zifei.corebeau.post.bean.UserUploadPicture;
@@ -26,7 +28,7 @@ import com.zifei.corebeau.post.ui.adapter.ImageAdapter;
 import com.zifei.corebeau.post.ui.view.PostViewPager;
 
 public class MyItemDetailActivity extends FragmentActivity implements
-		OnClickListener,OnMyItemDeleteListener {
+		OnClickListener, OnMyItemDeleteListener{
 
 	private PostViewPager mPager;
 	private PostTask postTask;
@@ -35,6 +37,8 @@ public class MyItemDetailActivity extends FragmentActivity implements
 	private TextView tvMsg;
 	private CirclePageIndicator mIndicator;
 	private MyItemDetailBottomBar bottomBar;
+	private MyTask myTask;
+//	private OnMyItemDeleteListener onMyItemDeleteListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +53,7 @@ public class MyItemDetailActivity extends FragmentActivity implements
 
 	@SuppressLint("ResourceAsColor")
 	private void init() {
-
+		myTask = new MyTask(this);
 		postTask = new PostTask(this);
 		mPager = (PostViewPager) findViewById(R.id.vp_post_image);
 		mIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
@@ -65,6 +69,8 @@ public class MyItemDetailActivity extends FragmentActivity implements
 		((FrameLayout) findViewById(android.R.id.content)).addView(bottomBar,
 				lp);
 		bottomBar.setCurrentItem(itemInfo);
+		bottomBar.registerOnMyItemDeleteListener(this);
+		
 		setPostData();
 
 	}
@@ -138,9 +144,15 @@ public class MyItemDetailActivity extends FragmentActivity implements
 			break;
 		}
 	}
-	
+
 	@Override
 	public void onMyListDataChanged(List<ItemInfo> list) {
+		
+		Intent intent = new Intent();
+		intent.putExtra("itemList",(Serializable) list);
+		this.setResult(RESULT_OK, intent);
 		this.finish();
+
 	}
+	
 }
