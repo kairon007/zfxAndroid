@@ -119,9 +119,14 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 		setIconImage();
 	}
 
+	public void setLikeStatus(boolean isLike) {
+		this.isLike = isLike;
+		likeStatus(isLike);
+	}
+
 	private void setWigetImageView() {
 		// ivScrap = response.get...;
-		
+
 		if (isScrap) {
 			ivScrap.setBackgroundResource(R.drawable.bottom_scrap_on);
 		} else {
@@ -220,7 +225,7 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 							isLike = true;
 							ivLike.setBackgroundResource(R.drawable.bottom_like_pressed);
 						}
-						Utils.showToast(context, response.getMsg());
+						Utils.showToast(context, "like success!");
 					}
 
 					@Override
@@ -229,9 +234,17 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 							isLike = false;
 							ivLike.setBackgroundResource(R.drawable.bottom_like_normal);
 						}
-						Utils.showToast(context, msg);
+						Utils.showToast(context, "like fail..");
 					}
 				});
+	}
+
+	private void likeStatus(boolean isLike) {
+		if (isLike == true) {
+			ivLike.setBackgroundResource(R.drawable.bottom_like_pressed);
+		} else {
+			ivLike.setBackgroundResource(R.drawable.bottom_like_normal);
+		}
 	}
 
 	private void deleteLike() {
@@ -257,5 +270,5 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 					}
 				});
 	}
-	
+
 }

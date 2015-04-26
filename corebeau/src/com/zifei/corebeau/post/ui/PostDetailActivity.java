@@ -89,7 +89,7 @@ public class PostDetailActivity extends FragmentActivity implements OnClickListe
             public void onSuccess(ItemDetailResponse response) {
             	List<UserUploadPicture> picList = response.getPictureUrls();
             	setPostImage(picList);
-            	
+            	bottomBar.setLikeStatus(response.isLike());
             }
 
             @Override
