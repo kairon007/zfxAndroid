@@ -1,50 +1,80 @@
 package com.zifei.corebeau.my.task;
 
-import java.util.HashMap;
 import java.util.Map;
 
+import android.content.Context;
+
+import com.zifei.corebeau.account.task.UserInfoService;
 import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.common.net.UrlConstants;
 import com.zifei.corebeau.common.task.NetworkExecutor;
-import com.zifei.corebeau.my.bean.response.MyPostListResponse;
 import com.zifei.corebeau.utils.Utils;
 
-import android.content.Context;
-
 public class MyInfoTask {
-	
-	public MyInfoTask(Context context){
-		
+
+	private UserInfoService userInfoService;
+
+	public MyInfoTask(Context context) {
+		userInfoService = new UserInfoService(context);
 	}
-	
+
 	public void updateUserInfo(UserInfo userInfo,
 			final AsyncCallBacks.OneOne<Response, String> callback) {
 
-				Map<String, Object> params = Utils.buildMap("userInfo", userInfo);
+		Map<String, Object> params = Utils.buildMap("userInfo", userInfo);
 
-				NetworkExecutor.post(UrlConstants.UPDATE_USERINFO, params,
-						Response.class,
-						new NetworkExecutor.CallBack<Response>() {
-							@Override
-							public void onSuccess(Response response) {
+		NetworkExecutor.post(UrlConstants.UPDATE_USERINFO, params,
+				Response.class, new NetworkExecutor.CallBack<Response>() {
+					@Override
+					public void onSuccess(Response response) {
 
-								int status = response.getStatusCode();
-								String msg = response.getMsg();
+						int status = response.getStatusCode();
+						String msg = response.getMsg();
 
-								if (status == Response.SUCCESS) {
-									callback.onSuccess(response);
-									// save userInfo on db
-								} else {
-									callback.onError(msg);
-								}
-							}
+						if (status == Response.SUCCESS) {
+							callback.onSuccess(response);
+							// save userInfo on db
+						} else {
+							callback.onError(msg);
+						}
+					}
 
-							@Override
-							public void onError(Integer status, String msg) {
-								callback.onError(msg);
-							}
-						});
-		}
+					@Override
+					public void onError(Integer status, String msg) {
+						callback.onError(msg);
+					}
+				});
+	}
+
+	public void updateNickName(final String nickName,
+			final AsyncCallBacks.OneOne<Response, String> callback) {
+
+		Map<String, Object> params = Utils.buildMap("nickName", nickName);
+
+		NetworkExecutor.post(UrlConstants.UPDATE_NICKNAME, params,
+				Response.class, new NetworkExecutor.CallBack<Response>() {
+					@Override
+					public void onSuccess(Response response) {
+
+						int status = response.getStatusCode();
+						String msg = response.getMsg();
+
+						if (status == Response.SUCCESS) {
+							UserInfo userInfo = new UserInfo();
+							userInfo.setNickName(nickName);
+							userInfoService.updateCurentUserInfo(userInfo);
+							callback.onSuccess(response);
+						} else {
+							callback.onError(msg);
+						}
+					}
+
+					@Override
+					public void onError(Integer status, String msg) {
+						callback.onError(msg);
+					}
+				});
+	}
 }

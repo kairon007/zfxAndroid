@@ -1,5 +1,6 @@
 package com.zifei.corebeau.my.ui;
 
+import java.io.File;
 import java.util.List;
 
 import android.app.Activity;
@@ -12,23 +13,30 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.zifei.corebeau.R;
+import com.zifei.corebeau.account.task.UserInfoService;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.bean.PageBean;
+import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
 import com.zifei.corebeau.my.bean.response.MyPostListResponse;
 import com.zifei.corebeau.my.task.MyTask;
+import com.zifei.corebeau.my.task.UploadTask;
 import com.zifei.corebeau.my.ui.adapter.MyItemListAdapter;
 import com.zifei.corebeau.my.ui.adapter.MyItemListAdapter.OnMyDetailStartClickListener;
+import com.zifei.corebeau.my.ui.crop.Crop;
+import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
 
 public class MyItemListActivity extends Activity implements OnClickListener,
-		OnMyDetailStartClickListener{
+		OnMyDetailStartClickListener {
 	private ListView postList;
 	private CircularImageView circularImageView;
 	private MyTask myTask;
@@ -39,6 +47,10 @@ public class MyItemListActivity extends Activity implements OnClickListener,
 	private ImageView backgroundImageView;
 	private ImageView write;
 	private ProgressBar progressBar;
+	private UserInfoService userInfoService;
+	private UserInfo userInfo;
+	private TextView nickName;
+	private UploadTask uploadTask;;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +72,7 @@ public class MyItemListActivity extends Activity implements OnClickListener,
 
 	private void init() {
 		myTask = new MyTask(this);
+		uploadTask = new UploadTask(this);
 		postList = (ListView) findViewById(R.id.lv_my_post);
 		write = (ImageView) findViewById(R.id.iv_write);
 		progressBar = (ProgressBar) findViewById(R.id.pb_my_post);
@@ -72,48 +85,37 @@ public class MyItemListActivity extends Activity implements OnClickListener,
 		postList.setAdapter(myPostAdapter);
 		circularImageView = (CircularImageView) findViewById(R.id.civ_my_post_icon);
 		backgroundImageView = (ImageView) findViewById(R.id.iv_my_post_background);
-		
+		nickName = (TextView) findViewById(R.id.tv_my_post_nickname);
+
 		postListTask();
 
-		setDefault();
+		setUserInfo();
 		myPostAdapter.setOnMyDetailStartClickListener(this);
-		backgroundImageView.setOnClickListener(this);
+		circularImageView.setOnClickListener(this);
+		nickName.setOnClickListener(this);
 	}
 
-	private void setDefault() {
-		imageLoader.displayImage("drawable://" + R.drawable.my_default,
-				circularImageView, imageOptions);
-	}
+	private void setUserInfo() {
+		userInfoService = new UserInfoService(this);
+		userInfo = userInfoService.getCurentUserInfo();
+		if (userInfo == null) {
+			return;
+		}
 
-	private void getUserInfo() {
-		// myTask.get
+		String nick = userInfo.getNickName();
+		if (nick != null) {
+			nickName.setText(nick);
+		}else{
+			nickName.setText("guest"+userInfo.getUserId());
+		}
 
-		// String urlThumb = response.;
-		// if (!StringUtil.isEmpty(urlThumb)) {
-		// imageLoader.displayImage(urlThumb, circularImageView,
-		// imageOptions);
-		// } else {
-		// }
-		// // if(data.size() > 0){
-		// myPostAdapter.addData(TestData.getSpotList(), false);
-		// myPostAdapter.notifyDataSetChanged();
-		// // }else{
-		// postList.setEmptyView(findViewById(android.R.id.empty));
-		//
-		// String urlThumb =
-		// "http://e0.vingle.net/t_us_m/opdr3ab94hxosfpwyl2x";
-		// if (!StringUtil.isEmpty(urlThumb)) {
-		// imageLoader.displayImage(urlThumb, circularImageView,
-		// imageOptions);
-		// } else {
-		// }
-		//
-		// String urlBackground =
-		// "http://e1.vingle.net/t_ca_xl/h3t1sdj903oevpovb1q6.jpg";
-		// if (!StringUtil.isEmpty(urlBackground)) {
-		// imageLoader.displayImage(urlBackground,
-		// backgroundImageView, imageOptions);
-		// } else {}
+		String iconUrl = userInfo.getPicThumbUrl();
+		if (iconUrl == null || StringUtil.isEmpty(iconUrl)) {
+			imageLoader.displayImage("drawable://" + R.drawable.my_default,
+					circularImageView, imageOptions);
+		} else {
+			imageLoader.displayImage(iconUrl, circularImageView, imageOptions);
+		}
 	}
 
 	private void postListTask() {
@@ -144,17 +146,16 @@ public class MyItemListActivity extends Activity implements OnClickListener,
 	}
 
 	private void submit(Uri uri) {
-		myTask.getToken(uri.getPath(),
+		uploadTask.getProfileToken(uri.getPath(),
 				new AsyncCallBacks.TwoTwo<Integer, String, Integer, String>() {
 
 					@Override
 					public void onSuccess(Integer state, String msg) {
-
+						Utils.showToast(MyItemListActivity.this, msg);
 					}
 
 					@Override
 					public void onError(Integer state, String msg) {
-						progressBar.setVisibility(View.GONE);
 						Utils.showToast(MyItemListActivity.this, msg);
 					}
 				});
@@ -171,11 +172,24 @@ public class MyItemListActivity extends Activity implements OnClickListener,
 			startActivity(intent);
 			break;
 		case R.id.civ_my_post_icon:
-			Intent i = new Intent(Intent.ACTION_PICK);
-			i.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
-			i.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-			startActivityForResult(i, REQ_CODE_PICK_GALLERY);
+			Crop.pickImage(this);
 			break;
+		case R.id.tv_my_post_nickname:
+			
+		}
+	}
+	
+	private void beginCrop(Uri source) {
+		Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
+		Crop.of(source, destination).asSquare().start(this);
+	}
+
+	private void handleCrop(int resultCode, Intent result) {
+		if (resultCode == RESULT_OK) {
+			submit(Crop.getOutput(result));
+		} else if (resultCode == Crop.RESULT_ERROR) {
+			Toast.makeText(this, Crop.getError(result).getMessage(),
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -186,10 +200,15 @@ public class MyItemListActivity extends Activity implements OnClickListener,
 				&& resultCode == Activity.RESULT_OK) {
 			Uri uri = data.getData();
 			submit(uri);
-		}else if(requestCode ==REQ_CODE_MY_DETAIL){
-			List<ItemInfo> list =  (List<ItemInfo>) data.getSerializableExtra("itemList");
+		} else if (requestCode == REQ_CODE_MY_DETAIL) {
+			List<ItemInfo> list = (List<ItemInfo>) data
+					.getSerializableExtra("itemList");
 			myPostAdapter.clearAdapter();
 			myPostAdapter.addData(list, false);
+		} else if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
+			beginCrop(data.getData());
+		} else if (requestCode == Crop.REQUEST_CROP) {
+			handleCrop(resultCode, data);
 		}
 	}
 
@@ -198,7 +217,7 @@ public class MyItemListActivity extends Activity implements OnClickListener,
 		ItemInfo itemInfo = myPostAdapter.getData().get(position);
 		Intent intent = new Intent(this, MyItemDetailActivity.class);
 		intent.putExtra("itemInfo", itemInfo);
-		startActivityForResult(intent,REQ_CODE_MY_DETAIL);
+		startActivityForResult(intent, REQ_CODE_MY_DETAIL);
 	}
 
 }

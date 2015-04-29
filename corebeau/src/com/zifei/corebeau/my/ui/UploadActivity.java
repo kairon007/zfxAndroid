@@ -6,7 +6,6 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -23,11 +22,10 @@ import com.zifei.corebeau.R;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.BarActivity;
 import com.zifei.corebeau.my.task.UploadTask;
-import com.zifei.corebeau.my.task.UploadTask.OnUploadStatusListener;
 import com.zifei.corebeau.my.ui.selector.MultiImageSelectorActivity;
 import com.zifei.corebeau.utils.Utils;
 
-public class UploadActivity extends BarActivity implements OnClickListener, OnUploadStatusListener {
+public class UploadActivity extends BarActivity implements OnClickListener{
 
 	private static final int REQUEST_IMAGE = 2;
 	private ArrayList<String> mSelectPath;
@@ -51,15 +49,12 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 		initLoader();
 		setActivityStatus();
 		uploadTask = new UploadTask(this);
-		uploadTask.setonTouchUpCallBackListener(this);
-		//TODO disable submit and loading....
 	}
 	
 	private void setActivityStatus(){
 		setNavTitle("upload");
 		setNavRightText("submit");
 		navi.setRightTextVisible(true);
-//		navi.rightText.setOnClickListener(this);
 		navi.rightTextClicker.setOnClickListener(this);
 	}
 
@@ -95,40 +90,26 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 	}
 	
 	private void submit(){
+		final String message = editText.getText().toString();
 		progressBar.setVisibility(View.VISIBLE);
-		uploadTask.getToken(mSelectPath, new AsyncCallBacks.TwoTwo<Integer, String, Integer, String>() {
+		navi.rightTextClicker.setClickable(false);
+		uploadTask.getToken(mSelectPath, message, new AsyncCallBacks.TwoTwo<Integer, String, Integer, String>() {
 
 			@Override
 			public void onSuccess(Integer state, String msg) {
-				
+				Utils.showToast(UploadActivity.this, "soon upload");
+				finish();
 			}
 
 			@Override
 			public void onError(Integer state, String msg) {
 				progressBar.setVisibility(View.GONE);
+				navi.rightTextClicker.setClickable(true);
 				Utils.showToast(UploadActivity.this, msg);
 			}
 		});
 	}
 
-	
-	final Handler handler = new Handler();
-	
-	private void upload(String message){
-		uploadTask.upload(message);
-		
-		Runnable run = new Runnable() {
-			@Override
-			public void run() {
-				Utils.showToast(UploadActivity.this, "submit success");
-				finish();
-				
-			}
-		};
-		handler.postDelayed(run, 500);
-		
-	}
-	
 	public class ImageAdapter extends BaseAdapter {
 
 		private Context mContext;
@@ -177,23 +158,11 @@ public class UploadActivity extends BarActivity implements OnClickListener, OnUp
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.navi_bar_text_clicker:
+			if(mSelectPath.isEmpty()){
+				return;
+			}
 			submit();
 			break;
-		}
-	}
-	
-	
-
-	@Override
-	public void uploadFinish(boolean status) {
-		
-		if(status){
-			upload(editText.getText().toString());
-		}else{
-			if(progressBar != null){
-				progressBar.setVisibility(View.GONE);
-			}
-			Utils.showToast(UploadActivity.this, "upload fail.... reuplod plz");
 		}
 	}
 

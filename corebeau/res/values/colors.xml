@@ -20,4 +20,9 @@
     
     <color name="spot_top_divider">#ABABAC</color>
      <color name="spot_inner_divider">#D8D8D8</color>
+     
+     <color name="crop__button_bar">#f3f3f3</color>
+    <color name="crop__button_text">#666666</color>
+    <color name="crop__selector_pressed">#1a000000</color>
+    <color name="crop__selector_focused">#77000000</color>
 </resources>

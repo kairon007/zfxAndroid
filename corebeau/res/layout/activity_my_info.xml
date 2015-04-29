@@ -57,8 +57,13 @@
 
             <EditText
                 android:id="@+id/et_my_info_nickname"
-                android:layout_width="40dp"
-                android:layout_height="200dp" />
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/common_item_inner"
+                android:gravity="right"
+                android:ellipsize="end"
+                android:maxLength="32"
+                android:singleLine="true" />
         </RelativeLayout>
 
         <View style="@style/my_info_divider" />

@@ -2,52 +2,33 @@ package com.zifei.corebeau.my.task;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.map.ObjectMapper;
-
 import android.annotation.SuppressLint;
-import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
 
 import com.zifei.corebeau.common.AsyncCallBacks;
-import com.zifei.corebeau.common.CorebeauApp;
 import com.zifei.corebeau.common.net.UrlConstants;
 import com.zifei.corebeau.common.task.NetworkExecutor;
 import com.zifei.corebeau.my.bean.response.TokenResponse;
-import com.zifei.corebeau.my.qiniu.QiniuTask;
-import com.zifei.corebeau.my.qiniu.up.UpParam;
-import com.zifei.corebeau.my.qiniu.up.UploadHandler;
-import com.zifei.corebeau.my.qiniu.up.rs.UploadResultCallRet;
-import com.zifei.corebeau.my.qiniu.up.slice.Block;
-import com.zifei.corebeau.my.ui.UploadActivity;
+import com.zifei.corebeau.my.task.service.ProfileImageService;
+import com.zifei.corebeau.my.task.service.UploadService;
 import com.zifei.corebeau.utils.CommonConfig;
 import com.zifei.corebeau.utils.Utils;
 
 public class UploadTask {
 
-	private OnUploadStatusListener uploadStatusListener;
 	private Context context;
-	private QiniuTask qiniuTask;
-	private List<String> names = new ArrayList<String>();
 
 	public UploadTask(Context context) {
 		this.context = context;
-		qiniuTask = new QiniuTask(context);
 	}
 
 	public void uploadImageQiniu() {
@@ -56,11 +37,8 @@ public class UploadTask {
 	private static int IMAGE_MAX_WIDTH = 480;
 	private static int IMAGE_MAX_HEIGHT = 960;
 
-	private static int getImageScale(String imagePath) {
+	public static int getImageScale(String imagePath) {
 		BitmapFactory.Options option = new BitmapFactory.Options();
-		// set inJustDecodeBounds to true, allowing the caller to query the
-		// bitmap info without having to allocate the
-		// memory for its pixels.
 		option.inJustDecodeBounds = true;
 		BitmapFactory.decodeFile(imagePath, option);
 
@@ -73,7 +51,8 @@ public class UploadTask {
 	}
 
 	public void getToken(
-			final ArrayList<String> stringPathList,
+			final ArrayList<String> stringPathList, 
+			final String message,
 			final AsyncCallBacks.TwoTwo<Integer, String, Integer, String> callback) {
 		Map<String, Object> params = new HashMap<String, Object>();
 
@@ -87,27 +66,9 @@ public class UploadTask {
 						String msg = response.getMsg();
 
 						if (status == TokenResponse.SUCCESS) {
-							ContentResolver cr = context.getContentResolver();
-							for (String stringPath : stringPathList) {
-								Bitmap bitmap;
-								try {
-									BitmapFactory.Options option = new BitmapFactory.Options();
-									option.inSampleSize = getImageScale(stringPath);
-									bitmap = BitmapFactory.decodeStream(cr
-											.openInputStream(Uri
-													.fromFile(new File(
-															stringPath))),null,option);
-									Uri uri = Uri.parse(MediaStore.Images.Media
-											.insertImage(cr,
-													compressImage(bitmap),
-													null, null));
-									qiniuTask.preUpload(uri, uploadHandler,
-											response.getUploadToken());
-								} catch (FileNotFoundException e) {
-									e.printStackTrace();
-								}
-							}
-							qiniuTask.doUpload();
+							startUpdateService(stringPathList, message, response.getUploadToken());
+							callback.onSuccess(status, msg);
+							
 						} else {
 							callback.onError(status, msg);
 						}
@@ -120,24 +81,52 @@ public class UploadTask {
 
 				});
 	}
+	
+	public void getProfileToken(
+			final String stringPath, 
+			final AsyncCallBacks.TwoTwo<Integer, String, Integer, String> callback) {
+		Map<String, Object> params = new HashMap<String, Object>();
 
-	// public void imageReset(final ArrayList<String> stringPath,
-	// final ImageCropListener listener) {
-	// for (String p : stringPath) {
-	// File file = new File(p);
-	// uriToBitmap(Uri.fromFile(file), listener, file.getName());
-	// }
-	// // TODO enable submit
-	// }
+		NetworkExecutor.post(UrlConstants.GET_UPLOAD_TOKEN, params,
+				TokenResponse.class,
+				new NetworkExecutor.CallBack<TokenResponse>() {
+					@Override
+					public void onSuccess(TokenResponse response) {
 
-	// public void imageReset(final ArrayList<String> stringPath,
-	// final ImageCropListener listener) {
-	// for (String p : stringPath) {
-	// File file = new File(p);
-	// uriToBitmap(Uri.fromFile(file), listener, file.getName());
-	// }
-	// // TODO enable submit
-	// }
+						int status = response.getStatusCode();
+						String msg = response.getMsg();
+
+						if (status == TokenResponse.SUCCESS) {
+							startUpdateProfileImage(stringPath, response.getUploadToken());
+							callback.onSuccess(status, msg);
+							
+						} else {
+							callback.onError(status, msg);
+						}
+					}
+
+					@Override
+					public void onError(Integer status, String msg) {
+						callback.onError(status, msg);
+					}
+
+				});
+	}
+	
+	public void startUpdateProfileImage(String stringPath, String token){
+		Intent intent = new Intent(context, ProfileImageService.class);
+		intent.putExtra("stringPath", stringPath);
+		intent.putExtra("token", token);
+		context.startService(intent);
+	}
+	
+	public void startUpdateService(ArrayList<String> stringPathList, String message, String token){
+		Intent intent = new Intent(context, UploadService.class);
+		intent.putStringArrayListExtra("stringPathList", stringPathList);
+		intent.putExtra("message", message);
+		intent.putExtra("token", token);
+		context.startService(intent);
+	}
 
 	public interface ImageCropListener {
 
@@ -146,23 +135,8 @@ public class UploadTask {
 		public void onError();
 	}
 
-	// private void uriToBitmap(Uri uri, ImageCropListener listener,
-	// String fileName) {
-	// ContentResolver cr = context.getContentResolver();
-	// String filePath = null;
-	// try {
-	// Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-	// filePath = saveBitmapToJpegFile(compressImage(bitmap),
-	// TEMP_ROOT_PATH + fileName);
-	// listener.onSucess(filePath);
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// listener.onError();
-	// }
-	// }
-
 	@SuppressLint("NewApi")
-	private Bitmap compressImage(Bitmap image) {
+	public Bitmap compressImage(Bitmap image) {
 		Log.i("image compressImage before", image.getByteCount() + " ");
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
@@ -183,80 +157,29 @@ public class UploadTask {
 		return bitmap;
 	}
 
-	public String saveBitmapToJpegFile(Bitmap bitmap, String filePath) {
-		try {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			bitmap.compress(CompressFormat.PNG, 100, bos);
-			byte[] bitmapdata = bos.toByteArray();
-
-			// write the bytes in file
-			FileOutputStream fos = new FileOutputStream(filePath);
-			fos.write(bitmapdata);
-			fos.close();
-
-		} catch (Exception exception) {
-			exception.printStackTrace();
-		}
-		return filePath;
-	}
-
-	public UploadHandler uploadHandler = new UploadHandler() {
-		@Override
-		protected void onProcess(long contentLength, long currentUploadLength,
-				long lastUploadLength, UpParam p, Object passParam) {
-		}
-
-		@Override
-		protected void onSuccess(UploadResultCallRet ret, UpParam p,
-				Object passParam) {
-			ObjectMapper objectMapper = new ObjectMapper();
-			Map readValue;
-			try {
-				readValue = objectMapper
-						.readValue(ret.getResponse(), Map.class);
-				names.add((String) readValue.get("key"));
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			try {
-				String sourceId = qiniuTask.generateSourceId(p, passParam);
-				qiniuTask.clean(sourceId);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			if (names.size() == qiniuTask.getLength()) {
-				uploadStatusListener.uploadFinish(true);
-			}
-		}
-
-		@Override
-		protected void onFailure(UploadResultCallRet ret, UpParam p,
-				Object passParam) {
-			Utils.showToast(context, "fail!!!! reupload plz");
-			if (ret.getException() != null) {
-				ret.getException().printStackTrace();
-			}
-			uploadStatusListener.uploadFinish(false);
-		}
-
-		@Override
-		protected void onBlockSuccess(List<Block> uploadedBlocks, Block block,
-				UpParam p, Object passParam) {
-			Utils.showToast(context, "block success!!");
-			try {
-				String sourceId = qiniuTask.generateSourceId(p, passParam);
-				qiniuTask.addBlock(sourceId, block);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	};
-
-	public void upload(String content,
+	public void upload(String content, List<String> picUrls,
 			final AsyncCallBacks.ZeroOne<String> callback) {
 		Map<String, Object> params = Utils.buildMap("title", content,
-				"picUrls", names);
+				"picUrls", picUrls);
+
+		NetworkExecutor.post(UrlConstants.UPLOAD_ITEM, params, TokenResponse.class,
+				new NetworkExecutor.CallBack<TokenResponse>() {
+					@Override
+					public void onSuccess(TokenResponse response) {
+						callback.onSuccess();
+					}
+
+					@Override
+					public void onError(Integer status, String msg) {
+						callback.onError(msg);
+					}
+
+				});
+	}
+	
+	public void uploadProfile(String picUrl,
+			final AsyncCallBacks.ZeroOne<String> callback) {
+		Map<String, Object> params = Utils.buildMap("picUrl", picUrl);
 
 		NetworkExecutor.post(UrlConstants.UPLOAD_ITEM, params, TokenResponse.class,
 				new NetworkExecutor.CallBack<TokenResponse>() {
@@ -273,33 +196,4 @@ public class UploadTask {
 				});
 	}
 
-	public void upload(String message) {
-
-		upload(message, new AsyncCallBacks.ZeroOne<String>() {
-
-			@Override
-			public void onSuccess() {
-				Utils.showToast(CorebeauApp.app, "upload success!!");
-
-			}
-
-			@Override
-			public void onError(String msg) {
-				Utils.showToast(CorebeauApp.app, "upload failed");
-			}
-		});
-	}
-
-	public interface OnUploadStatusListener {
-		void uploadFinish(boolean status);
-	}
-
-	public void setonTouchUpCallBackListener(
-			OnUploadStatusListener uploadStatusListener) {
-		this.uploadStatusListener = uploadStatusListener;
-	}
-
-	public OnUploadStatusListener getonTouchUpCallBackListener() {
-		return uploadStatusListener;
-	}
 }

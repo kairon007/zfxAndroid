@@ -75,7 +75,7 @@ public class QiniuTask {
 
 	private List<Executor> executors = new ArrayList<Executor>();
 
-	public synchronized void doUpload() {
+	public synchronized void doUpload() {// 업로드 이전 생성
 		for (Upload up : ups) {
 			if (UpApi.isSliceUpload(up)) {
 				String sourceId = generateSourceId(up.getUpParam(), up.getPassParam());

@@ -84,6 +84,23 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
+        
+         <activity
+            android:name="com.zifei.corebeau.my.ui.crop.CropImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+        
+         <service
+            android:name="com.zifei.corebeau.my.task.service.SignService"
+            android:enabled="true" >
+        </service>
+        
+          <service
+            android:name="com.zifei.corebeau.my.task.service.ProfileImageService"
+            android:enabled="true" >
+        </service>
+        
     </application>
 
 </manifest>
