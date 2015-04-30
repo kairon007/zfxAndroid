@@ -80,7 +80,7 @@
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name="com.zifei.corebeau.my.ui.ScrapPostActivity"
+            android:name="com.zifei.corebeau.my.ui.OptionActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>

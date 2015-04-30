@@ -20,11 +20,11 @@
         <TextView
             android:layout_toRightOf="@id/ib_my_post"
             android:layout_marginLeft="50dp"
-            android:id="@+id/ib_my_scrap"
+            android:id="@+id/ib_my_option"
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:background="@drawable/my_circle_selector"
-            android:text="scrap"
+            android:text="option"
             android:textColor="#404040"
             android:gravity="center_horizontal|center_vertical" />
 
@@ -40,7 +40,7 @@
             android:gravity="center_horizontal|center_vertical" />
         
         <TextView
-            android:layout_below="@id/ib_my_scrap"
+            android:layout_below="@id/ib_my_option"
             android:layout_toRightOf="@id/ib_my_follow"
             android:layout_marginTop="50dp"
             android:layout_marginLeft="50dp"

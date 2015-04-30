@@ -54,7 +54,8 @@
                     android:layout_centerInParent="true" />
             </RelativeLayout>
 
-            <RelativeLayout
+            <!--
+                <RelativeLayout
                 android:id="@+id/rl_other_tab"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -66,6 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true" />
             </RelativeLayout>
+            -->
         </LinearLayout>
     </RelativeLayout>
 

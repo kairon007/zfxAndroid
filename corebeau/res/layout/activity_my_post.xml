@@ -4,21 +4,6 @@
     android:layout_height="match_parent"
     android:background="@color/common_background_white" >
 
-    <ListView
-        android:id="@+id/lv_my_post"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null"
-        android:listSelector="@android:color/transparent"
-        android:scrollbars="none" >
-    </ListView>
-
-    <ProgressBar
-        android:id="@+id/pb_my_post"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/iv_write"
@@ -29,5 +14,12 @@
         android:layout_marginRight="50dp"
         android:layout_marginBottom="50dp"
         android:src="@drawable/my_post_write" />
+    
+     <android.support.v4.view.ViewPager
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/pager_mypage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MyItemListActivity" />
 
 </RelativeLayout>

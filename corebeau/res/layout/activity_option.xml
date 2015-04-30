@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_background_grey"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/navi_height"
+    tools:context="com.zifei.corebeau.other.ui.fragment.OtherFragment" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/rl_other_system_setting"
+            style="@style/other_rl_btn" >
+
+            <TextView
+                style="@style/other_rl_btn_text"
+                android:text="system setting" />
+        </RelativeLayout>
+
+        <View style="@style/custom_divider" />
+
+        <RelativeLayout
+            android:id="@+id/rl_other_announcement"
+            style="@style/other_rl_btn" >
+
+            <TextView
+                style="@style/other_rl_btn_text"
+                android:text="announcement" />
+        </RelativeLayout>
+
+        <View style="@style/custom_divider" />
+
+        <RelativeLayout
+            android:id="@+id/rl_other_qna"
+            style="@style/other_rl_btn" >
+
+            <TextView
+                style="@style/other_rl_btn_text"
+                android:text="q n a" />
+        </RelativeLayout>
+
+        <View style="@style/custom_divider" />
+
+        <RelativeLayout
+            android:id="@+id/rl_other_logout"
+            style="@style/other_rl_btn" >
+
+            <TextView
+                style="@style/other_rl_btn_text"
+                android:text="logout" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

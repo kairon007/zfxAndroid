@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,7 +31,7 @@ import com.zifei.corebeau.my.ui.adapter.MyItemListAdapter.OnMyDetailStartClickLi
 import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
 
-public class MyItemListActivity extends Activity implements OnClickListener,
+public class MyItemListActivity extends FragmentActivity implements OnClickListener,
 		OnMyDetailStartClickListener {
 	private ListView postList;
 	private CircularImageView circularImageView;
@@ -53,6 +54,8 @@ public class MyItemListActivity extends Activity implements OnClickListener,
 		initLoader();
 		init();
 	}
+	
+	
 
 	private void initLoader() {
 		imageLoader = ImageLoader.getInstance();
@@ -65,6 +68,9 @@ public class MyItemListActivity extends Activity implements OnClickListener,
 	}
 
 	private void init() {
+		
+		
+		
 		myTask = new MyTask(this);
 		postList = (ListView) findViewById(R.id.lv_my_post);
 		write = (ImageView) findViewById(R.id.iv_write);
