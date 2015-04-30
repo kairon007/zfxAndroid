@@ -4,22 +4,91 @@
     android:layout_height="match_parent"
     android:background="@color/common_background_white" >
 
+    <FrameLayout
+        android:id="@+id/fl_my_header"
+        android:layout_width="match_parent"
+        android:layout_height="250dp" >
+
+        <ImageView
+            android:id="@+id/iv_my_post_background"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/common_orange"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/tv_my_post_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:textSize="30dp" />
+
+        <com.zifei.corebeau.common.ui.view.CircularImageView
+            android:id="@+id/civ_my_post_icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_horizontal|bottom" />
+    </FrameLayout>
+    
+     <RelativeLayout
+         android:id="@+id/rl_my_bar"
+         android:layout_below="@id/fl_my_header"
+         android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/navi_height" >
+
+        <LinearLayout
+            android:id="@+id/vw_group"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/common_background_grey"
+            android:baselineAligned="false"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:id="@+id/rl_my_post_tab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/tv_my_post_tab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_my_scrap_tab"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/tv_my_scrap_tab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/pager_mypage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_my_bar"
+        tools:context=".MyItemListActivity" />
 
     <ImageView
         android:id="@+id/iv_write"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginRight="50dp"
+        android:layout_alignParentRight="true"
         android:layout_marginBottom="50dp"
+        android:layout_marginRight="50dp"
         android:src="@drawable/my_post_write" />
-    
-     <android.support.v4.view.ViewPager
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/pager_mypage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MyItemListActivity" />
 
 </RelativeLayout>
