@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/common_item_inner"
-    android:paddingTop="@dimen/navi_height"
-    android:orientation="vertical" >
+    android:background="@color/common_background_grey"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/navi_height" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,6 +13,43 @@
         android:layout_marginRight="30dp"
         android:layout_marginTop="30dp"
         android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/rl_my_info_user_icon"
+             style="@style/other_rl_btn" >
+
+            <com.zifei.corebeau.common.ui.view.CircularImageView
+                android:id="@+id/my_info_user_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+            
+            <TextView 
+                android:id="@+id/tv_my_info_user_icon"
+                android:layout_toRightOf="@+id/my_info_user_icon"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+        
+         <View style="@style/my_info_divider" />
+        
+         <RelativeLayout
+            android:id="@+id/rl_my_info_user_cover"
+             style="@style/other_rl_btn" >
+
+            <ImageView
+                android:id="@+id/my_info_user_cover"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+            <TextView 
+                android:id="@+id/tv_my_info_user_cover"
+                android:layout_toRightOf="@+id/my_info_user_cover"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+
+        <View style="@style/my_info_divider" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -24,7 +61,7 @@
 
         <RelativeLayout
             android:id="@+id/my_info_bind_account"
-            style="@style/other_rl_btn_press" >
+            style="@style/other_rl_btn" >
 
             <TextView
                 style="@style/other_rl_btn_text"
@@ -35,7 +72,7 @@
 
         <RelativeLayout
             android:id="@+id/my_info_change_password"
-            style="@style/other_rl_btn_press" >
+            style="@style/other_rl_btn" >
 
             <TextView
                 style="@style/other_rl_btn_text"
@@ -45,50 +82,52 @@
         <View style="@style/my_info_divider" />
 
         <TextView
-            android:layout_marginTop="50dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
             android:text="selection "
             android:textSize="15sp" />
 
         <RelativeLayout
             android:id="@+id/my_info_nickname"
-            style="@style/other_rl_btn_press" >
+            style="@style/other_rl_btn" >
 
             <EditText
                 android:id="@+id/et_my_info_nickname"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@color/common_item_inner"
-                android:gravity="right"
                 android:ellipsize="end"
+                android:gravity="right"
                 android:maxLength="32"
                 android:singleLine="true" />
         </RelativeLayout>
 
         <View style="@style/my_info_divider" />
 
-        <RelativeLayout style="@style/other_rl_btn_press" >
+        <RelativeLayout 
+            android:id="@+id/rl_gender"
+            style="@style/other_rl_btn" >
 
-            <ImageView
-                android:id="@+id/iv_sex_male"
+             <TextView
+                 android:text="gender"
+                 android:textColor="@color/common_dark_grey"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/scrap_off" />
-
-            <ImageView
-                android:id="@+id/iv_sex_female"
+                android:layout_centerVertical="true" />
+            <TextView
+                android:id="@+id/tv_gender"
+                android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/iv_sex_male"
-                android:background="@drawable/scrap_off" />
+                android:layout_centerVertical="true" />
         </RelativeLayout>
 
         <View style="@style/my_info_divider" />
 
         <RelativeLayout
             android:id="@+id/my_info_city"
-            style="@style/other_rl_btn_press" >
+            style="@style/other_rl_btn" >
 
             <TextView
                 style="@style/other_rl_btn_text"

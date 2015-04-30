@@ -2,33 +2,52 @@ package com.zifei.corebeau.my.task;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jackson.map.ObjectMapper;
+
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 
+import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
+import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.common.net.UrlConstants;
 import com.zifei.corebeau.common.task.NetworkExecutor;
 import com.zifei.corebeau.my.bean.response.TokenResponse;
+import com.zifei.corebeau.my.qiniu.QiniuTask;
+import com.zifei.corebeau.my.qiniu.up.UpParam;
+import com.zifei.corebeau.my.qiniu.up.UploadHandler;
+import com.zifei.corebeau.my.qiniu.up.rs.UploadResultCallRet;
+import com.zifei.corebeau.my.qiniu.up.slice.Block;
 import com.zifei.corebeau.my.task.service.ProfileImageService;
 import com.zifei.corebeau.my.task.service.UploadService;
 import com.zifei.corebeau.utils.CommonConfig;
 import com.zifei.corebeau.utils.Utils;
 
-public class UploadTask {
-
+public class ProfileImageTask {
+	
 	private Context context;
+	private QiniuTask qiniuTask;
+    private OnProfileImgStatusListener profileImgStatusListener;
 
-	public UploadTask(Context context) {
+	
+	public ProfileImageTask(Context context) {
 		this.context = context;
+		qiniuTask = new QiniuTask(context);
 	}
 
 	public void uploadImageQiniu() {
@@ -50,9 +69,8 @@ public class UploadTask {
 		return scale;
 	}
 
-	public void getToken(
-			final ArrayList<String> stringPathList, 
-			final String message,
+	public void getProfileToken(
+			final String stringPath, 
 			final AsyncCallBacks.TwoTwo<Integer, String, Integer, String> callback) {
 		Map<String, Object> params = new HashMap<String, Object>();
 
@@ -66,7 +84,23 @@ public class UploadTask {
 						String msg = response.getMsg();
 
 						if (status == TokenResponse.SUCCESS) {
-							startUpdateService(stringPathList, message, response.getUploadToken());
+							
+							ContentResolver cr = context.getContentResolver();
+							Bitmap bitmap;
+							try {
+								BitmapFactory.Options option = new BitmapFactory.Options();
+								option.inSampleSize = UploadTask.getImageScale(stringPath);
+								bitmap = BitmapFactory.decodeStream(
+										cr.openInputStream(Uri.fromFile(new File(stringPath))),
+										null, option);
+								Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(cr,
+										compressImage(bitmap), null, null));
+								qiniuTask.preUpload(uri, uploadHandler, response.getUploadToken());
+							} catch (FileNotFoundException e) {
+								e.printStackTrace();
+							}
+							qiniuTask.doUpload();
+							
 							callback.onSuccess(status, msg);
 							
 						} else {
@@ -82,14 +116,58 @@ public class UploadTask {
 				});
 	}
 	
-	public void startUpdateService(ArrayList<String> stringPathList, String message, String token){
-		Intent intent = new Intent(context, UploadService.class);
-		intent.putStringArrayListExtra("stringPathList", stringPathList);
-		intent.putExtra("message", message);
-		intent.putExtra("token", token);
-		context.startService(intent);
-	}
+	public UploadHandler uploadHandler = new UploadHandler() {
+		@Override
+		protected void onProcess(long contentLength, long currentUploadLength,
+				long lastUploadLength, UpParam p, Object passParam) {
+		}
 
+		@Override
+		protected void onSuccess(UploadResultCallRet ret, UpParam p,
+				Object passParam) {
+			ObjectMapper objectMapper = new ObjectMapper();
+			Map readValue;
+			String picUrls = "";
+			try {
+				readValue = objectMapper
+						.readValue(ret.getResponse(), Map.class);
+				picUrls = (String) readValue.get("key");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			try {
+				String sourceId = qiniuTask.generateSourceId(p, passParam);
+				qiniuTask.clean(sourceId);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			profileImgStatusListener.uploadFinish(picUrls);
+		}
+
+		@Override
+		protected void onFailure(UploadResultCallRet ret, UpParam p,
+				Object passParam) {
+			Utils.showToast(context, "fail!!!! reupload plz");
+			if (ret.getException() != null) {
+				ret.getException().printStackTrace();
+			}
+			// uploadStatusListener.uploadFinish(false);
+		}
+
+		@Override
+		protected void onBlockSuccess(List<Block> uploadedBlocks, Block block,
+				UpParam p, Object passParam) {
+			Utils.showToast(context, "block success!!");
+			try {
+				String sourceId = qiniuTask.generateSourceId(p, passParam);
+				qiniuTask.addBlock(sourceId, block);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	};
+	
 	public interface ImageCropListener {
 
 		public void onSucess(String fileUrl);
@@ -119,15 +197,15 @@ public class UploadTask {
 		return bitmap;
 	}
 
-	public void upload(String content, List<String> picUrls,
+	
+	public void updateUserInfo(UserInfo userInfo,
 			final AsyncCallBacks.ZeroOne<String> callback) {
-		Map<String, Object> params = Utils.buildMap("title", content,
-				"picUrls", picUrls);
+		Map<String, Object> params = Utils.buildMap("userInfo", userInfo);
 
-		NetworkExecutor.post(UrlConstants.UPLOAD_ITEM, params, TokenResponse.class,
-				new NetworkExecutor.CallBack<TokenResponse>() {
+		NetworkExecutor.post(UrlConstants.UPDATE_USERINFO, params, Response.class,
+				new NetworkExecutor.CallBack<Response>() {
 					@Override
-					public void onSuccess(TokenResponse response) {
+					public void onSuccess(Response response) {
 						callback.onSuccess();
 					}
 
@@ -138,5 +216,14 @@ public class UploadTask {
 
 				});
 	}
+	
+    public interface OnProfileImgStatusListener {
+        void uploadFinish(String url);
+    }
+
+    public void setonTouchUpCallBackListener(
+    		OnProfileImgStatusListener profileImgStatusListener) {
+        this.profileImgStatusListener = profileImgStatusListener;
+    }
 
 }

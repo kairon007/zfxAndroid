@@ -5,6 +5,9 @@ package com.zifei.corebeau.bean;
  */
 public class UserInfo {
 	
+	public static final short GENDER_MALE = 1;
+	public static final short GENDER_FEMALE = 2;
+	
 	private String loginId;
 
     private String userId;

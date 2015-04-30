@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="other_rl_btn_press">
+    <style name="other_rl_btn">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
         <item name="android:paddingLeft">10dp</item>
@@ -112,6 +112,14 @@
     <style name="Crop.ActionButtonText.Cancel">
         <item name="android:drawableLeft">@drawable/crop__ic_cancel</item>
         <item name="android:text">@string/crop__cancel</item>
+    </style>
+    
+    <style name="new_setting_dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/common_background_grey</item>
     </style>
 
 </resources>

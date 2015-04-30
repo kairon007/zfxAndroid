@@ -1,11 +1,9 @@
 package com.zifei.corebeau.my.ui;
 
-import java.io.File;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -28,10 +25,8 @@ import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
 import com.zifei.corebeau.my.bean.response.MyPostListResponse;
 import com.zifei.corebeau.my.task.MyTask;
-import com.zifei.corebeau.my.task.UploadTask;
 import com.zifei.corebeau.my.ui.adapter.MyItemListAdapter;
 import com.zifei.corebeau.my.ui.adapter.MyItemListAdapter.OnMyDetailStartClickListener;
-import com.zifei.corebeau.my.ui.crop.Crop;
 import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
 
@@ -50,7 +45,6 @@ public class MyItemListActivity extends Activity implements OnClickListener,
 	private UserInfoService userInfoService;
 	private UserInfo userInfo;
 	private TextView nickName;
-	private UploadTask uploadTask;;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +66,6 @@ public class MyItemListActivity extends Activity implements OnClickListener,
 
 	private void init() {
 		myTask = new MyTask(this);
-		uploadTask = new UploadTask(this);
 		postList = (ListView) findViewById(R.id.lv_my_post);
 		write = (ImageView) findViewById(R.id.iv_write);
 		progressBar = (ProgressBar) findViewById(R.id.pb_my_post);
@@ -145,23 +138,6 @@ public class MyItemListActivity extends Activity implements OnClickListener,
 		});
 	}
 
-	private void submit(Uri uri) {
-		uploadTask.getProfileToken(uri.getPath(),
-				new AsyncCallBacks.TwoTwo<Integer, String, Integer, String>() {
-
-					@Override
-					public void onSuccess(Integer state, String msg) {
-						Utils.showToast(MyItemListActivity.this, msg);
-					}
-
-					@Override
-					public void onError(Integer state, String msg) {
-						Utils.showToast(MyItemListActivity.this, msg);
-					}
-				});
-	}
-
-	private final int REQ_CODE_PICK_GALLERY = 900001;
 	private final int REQ_CODE_MY_DETAIL = 900002;
 
 	@Override
@@ -172,43 +148,21 @@ public class MyItemListActivity extends Activity implements OnClickListener,
 			startActivity(intent);
 			break;
 		case R.id.civ_my_post_icon:
-			Crop.pickImage(this);
+			
 			break;
 		case R.id.tv_my_post_nickname:
 			
 		}
 	}
 	
-	private void beginCrop(Uri source) {
-		Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
-		Crop.of(source, destination).asSquare().start(this);
-	}
-
-	private void handleCrop(int resultCode, Intent result) {
-		if (resultCode == RESULT_OK) {
-			submit(Crop.getOutput(result));
-		} else if (resultCode == Crop.RESULT_ERROR) {
-			Toast.makeText(this, Crop.getError(result).getMessage(),
-					Toast.LENGTH_SHORT).show();
-		}
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == REQ_CODE_PICK_GALLERY
-				&& resultCode == Activity.RESULT_OK) {
-			Uri uri = data.getData();
-			submit(uri);
-		} else if (requestCode == REQ_CODE_MY_DETAIL) {
+		if (requestCode == REQ_CODE_MY_DETAIL) {
 			List<ItemInfo> list = (List<ItemInfo>) data
 					.getSerializableExtra("itemList");
 			myPostAdapter.clearAdapter();
 			myPostAdapter.addData(list, false);
-		} else if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
-			beginCrop(data.getData());
-		} else if (requestCode == Crop.REQUEST_CROP) {
-			handleCrop(resultCode, data);
 		}
 	}
 

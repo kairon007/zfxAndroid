@@ -38,97 +38,14 @@ public class ProfileImageService extends Service {
 
 		final String stringPath = intent.getStringExtra("stringPath");
 		final String token = intent.getStringExtra("token");
-		ContentResolver cr = this.getContentResolver();
-		Bitmap bitmap;
-		try {
-			BitmapFactory.Options option = new BitmapFactory.Options();
-			option.inSampleSize = UploadTask.getImageScale(stringPath);
-			bitmap = BitmapFactory.decodeStream(
-					cr.openInputStream(Uri.fromFile(new File(stringPath))),
-					null, option);
-			Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(cr,
-					uploadTask.compressImage(bitmap), null, null));
-			qiniuTask.preUpload(uri, uploadHandler, token);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			stopSelf();
-		}
-		qiniuTask.doUpload();
+		
 		return Service.START_STICKY;
 	}
 
-	public UploadHandler uploadHandler = new UploadHandler() {
-		@Override
-		protected void onProcess(long contentLength, long currentUploadLength,
-				long lastUploadLength, UpParam p, Object passParam) {
-		}
-
-		@Override
-		protected void onSuccess(UploadResultCallRet ret, UpParam p,
-				Object passParam) {
-			ObjectMapper objectMapper = new ObjectMapper();
-			Map readValue;
-			String picUrls = "";
-			try {
-				readValue = objectMapper
-						.readValue(ret.getResponse(), Map.class);
-				picUrls = (String) readValue.get("key");
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			try {
-				String sourceId = qiniuTask.generateSourceId(p, passParam);
-				qiniuTask.clean(sourceId);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			uploadProfile(picUrls);
-		}
-
-		@Override
-		protected void onFailure(UploadResultCallRet ret, UpParam p,
-				Object passParam) {
-			Utils.showToast(ProfileImageService.this, "fail!!!! reupload plz");
-			if (ret.getException() != null) {
-				ret.getException().printStackTrace();
-			}
-			// uploadStatusListener.uploadFinish(false);
-			stopSelf();
-		}
-
-		@Override
-		protected void onBlockSuccess(List<Block> uploadedBlocks, Block block,
-				UpParam p, Object passParam) {
-			Utils.showToast(ProfileImageService.this, "block success!!");
-			try {
-				String sourceId = qiniuTask.generateSourceId(p, passParam);
-				qiniuTask.addBlock(sourceId, block);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	};
 
 	@Override
 	public IBinder onBind(Intent arg0) {
 		return null;
 	}
 
-	private void uploadProfile(String picUrl) {
-		uploadTask.uploadProfile(picUrl, new AsyncCallBacks.ZeroOne<String>() {
-
-			@Override
-			public void onSuccess() {
-				Utils.showToast(CorebeauApp.app, "upload success!!");
-				stopSelf();
-			}
-
-			@Override
-			public void onError(String msg) {
-				Utils.showToast(CorebeauApp.app, "upload failed");
-				stopSelf();
-			}
-		});
-	}
 }

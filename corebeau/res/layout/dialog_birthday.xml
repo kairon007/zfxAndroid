@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:id="@+id/dialog_container"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical" >
+
+   <!--  <RelativeLayout  
+        android:gravity="center_vertical"
+        style="@style/dialog_content_header">
+
+        <TextView
+           style="@style/dialog_text_title"
+            android:text="@string/please_choose_your_birthday" />
+    </RelativeLayout>
+
+    <View
+        style="@style/custom_divider"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        />
+
+    <LinearLayout
+       style="@style/dialog_content_body"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+        <kankan.wheel.widget.WheelView
+            android:id="@+id/birthday_dialog_year"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@null" >
+        </kankan.wheel.widget.WheelView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/year" />
+
+        <kankan.wheel.widget.WheelView
+            android:id="@+id/birthday_dialog_month"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2" >
+        </kankan.wheel.widget.WheelView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/month" />
+
+    </LinearLayout>
+
+    <LinearLayout
+       style="@style/dialog_content_footer"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/birthday_dialog_btn_cancel"
+            style="@style/button_white_short"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="@string/cancel"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/birthday_dialog_btn_confirm"
+            style="@style/button_red_short"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_weight="1"
+            android:text="@string/confirm"
+            android:textColor="@color/white" />
+    </LinearLayout>
+ -->
+</LinearLayout>

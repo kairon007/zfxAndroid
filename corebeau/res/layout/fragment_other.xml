@@ -16,7 +16,7 @@
 
         <RelativeLayout 
             android:id="@+id/rl_other_system_setting"
-            style="@style/other_rl_btn_press" >
+            style="@style/other_rl_btn" >
 
             <TextView
                 style="@style/other_rl_btn_text"
@@ -27,7 +27,7 @@
 
         <RelativeLayout 
             android:id="@+id/rl_other_announcement"
-            style="@style/other_rl_btn_press" >
+            style="@style/other_rl_btn" >
 
             <TextView
                 style="@style/other_rl_btn_text"
@@ -38,7 +38,7 @@
 
         <RelativeLayout 
             android:id="@+id/rl_other_qna"
-            style="@style/other_rl_btn_press" >
+            style="@style/other_rl_btn" >
 
             <TextView
                 style="@style/other_rl_btn_text"
@@ -49,7 +49,7 @@
 
         <RelativeLayout 
             android:id="@+id/rl_other_logout"
-            style="@style/other_rl_btn_press" >
+            style="@style/other_rl_btn" >
 
             <TextView
                 style="@style/other_rl_btn_text"

@@ -92,7 +92,7 @@
         </activity>
         
          <service
-            android:name="com.zifei.corebeau.my.task.service.SignService"
+            android:name="com.zifei.corebeau.my.task.service.UploadService"
             android:enabled="true" >
         </service>
         
