@@ -9,6 +9,6 @@ public class OptionActivity extends BarActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_follow);
+		setContentView(R.layout.activity_option);
 	}
 }

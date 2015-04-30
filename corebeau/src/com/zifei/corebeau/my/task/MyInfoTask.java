@@ -48,10 +48,10 @@ public class MyInfoTask {
 				});
 	}
 
-	public void updateNickName(final String nickName,
+	public void updateNickName(final String oldPassword, final String newPassword,
 			final AsyncCallBacks.OneOne<Response, String> callback) {
 
-		Map<String, Object> params = Utils.buildMap("nickName", nickName);
+		Map<String, Object> params = Utils.buildMap("oldPassword", oldPassword,"newPassword",newPassword);
 
 		NetworkExecutor.post(UrlConstants.UPDATE_NICKNAME, params,
 				Response.class, new NetworkExecutor.CallBack<Response>() {
@@ -63,7 +63,7 @@ public class MyInfoTask {
 
 						if (status == Response.SUCCESS) {
 							UserInfo userInfo = new UserInfo();
-							userInfo.setNickName(nickName);
+							userInfo.setNickName(newPassword);
 							userInfoService.updateCurentUserInfo(userInfo);
 							callback.onSuccess(response);
 						} else {

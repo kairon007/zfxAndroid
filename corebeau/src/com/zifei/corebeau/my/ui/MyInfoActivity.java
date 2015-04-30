@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
@@ -29,6 +30,7 @@ import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.common.ui.BarActivity;
+import com.zifei.corebeau.common.ui.SplashActivity;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
 import com.zifei.corebeau.database.RegionDBHelper;
 import com.zifei.corebeau.my.task.MyInfoTask;
@@ -60,6 +62,7 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 	private TextView tvUserIcon, tvGender;
 	private GenderSettingDialog genderDialog;
 	private CitySettingDialog cityDialog;
+	private PassWordSettingDialog passwordDialog;
 	private short genderShort;
 
 	@Override
@@ -108,6 +111,7 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 		case R.id.my_info_bind_account:
 			break;
 		case R.id.my_info_change_password:
+			showChangePassWordDialog();
 			break;
 		case R.id.rl_gender:
 			showChangeGenderDialog();
@@ -308,12 +312,9 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 					tvGender.setText("female");
 					genderDialog.dismiss();
 				}
-
 			});
 		}
-
 	}
-	
 	
 	private void showChangeCityDialog() {
 		cityDialog = new CitySettingDialog(MyInfoActivity.this,
@@ -349,7 +350,82 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 				}
 			});
 		}
+	}
+	
+	
+	private void showChangePassWordDialog() {
+		passwordDialog = new PassWordSettingDialog(MyInfoActivity.this,
+				R.style.new_setting_dialog);
+		passwordDialog.show();
+	}
+	
+	public class PassWordSettingDialog extends Dialog {
+		
+		private EditText etBeforePassword, etNewPassword, etNewPasswordConfirm;
+		private RelativeLayout submit;
+		
+		public PassWordSettingDialog(Context context, int theme) {
+			super(context, theme);
+		}
 
+		@Override
+		protected void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.dialog_update_password);
+			
+			etBeforePassword = (EditText)findViewById(R.id.et_before_password);
+			etNewPassword = (EditText)findViewById(R.id.et_new_password);
+			etNewPasswordConfirm = (EditText)findViewById(R.id.et_new_password_confirm);
+			submit = (RelativeLayout)findViewById(R.id.rl_submit_password);
+			submit.setOnClickListener(new View.OnClickListener() { 
+	            public void onClick(View v) { 
+	            	
+	            	String beforePass = etBeforePassword.getText().toString();
+	            	String newPass = etNewPassword.getText().toString();
+	            	String newPassConfirm = etNewPasswordConfirm.getText().toString();
+	            	
+	            	updatePassword(beforePass, newPass);
+	            } 
+	        }); 
+		}
+		
+		private boolean passCheck(String beforePass, String newPass, String newPassConfirm) {
+			if (TextUtils.isEmpty(beforePass)) {
+				Utils.showToast(MyInfoActivity.this, "beforePass empty");
+				return false;
+			} else if (TextUtils.isEmpty( newPass)) {
+					Utils.showToast(MyInfoActivity.this, "newPass empty");
+					return false;
+			} else if (TextUtils.isEmpty(newPassConfirm)) {
+				Utils.showToast(MyInfoActivity.this, "newPassConfirm empty");
+				return false;
+			} else if (newPass.length() < 8 || newPass.length() > 16) {
+				Utils.showToast(MyInfoActivity.this, "password must be 8~16 word");
+				return false;
+			} else if (!newPass.equals(newPassConfirm)) {
+				Utils.showToast(MyInfoActivity.this,
+						"newPassConfirm not equal with password");
+				return false;
+			}
+			return true;
+		}
+		
+		private void updatePassword(String oldPassword, String newPassword){
+			myInfoTask.updateNickName(oldPassword, newPassword,
+					new AsyncCallBacks.OneOne<Response, String>() {
+
+				@Override
+				public void onSuccess(Response state) {
+					Utils.showToast(MyInfoActivity.this, "change success");
+					passwordDialog.dismiss();
+				}
+
+				@Override
+				public void onError(String msg) {
+					Utils.showToast(MyInfoActivity.this, "change fail");
+				}
+			});
+}
 	}
 
 }
