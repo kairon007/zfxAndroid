@@ -21,12 +21,11 @@
         <attr name="grid_paddingTop" format="dimension" />
         <attr name="grid_paddingBottom" format="dimension" />
     </declare-styleable>
-    
     <declare-styleable name="GifTextureView">
         <attr name="src" format="reference|string" />
         <attr name="isOpaque" format="boolean" />
     </declare-styleable>
-    
+
     <!-- Defines the custom XML attributes supported for a HorizontalListView -->
     <declare-styleable name="HorizontalListView">
         <attr name="dividerWidth" format="dimension" />
@@ -34,29 +33,42 @@
         <attr name="android:requiresFadingEdge" />
         <attr name="android:fadingEdgeLength" />
     </declare-styleable>
-    
-      <declare-styleable name="CircularProgressBar">
-        <attr name="cpbStyle" format="reference"/>
-        <attr name="cpb_color" format="color"/>
-        <attr name="cpb_colors" format="reference"/>
-        <attr name="cpb_stroke_width" format="dimension"/>
-        <attr name="cpb_min_sweep_angle" format="integer"/>
-        <attr name="cpb_max_sweep_angle" format="integer"/>
-        <attr name="cpb_sweep_speed" format="float"/>
-        <attr name="cpb_rotation_speed" format="float"/>
+    <declare-styleable name="CircularProgressBar">
+        <attr name="cpbStyle" format="reference" />
+        <attr name="cpb_color" format="color" />
+        <attr name="cpb_colors" format="reference" />
+        <attr name="cpb_stroke_width" format="dimension" />
+        <attr name="cpb_min_sweep_angle" format="integer" />
+        <attr name="cpb_max_sweep_angle" format="integer" />
+        <attr name="cpb_sweep_speed" format="float" />
+        <attr name="cpb_rotation_speed" format="float" />
     </declare-styleable>
-    
-       <attr name="cropImageStyle" format="reference" />
+
+    <attr name="cropImageStyle" format="reference" />
 
     <declare-styleable name="CropImageView">
         <attr name="highlightColor" format="reference|color" />
         <attr name="showThirds" format="boolean" />
         <attr name="showCircle" format="boolean" />
         <attr name="showHandles">
-          <enum name="changing" value="0" />
-          <enum name="always" value="1" />
-          <enum name="never" value="2" />
+            <enum name="changing" value="0" />
+            <enum name="always" value="1" />
+            <enum name="never" value="2" />
         </attr>
+    </declare-styleable>
+    
+    <declare-styleable name="PagerSlidingTabStrip">
+        <attr name="pstsIndicatorColor" format="color" />
+        <attr name="pstsUnderlineColor" format="color" />
+        <attr name="pstsDividerColor" format="color" />
+        <attr name="pstsIndicatorHeight" format="dimension" />
+        <attr name="pstsUnderlineHeight" format="dimension" />
+        <attr name="pstsDividerPadding" format="dimension" />
+        <attr name="pstsTabPaddingLeftRight" format="dimension" />
+        <attr name="pstsScrollOffset" format="dimension" />
+        <attr name="pstsTabBackground" format="reference" />
+        <attr name="pstsShouldExpand" format="boolean" />
+        <attr name="pstsTextAllCaps" format="boolean" />
     </declare-styleable>
 
 </resources>

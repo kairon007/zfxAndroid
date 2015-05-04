@@ -1,10 +1,7 @@
 package com.zifei.corebeau.common.ui;
 
-import java.util.Locale;
-
 import android.graphics.PorterDuff.Mode;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,11 +10,9 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.my.ui.fragment.MyFragment;
-import com.zifei.corebeau.other.ui.fragment.OtherFragment;
 import com.zifei.corebeau.search.ui.fragment.SearchFragment;
 import com.zifei.corebeau.spot.ui.fragment.SpotFragment;
 
@@ -26,8 +21,7 @@ public class MainActivity extends CommonFragmentActvity implements
 
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewPager mViewPager;
-	private ImageView spotTab, searchTab, myTab, otherTab;
-	private static final int PAGE_COUNT = 3;
+	private ImageView spotTab, searchTab, myTab;
 	 private static int selectedPage = 0;
 	    private static int preSelectedPage = 0;
 	    private boolean isClick = false;
@@ -55,7 +49,6 @@ public class MainActivity extends CommonFragmentActvity implements
 		spotTab = (ImageView) findViewById(R.id.iv_rl_spot_tab);
 		searchTab = (ImageView) findViewById(R.id.iv_rl_search_tab);
 		myTab = (ImageView) findViewById(R.id.iv_rl_my_tab);
-//		otherTab = (ImageView) findViewById(R.id.iv_rl_other_tab);
 		spotTab.setColorFilter(0x8893e2ff, Mode.SRC_OVER);
 		updateSelectedTab(0);
 	}
@@ -82,10 +75,6 @@ public class MainActivity extends CommonFragmentActvity implements
 				f = Fragment.instantiate(MainActivity.this,
 						MyFragment.class.getName(), null);
 				break;
-//			case 3:
-//				f = Fragment.instantiate(MainActivity.this,
-//						OtherFragment.class.getName(), null);
-//				break;
 			default:
 				f = Fragment.instantiate(MainActivity.this,
 						SpotFragment.class.getName(), null);
@@ -96,7 +85,6 @@ public class MainActivity extends CommonFragmentActvity implements
 
 		@Override
 		public int getCount() {
-			// Show 3 total pages.
 			return 3;
 		}
 	}
@@ -117,9 +105,6 @@ public class MainActivity extends CommonFragmentActvity implements
                 case 2:
                     updateSelectedTab(2);
                     break;
-//                case 3:
-//                    updateSelectedTab(3);
-//                    break;
                 default:
                     updateSelectedTab(0);
                     break;
@@ -184,81 +169,6 @@ public class MainActivity extends CommonFragmentActvity implements
                 }
             }
         });
-//        view = findViewById(R.id.rl_spot_tab);
-//        view.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                isClick = true;
-//                if (preSelectedPage == 1) {
-//                	mViewPager.setCurrentItem(0, true);
-//                } else if (preSelectedPage == 2) {
-//                	mViewPager.setCurrentItem(0, true);
-//                } else if (preSelectedPage == 3) {
-//                	mViewPager.setCurrentItem(0, true);
-//                } else {
-//                    isClick = false;
-//                    mViewPager.setCurrentItem(0, false);
-//                    updateSelectedTab(0);
-//                }
-//            }
-//        });
-//        
-//        view = findViewById(R.id.rl_search_tab);
-//        view.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                isClick = true;
-//                if (preSelectedPage == 0) {
-//                	mViewPager.setCurrentItem(1, true);
-//                } else if(preSelectedPage == 2) {
-//                	mViewPager.setCurrentItem(1, true);
-//                } else if(preSelectedPage == 3) {
-//                	mViewPager.setCurrentItem(1, true);
-//                } else {
-//                    isClick = false;
-//                    mViewPager.setCurrentItem(1, false);
-//                    updateSelectedTab(1);
-//                }
-//            }
-//        });
-//        
-//        view = findViewById(R.id.rl_my_tab);
-//        view.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                isClick = true;
-//                if (preSelectedPage == 0) {
-//                	mViewPager.setCurrentItem(2, true);
-//                } else if(preSelectedPage == 1) {
-//                	mViewPager.setCurrentItem(2, true);
-//                } else if(preSelectedPage == 3) {
-//                	mViewPager.setCurrentItem(2, true);
-//                } else {
-//                    isClick = false;
-//                    mViewPager.setCurrentItem(2, false);
-//                    updateSelectedTab(2);
-//                }
-//            }
-//        });
-//        
-//        view = findViewById(R.id.rl_other_tab);
-//        view.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                isClick = true;
-//                if (preSelectedPage == 0) {
-//                	mViewPager.setCurrentItem(3, true);
-//                } else if(preSelectedPage == 1) {
-//                	mViewPager.setCurrentItem(3, true);
-//                } else if(preSelectedPage == 2) {
-//                	mViewPager.setCurrentItem(3, true);
-//                } else {
-//                    isClick = false;
-//                    mViewPager.setCurrentItem(3, false);
-//                    updateSelectedTab(3);
-//                }
-//            }
-//        });
     }
 
 	private void updateSelectedTab(int nSelected) {
@@ -266,25 +176,15 @@ public class MainActivity extends CommonFragmentActvity implements
 			spotTab.setBackgroundResource(R.drawable.topnav_spot_on);
 			searchTab.setBackgroundResource(R.drawable.topnav_search_off);
 			myTab.setBackgroundResource(R.drawable.topnav_my_off);
-//			otherTab.setBackgroundResource(R.drawable.topnav_other_off);
 		}else if (nSelected == 1) {
 			spotTab.setBackgroundResource(R.drawable.topnav_spot_off);
 			searchTab.setBackgroundResource(R.drawable.topnav_search_on);
 			myTab.setBackgroundResource(R.drawable.topnav_my_off);
-//			otherTab.setBackgroundResource(R.drawable.topnav_other_off);
 		} else if (nSelected == 2) {
 			spotTab.setBackgroundResource(R.drawable.topnav_spot_off);
 			searchTab.setBackgroundResource(R.drawable.topnav_search_off);
 			myTab.setBackgroundResource(R.drawable.topnav_my_on);
-//			otherTab.setBackgroundResource(R.drawable.topnav_other_off);
 		} 
-		
-//		else {
-//			spotTab.setBackgroundResource(R.drawable.topnav_spot_off);
-//			searchTab.setBackgroundResource(R.drawable.topnav_search_off);
-//			myTab.setBackgroundResource(R.drawable.topnav_my_off);
-//			otherTab.setBackgroundResource(R.drawable.topnav_other_on);
-//		}
 	}
 
 	@Override

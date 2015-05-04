@@ -1,10 +1,12 @@
 package com.zifei.corebeau.my.ui.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 
 import com.zifei.corebeau.R;
@@ -14,25 +16,26 @@ import com.zifei.corebeau.my.task.ScrapTask;
 import com.zifei.corebeau.my.ui.adapter.ScrapPostAdapter;
 import com.zifei.corebeau.utils.Utils;
 
-public class ScrapPostFragment extends Fragment{
+public class ScrapPostFragment extends ScrollTabHolderFragment implements OnScrollListener {
 	
+	private static final String ARG_POSITION = "position";
+	private int mPosition;
 	private ScrapPostAdapter scrapPostAdapter;
 	private ScrapTask scrapTask;
 	private ListView listView;
 	
-	public static ScrapPostFragment newInstance(String param1, String param2) {
+	public static ScrapPostFragment newInstance(int position) {
 		ScrapPostFragment fragment = new ScrapPostFragment();
 		Bundle args = new Bundle();
+		args.putInt(ARG_POSITION, position);
 		fragment.setArguments(args);
 		return fragment;
-	}
-
-	public ScrapPostFragment() {
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mPosition = 1;
 	}
 
 	@Override
@@ -42,6 +45,10 @@ public class ScrapPostFragment extends Fragment{
 		
 		scrapTask = new ScrapTask(getActivity());
 		listView = (ListView) view.findViewById(R.id.lv_scrap);
+		
+		View placeHolderView = inflater.inflate(R.layout.view_header_placeholder, listView, false);
+		listView.addHeaderView(placeHolderView);
+		listView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 		scrapPostAdapter = new ScrapPostAdapter(getActivity(), listView);
 		listView.setAdapter(scrapPostAdapter);
 		
@@ -67,4 +74,27 @@ public class ScrapPostFragment extends Fragment{
 					}
 				});
 	}
+	
+	@Override
+	public void adjustScroll(int scrollHeight) {
+		if (scrollHeight == 0 && listView.getFirstVisiblePosition() >= 1) {
+			return;
+		}
+
+		listView.setSelectionFromTop(1, scrollHeight);
+
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+		if (mScrollTabHolder != null)
+			mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, mPosition);
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// nothing
+	}
+
+
 }

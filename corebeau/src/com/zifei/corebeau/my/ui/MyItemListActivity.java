@@ -1,68 +1,63 @@
 package com.zifei.corebeau.my.ui;
 
-import java.util.List;
-
-import android.app.Activity;
+import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.util.SparseArrayCompat;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
+import android.support.v7.app.ActionBarActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AbsListView;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.nineoldandroids.view.ViewHelper;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.account.task.UserInfoService;
-import com.zifei.corebeau.bean.ItemInfo;
-import com.zifei.corebeau.bean.PageBean;
 import com.zifei.corebeau.bean.UserInfo;
-import com.zifei.corebeau.common.AsyncCallBacks;
-import com.zifei.corebeau.common.ui.MainActivity;
-import com.zifei.corebeau.common.ui.MainActivity.SectionsPagerAdapter;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
-import com.zifei.corebeau.my.bean.response.MyPostListResponse;
-import com.zifei.corebeau.my.task.MyTask;
-import com.zifei.corebeau.my.ui.adapter.MyItemListAdapter;
-import com.zifei.corebeau.my.ui.adapter.MyItemListAdapter.OnMyDetailStartClickListener;
-import com.zifei.corebeau.my.ui.fragment.MyFragment;
 import com.zifei.corebeau.my.ui.fragment.MyItemFragment;
 import com.zifei.corebeau.my.ui.fragment.ScrapPostFragment;
-import com.zifei.corebeau.search.ui.fragment.SearchFragment;
-import com.zifei.corebeau.spot.ui.fragment.SpotFragment;
+import com.zifei.corebeau.my.ui.fragment.ScrollTabHolderFragment;
+import com.zifei.corebeau.my.ui.parallaxheader.AlphaForegroundColorSpan;
+import com.zifei.corebeau.my.ui.parallaxheader.PagerSlidingTabStrip;
+import com.zifei.corebeau.my.ui.parallaxheader.ScrollTabHolder;
 import com.zifei.corebeau.utils.StringUtil;
-import com.zifei.corebeau.utils.Utils;
 
-public class MyItemListActivity extends FragmentActivity implements OnClickListener{
-	
+public class MyItemListActivity extends ActionBarActivity implements
+		OnClickListener, ScrollTabHolder, ViewPager.OnPageChangeListener {
+
 	private CircularImageView circularImageView;
 	private DisplayImageOptions imageOptions;
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
 	private ImageView backgroundImageView;
 	private ImageView write;
-	private ProgressBar progressBar;
 	private UserInfoService userInfoService;
 	private UserInfo userInfo;
-	private TextView nickName, tabMyPost, tabMyScrap;
+	private TextView nickName;
+	private View mHeader;
+	private PagerSlidingTabStrip mPagerSlidingTabStrip;
 	private ViewPager mViewPager;
-	private SectionsPagerAdapter mSectionsPagerAdapter;
-	private static final int PAGE_COUNT = 2;
-	 private static int selectedPage = 0;
-	    private static int preSelectedPage = 0;
-	    private boolean isClick = false;
-	    
+	private PagerAdapter mPagerAdapter;
+	private int mActionBarHeight;
+	private int mMinHeaderHeight;
+	private int mHeaderHeight;
+	private int mMinHeaderTranslation;
+	private TypedValue mTypedValue = new TypedValue();
+	private SpannableString mSpannableString;
+	private AlphaForegroundColorSpan mAlphaForegroundColorSpan;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +65,8 @@ public class MyItemListActivity extends FragmentActivity implements OnClickListe
 		setContentView(R.layout.activity_my_post);
 		initLoader();
 		init();
-		initTabListener();
 	}
-	
+
 	private void initLoader() {
 		imageLoader = ImageLoader.getInstance();
 		config = new ImageLoaderConfiguration.Builder(this).threadPoolSize(3)
@@ -84,21 +78,38 @@ public class MyItemListActivity extends FragmentActivity implements OnClickListe
 	}
 
 	private void init() {
-		mSectionsPagerAdapter = new SectionsPagerAdapter(
-				getSupportFragmentManager());
-		mViewPager = (ViewPager) findViewById(R.id.pager);
-		tabMyPost = (TextView) findViewById(R.id.tv_my_post_tab);
-		tabMyPost.setText("my post");
-		tabMyScrap = (TextView) findViewById(R.id.tv_my_scrap_tab);
-		tabMyScrap.setText("my scrap");
+
+		mMinHeaderHeight = getResources().getDimensionPixelSize(
+				R.dimen.min_header_height);
+		mHeaderHeight = getResources().getDimensionPixelSize(
+				R.dimen.header_height);
+		mMinHeaderTranslation = -mMinHeaderHeight + getActionBarHeight();
+		
+		backgroundImageView = (ImageView) findViewById(R.id.header_picture);
+		
+		mHeader = findViewById(R.id.fl_my_header);
+		mPagerSlidingTabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
 		mViewPager = (ViewPager) findViewById(R.id.pager_mypage);
-		mViewPager.setAdapter(mSectionsPagerAdapter);
-		mViewPager.setOnPageChangeListener(listener);
+		mViewPager.setOffscreenPageLimit(4);
+
+		mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
+		mPagerAdapter.setTabHolderScrollingContent(this);
+
+		mViewPager.setAdapter(mPagerAdapter);
+		mViewPager.setOverScrollMode(View.OVER_SCROLL_NEVER);
+		mPagerSlidingTabStrip.setViewPager(mViewPager);
+		mPagerSlidingTabStrip.setOnPageChangeListener(this);
+		mSpannableString = new SpannableString("aa");
+		mAlphaForegroundColorSpan = new AlphaForegroundColorSpan(0xffffffff);
+		
+		ViewHelper.setAlpha(getActionBarIconView(), 0f);
+		
+		getSupportActionBar().setBackgroundDrawable(null);
+		
+		
 		write = (ImageView) findViewById(R.id.iv_write);
-		progressBar = (ProgressBar) findViewById(R.id.pb_my_post);
 		write.setOnClickListener(this);
 		circularImageView = (CircularImageView) findViewById(R.id.civ_my_post_icon);
-		backgroundImageView = (ImageView) findViewById(R.id.iv_my_post_background);
 		nickName = (TextView) findViewById(R.id.tv_my_post_nickname);
 
 		setUserInfo();
@@ -116,8 +127,8 @@ public class MyItemListActivity extends FragmentActivity implements OnClickListe
 		String nick = userInfo.getNickName();
 		if (nick != null) {
 			nickName.setText(nick);
-		}else{
-			nickName.setText("guest"+userInfo.getUserId());
+		} else {
+			nickName.setText("guest" + userInfo.getUserId());
 		}
 
 		String iconUrl = userInfo.getPicThumbUrl();
@@ -127,9 +138,8 @@ public class MyItemListActivity extends FragmentActivity implements OnClickListe
 		} else {
 			imageLoader.displayImage(iconUrl, circularImageView, imageOptions);
 		}
+		
 	}
-
-
 
 	@Override
 	public void onClick(View v) {
@@ -139,111 +149,163 @@ public class MyItemListActivity extends FragmentActivity implements OnClickListe
 			startActivity(intent);
 			break;
 		case R.id.civ_my_post_icon:
-			
+
 			break;
 		case R.id.tv_my_post_nickname:
-			
+
 		}
 	}
-	
-	public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-		public SectionsPagerAdapter(FragmentManager fm) {
+	@Override
+	public void onPageScrollStateChanged(int arg0) {
+	}
+
+	@Override
+	public void onPageScrolled(int arg0, float arg1, int arg2) {
+	}
+
+	@Override
+	public void onPageSelected(int position) {
+		SparseArrayCompat<ScrollTabHolder> scrollTabHolders = mPagerAdapter.getScrollTabHolders();
+		ScrollTabHolder currentHolder = scrollTabHolders.valueAt(position);
+
+		currentHolder.adjustScroll((int) (mHeader.getHeight() + ViewHelper.getTranslationY(mHeader)));
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
+		if (mViewPager.getCurrentItem() == pagePosition) {
+			int scrollY = getScrollY(view);
+			ViewHelper.setTranslationY(mHeader, Math.max(-scrollY, mMinHeaderTranslation));
+			float ratio = clamp(ViewHelper.getTranslationY(mHeader) / mMinHeaderTranslation, 0.0f, 1.0f);
+			setTitleAlpha(clamp(5.0F * ratio - 4.0F, 0.0F, 1.0F));
+		}
+	}
+
+	@Override
+	public void adjustScroll(int scrollHeight) {
+		// nothing
+	}
+
+	public int getScrollY(AbsListView view) {
+		View c = view.getChildAt(0);
+		if (c == null) {
+			return 0;
+		}
+
+		int firstVisiblePosition = view.getFirstVisiblePosition();
+		int top = c.getTop();
+
+		int headerHeight = 0;
+		if (firstVisiblePosition >= 1) {
+			headerHeight = mHeaderHeight;
+		}
+
+		return -top + firstVisiblePosition * c.getHeight() + headerHeight;
+	}
+
+	public static float clamp(float value, float max, float min) {
+		return Math.max(Math.min(value, min), max);
+	}
+
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public int getActionBarHeight() {
+		if (mActionBarHeight != 0) {
+			return mActionBarHeight;
+		}
+		
+		if(Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB){
+			getTheme().resolveAttribute(android.R.attr.actionBarSize, mTypedValue, true);
+		}
+		
+//		else{
+//			getTheme().resolveAttribute(R.attr.actionBarSize, mTypedValue, true);
+//		}
+		
+		mActionBarHeight = TypedValue.complexToDimensionPixelSize(mTypedValue.data, getResources().getDisplayMetrics());
+		
+		return mActionBarHeight;
+	}
+
+	private void setTitleAlpha(float alpha) {
+		mAlphaForegroundColorSpan.setAlpha(alpha);
+		mSpannableString.setSpan(mAlphaForegroundColorSpan, 0, mSpannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		getSupportActionBar().setTitle(mSpannableString);
+	}
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private ImageView getActionBarIconView() {
+		
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+			return (ImageView)findViewById(android.R.id.home);
+		}
+
+		return (ImageView)findViewById(R.drawable.asv);
+	}
+
+	public class PagerAdapter extends FragmentPagerAdapter {
+
+		private SparseArrayCompat<ScrollTabHolder> mScrollTabHolders;
+		private final String[] TITLES = { "my post", "my scrap"};
+		private ScrollTabHolder mListener;
+
+		public PagerAdapter(FragmentManager fm) {
 			super(fm);
+			mScrollTabHolders = new SparseArrayCompat<ScrollTabHolder>();
+		}
+
+		public void setTabHolderScrollingContent(ScrollTabHolder listener) {
+			mListener = listener;
 		}
 
 		@Override
+		public CharSequence getPageTitle(int position) {
+			return TITLES[position];
+		}
+
+		
+		@Override
 		public Fragment getItem(int position) {
-			Fragment f = null;
+			ScrollTabHolderFragment f;
+			if(position == 0){
+				f = (ScrollTabHolderFragment) MyItemFragment.newInstance(position);
+			}else{
+				f = (ScrollTabHolderFragment) ScrapPostFragment.newInstance(position);
+			}
+			
+			
 			switch (position) {
 			case 0:
-				f = Fragment.instantiate(MyItemListActivity.this,
+				f = (ScrollTabHolderFragment) Fragment.instantiate(MyItemListActivity.this,
 						MyItemFragment.class.getName(), null);
 				break;
 			case 1:
-				f = Fragment.instantiate(MyItemListActivity.this,
+				f = (ScrollTabHolderFragment) Fragment.instantiate(MyItemListActivity.this,
 						ScrapPostFragment.class.getName(), null);
 				break;
 			default:
-				f = Fragment.instantiate(MyItemListActivity.this,
+				f = (ScrollTabHolderFragment) Fragment.instantiate(MyItemListActivity.this,
 						MyItemFragment.class.getName(), null);
 				break;
 			}
+			
+			mScrollTabHolders.put(position, f);
+			if (mListener != null) {
+				f.setScrollTabHolder(mListener);
+			}
+			
 			return f;
 		}
 
 		@Override
 		public int getCount() {
-			return PAGE_COUNT;
+			return TITLES.length;
 		}
-	}
-	
-	private ViewPager.SimpleOnPageChangeListener listener = new ViewPager.SimpleOnPageChangeListener() {
-        @Override
-        public void onPageSelected(int position) {
-            preSelectedPage = selectedPage;
-            selectedPage = position;
-            if(!isClick){
-                switch(position) {
-                case 0:
-                    updateSelectedTab(0);
-                    break;
-                case 1:
-                    updateSelectedTab(1);
-                    break;
-                default:
-                    updateSelectedTab(0);
-                    break;
-                }
-            }
-        }
-        
-        @Override
-        public void onPageScrollStateChanged(int state) {
-        }
-    };
-    
-    private void initTabListener() {
-        View view;
-        view = findViewById(R.id.rl_my_post_tab);
-        view.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isClick = true;
-                if (preSelectedPage == 1) {
-                    mViewPager.setCurrentItem(0, true);
-                } else {
-                    isClick = false;
-                    mViewPager.setCurrentItem(0, false);
-                    updateSelectedTab(0);
-                }
-            }
-        });
-        
-        view = findViewById(R.id.rl_my_scrap_tab);
-        view.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isClick = true;
-                if (preSelectedPage == 0) {
-                    mViewPager.setCurrentItem(1, true);
-                } else {
-                    isClick = false;
-                    mViewPager.setCurrentItem(1, false);
-                    updateSelectedTab(1);
-                }
-            }
-        });
-    }
-    
-	private void updateSelectedTab(int nSelected) {
-		if (nSelected == 0) {
-			tabMyPost.setTextColor(Color.BLACK);
-			tabMyScrap.setTextColor(Color.GRAY);
-			
-		}else if (nSelected == 1) {
-			tabMyPost.setTextColor(Color.BLACK);
-			tabMyScrap.setTextColor(Color.GRAY);
+
+		public SparseArrayCompat<ScrollTabHolder> getScrollTabHolders() {
+			return mScrollTabHolders;
 		}
+
 	}
 }

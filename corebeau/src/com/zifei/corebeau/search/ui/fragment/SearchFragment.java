@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 
 import com.zifei.corebeau.R;
@@ -38,7 +39,7 @@ public class SearchFragment extends Fragment implements
 	private StaggeredGridView staggeredGridView;
 	private RecommedUserAdapter recommedUserAdapter;
 	private SearchTask searchTask;
-	private CircularProgressBar progressBar;
+	private ProgressBar progressBar;
 	private SampleAdapter mAdapter;
 	private boolean mHasRequestedMore;
 	private static final String TAG = "StaggeredGridActivity";
@@ -73,7 +74,7 @@ public class SearchFragment extends Fragment implements
 			Bundle savedInstanceState) {
 		View view = inflater
 				.inflate(R.layout.fragment_search, container, false);
-		progressBar = (CircularProgressBar) view.findViewById(R.id.pb_search);
+		progressBar = (ProgressBar) view.findViewById(R.id.pb_search);
 		staggeredGridView = (StaggeredGridView) view
 				.findViewById(R.id.sgv_search);
 		staggeredGridView.setOnItemClickListener(this);
@@ -110,8 +111,6 @@ public class SearchFragment extends Fragment implements
 	@Override
 	public void onPause() {
 		super.onPause();
-		((CircularProgressDrawable) progressBar
-				.getIndeterminateDrawable()).progressiveStop();
 	}
 
 	@Override
@@ -167,8 +166,7 @@ public class SearchFragment extends Fragment implements
 
 	private void getRecommendUserList() {
 		// progressBar.setVisibility(View.VISIBLE);
-		((CircularProgressDrawable) progressBar.getIndeterminateDrawable())
-				.start();
+		progressBar.setVisibility(View.GONE);
 		searchTask
 				.getRecommendUserList(new AsyncCallBacks.OneOne<RecommendUserResponse, String>() {
 					@Override
@@ -193,14 +191,12 @@ public class SearchFragment extends Fragment implements
 	}
 
 	private void getRecommendPostList() {
-		((CircularProgressDrawable) progressBar.getIndeterminateDrawable())
-				.start();
+		progressBar.setVisibility(View.GONE);
 		searchTask
 				.getRecommendPostList(new AsyncCallBacks.OneOne<RecommendPostResponse, String>() {
 					@Override
 					public void onSuccess(RecommendPostResponse response) {
-						((CircularProgressDrawable) progressBar
-								.getIndeterminateDrawable()).progressiveStop();
+						progressBar.setVisibility(View.GONE);
 						PageBean<ItemInfo> pageBean = (PageBean<ItemInfo>) response
 								.getPageBean();
 						List<ItemInfo> list = pageBean.getList();
@@ -217,9 +213,7 @@ public class SearchFragment extends Fragment implements
 
 					@Override
 					public void onError(String msg) {
-						((CircularProgressDrawable) progressBar
-								.getIndeterminateDrawable()).progressiveStop();
-
+						progressBar.setVisibility(View.GONE);
 						Utils.showToast(getActivity(), msg);
 					}
 				});

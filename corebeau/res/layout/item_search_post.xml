@@ -11,12 +11,11 @@
         android:layout_width="match_parent" 
         />
 
-    <com.zifei.corebeau.common.ui.widget.staggered.util.DynamicHeightImageView
+    <ImageView
         android:id="@+id/iv_search_post"
         android:layout_below="@id/search_image_top_divider"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY" />
+        android:layout_height="match_parent" />
     
     <View
         android:id="@+id/search_image_bottom_divider"

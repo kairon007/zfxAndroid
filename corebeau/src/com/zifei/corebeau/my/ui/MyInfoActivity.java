@@ -383,7 +383,7 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 	            	String beforePass = etBeforePassword.getText().toString();
 	            	String newPass = etNewPassword.getText().toString();
 	            	String newPassConfirm = etNewPasswordConfirm.getText().toString();
-	            	
+	            	if(passCheck(beforePass,newPass,newPassConfirm))
 	            	updatePassword(beforePass, newPass);
 	            } 
 	        }); 

@@ -1,18 +1,14 @@
 package com.zifei.corebeau.search.ui.adapter;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
-import java.util.Random;
 
 import android.content.Context;
-import android.media.Image;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -21,19 +17,15 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.common.CorebeauApp;
-import com.zifei.corebeau.common.ui.widget.staggered.util.DynamicHeightImageView;
 import com.zifei.corebeau.utils.StringUtil;
-import com.zifei.corebeau.utils.Utils;
 
 public class SampleAdapter extends ArrayAdapter<ItemInfo> {
 
 	private DisplayImageOptions imageOptions;
 	private ImageLoader imageLoader;
-	private static final SparseArray<Double> sPositionHeightRatios = new SparseArray<Double>();
 	private final LayoutInflater mLayoutInflater;
 	private String smallImageConfig;
 	private int columnWidth;
-	private Context context;
 
 	public SampleAdapter(final Context context, final int textViewResourceId,
 			List<ItemInfo> objects) {
@@ -42,7 +34,7 @@ public class SampleAdapter extends ArrayAdapter<ItemInfo> {
 		this.mLayoutInflater = LayoutInflater.from(context);
 		imageLoader = ImageLoader.getInstance();
 		imageOptions = new DisplayImageOptions.Builder().cacheInMemory(false)
-				.imageScaleType(ImageScaleType.NONE).cacheOnDisk(true)
+				.imageScaleType(ImageScaleType.EXACTLY_STRETCHED).cacheOnDisk(true)
 				.build();
 	}
 	
@@ -67,7 +59,7 @@ public class SampleAdapter extends ArrayAdapter<ItemInfo> {
 			convertView = mLayoutInflater.inflate(R.layout.item_search_post,
 					parent, false);
 			vh = new ViewHolder();
-			vh.image = (DynamicHeightImageView) convertView
+			vh.image = (ImageView) convertView
 					.findViewById(R.id.iv_search_post);
 			
 			if(smallImgHeight!=0 && smallImgWidth!=0 && columnWidth!=0){
@@ -101,7 +93,7 @@ public class SampleAdapter extends ArrayAdapter<ItemInfo> {
 	}
 
 	static class ViewHolder {
-		DynamicHeightImageView image;
+		ImageView image;
 		TextView likeCnt;
 		TextView commentCnt;
 		TextView message;

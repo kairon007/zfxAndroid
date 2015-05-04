@@ -24,20 +24,20 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.5dp</item>
     </style>
-    
+
     <style name="custom_divider_grey">
         <item name="android:background">@color/common_background_grey</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.5dp</item>
     </style>
-    
+
     <style name="my_info_divider">
         <item name="android:background">@color/spot_inner_divider</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.5dp</item>
     </style>
-    
-     <style name="holizontal_divider">
+
+    <style name="holizontal_divider">
         <item name="android:background">#FFFFFF</item>
         <item name="android:layout_width">0.5dp</item>
         <item name="android:layout_height">match_parent</item>
@@ -48,26 +48,24 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.5dp</item>
     </style>
-    
+
     <style name="spot_top_divider">
         <item name="android:background">@color/spot_top_divider</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.01dp</item>
     </style>
-    
+
     <style name="spot_inner_divider">
         <item name="android:background">@color/spot_inner_divider</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.01dp</item>
     </style>
-    
-    
+
     <style name="Theme.SmoothProgressBarDefaults" parent="android:Theme.Holo">
         <item name="cpbStyle">@style/CircularProgressBar</item>
     </style>
 
-    <style name="CPB" parent="android:Widget.Holo.ProgressBar">
-    </style>
+    <style name="CPB" parent="android:Widget.Holo.ProgressBar"></style>
 
     <style name="CircularProgressBar" parent="CPB">
         <item name="cpb_color">@color/cpb_default_color</item>
@@ -77,8 +75,7 @@
         <item name="cpb_sweep_speed">@string/cpb_default_sweep_speed</item>
         <item name="cpb_rotation_speed">@string/cpb_default_rotation_speed</item>
     </style>
-    
-    
+
     <style name="Crop"></style>
 
     <style name="Crop.DoneCancelBar">
@@ -103,7 +100,8 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingRight">20dp</item> <!-- Offsets left drawable -->
+        <item name="android:paddingRight">20dp</item>
+ <!-- Offsets left drawable -->
         <item name="android:drawablePadding">8dp</item>
         <item name="android:textColor">@color/crop__button_text</item>
         <item name="android:textStyle">bold</item>
@@ -119,7 +117,7 @@
         <item name="android:drawableLeft">@drawable/crop__ic_cancel</item>
         <item name="android:text">@string/crop__cancel</item>
     </style>
-    
+
     <style name="new_setting_dialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>
@@ -127,5 +125,29 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@color/common_background_grey</item>
     </style>
+    
+    <style name="MyPageTheme" parent="TransparentTheme"></style>
+    
+    <style name="TransparentTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="homeAsUpIndicator">@drawable/abc_ic_ab_back_holo_dark</item>
+        <item name="android:actionBarStyle">@style/ActionBarStyle.Transparent</item>
+        <item name="actionBarStyle">@style/ActionBarStyle.Transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="windowActionBarOverlay">true</item>
+    </style>
 
+    <style name="ActionBarStyle.Transparent" parent="@style/Widget.AppCompat.ActionBar">
+        <item name="android:background">@null</item>
+        <item name="android:displayOptions">homeAsUp|showHome|showTitle</item>
+        <item name="displayOptions">homeAsUp|showHome|showTitle</item>
+        <item name="android:titleTextStyle">@style/ActionBarStyle.Transparent.TitleTextStyle</item>
+        <item name="titleTextStyle">@style/ActionBarStyle.Transparent.TitleTextStyle</item>
+    </style>
+
+    <style name="ActionBarStyle.Transparent.TitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+  
 </resources>
