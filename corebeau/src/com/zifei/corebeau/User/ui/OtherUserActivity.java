@@ -2,6 +2,7 @@ package com.zifei.corebeau.User.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.widget.ListView;
 
 import com.zifei.corebeau.R;
@@ -15,10 +16,9 @@ import com.zifei.corebeau.utils.Utils;
 /**
  * Created by im14s_000 on 2015/3/28.
  */
-public class OtherUserActivity extends Activity {
+public class OtherUserActivity extends ActionBarActivity {
 
     private ListView imageListView;
-    //    private ListView commentListView;
     private PostTask postTask;
     private OtherUserPostAdapter imageAdapter;
     private Integer postId;
@@ -26,40 +26,8 @@ public class OtherUserActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
-        init();
+        setContentView(R.layout.activity_another_user);
+//        init();
     }
 
-    private void init() {
-//        imageListView = (ListView) findViewById(R.id.lv_post_image);
-//        subListView = (HorizontalListView) findViewById(R.id.hlv_post_image_sub);
-//        commentListView = (ListView)findViewById(R.id.lv_post_comment);
-        postTask = new PostTask(this);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    private void getPostTask() {
-    }
-
-
-    // 해놓고 백그라운드에서 돌린다
-    private void insertLikeTask() {
-    }
-
-    private void deleteLikeTask() {
-    }
 }

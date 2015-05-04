@@ -12,13 +12,11 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import android.app.Service;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.IBinder;
-import android.provider.MediaStore;
 
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.CorebeauApp;
@@ -29,7 +27,6 @@ import com.zifei.corebeau.my.qiniu.up.rs.UploadResultCallRet;
 import com.zifei.corebeau.my.qiniu.up.slice.Block;
 import com.zifei.corebeau.my.task.UploadTask;
 import com.zifei.corebeau.utils.CommonConfig;
-import com.zifei.corebeau.utils.PictureUtil;
 import com.zifei.corebeau.utils.Utils;
 
 public class UploadService extends Service {

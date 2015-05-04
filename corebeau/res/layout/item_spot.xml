@@ -98,14 +98,6 @@
                 android:layout_marginRight="10dp"
                 android:textColor="#404040" />
 
-            <TextView
-                android:id="@+id/tv_go_detail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:paddingBottom="15dp"
-                android:text="..."
-                android:textSize="20dp" />
 
             <View
                 style="@style/spot_top_divider"
