@@ -34,8 +34,8 @@ public class UploadTask {
 	public void uploadImageQiniu() {
 	}
 
-	private static int IMAGE_MAX_WIDTH = 480;
-	private static int IMAGE_MAX_HEIGHT = 960;
+	private static int IMAGE_MAX_WIDTH = 600;
+	private static int IMAGE_MAX_HEIGHT = 800;
 
 	public static int getImageScale(String imagePath) {
 		BitmapFactory.Options option = new BitmapFactory.Options();
@@ -99,15 +99,13 @@ public class UploadTask {
 
 	@SuppressLint("NewApi")
 	public Bitmap compressImage(Bitmap image) {
+//		return image;
 		Log.i("image compressImage before", image.getByteCount() + " ");
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
-		if (baos.toByteArray().length / 1024 <= CommonConfig.UPLOAD_IMAGE_QUALITY) {
-			ByteArrayInputStream isBm = new ByteArrayInputStream(
-					baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
-			Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
-			return bitmap;
-		}
+//		if (baos.toByteArray().length / 1024 <= CommonConfig.UPLOAD_IMAGE_QUALITY) {
+//			return null;
+//		}
 		int options = 100;
 		while (baos.toByteArray().length / 1024 > CommonConfig.UPLOAD_IMAGE_QUALITY) { // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
 			baos.reset();// 重置baos即清空baos
