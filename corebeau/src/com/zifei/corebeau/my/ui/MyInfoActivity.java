@@ -178,11 +178,11 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 					@Override
 					public void onSuccess(Response response) {
 						// progressBar.setVisibility(View.INVISIBLE);
-						Utils.showToast(MyInfoActivity.this, "");
+						Utils.showToast(MyInfoActivity.this, "update success");
 						// 셋팅창 userinfo 셋팅
 						
-						nickname.setText("");
-						nickname.setHint(userInfo.getNickName());
+//						nickname.setText("");
+//						nickname.setHint(userInfo.getNickName());
 					}
 
 					@Override

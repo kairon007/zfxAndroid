@@ -75,7 +75,7 @@ public class UrlConstants {
 	
 	// my info
 
-	public static String UPDATE_USERINFO = BASE_URL + "/.../...";
+	public static String UPDATE_USERINFO = BASE_URL + "/account/updateUserInfo";
 	
 	public static String UPDATE_NICKNAME = BASE_URL + "/.../...";
 
