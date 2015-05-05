@@ -27,6 +27,7 @@ import com.zifei.corebeau.my.qiniu.up.rs.UploadResultCallRet;
 import com.zifei.corebeau.my.qiniu.up.slice.Block;
 import com.zifei.corebeau.my.task.UploadTask;
 import com.zifei.corebeau.utils.CommonConfig;
+import com.zifei.corebeau.utils.PictureUtil;
 import com.zifei.corebeau.utils.Utils;
 
 public class UploadService extends Service {
@@ -57,7 +58,8 @@ public class UploadService extends Service {
 					 Bitmap bitmap = BitmapFactory.decodeStream(
 							cr.openInputStream(Uri.fromFile(file)),
 							null, option);
-					 uri = getUriFromBitmap( file,uploadTask.compressImage(bitmap));
+					 //uri = getUriFromBitmap( file,uploadTask.compressImage(bitmap));
+					 uri = Uri.fromFile(PictureUtil.compressImage(this, stringPath, file.getName(), 90));
 				}
 				//Uri uri =Uri.fromFile(new File(PictureUtil.compressImage(this, stringPath, file.getName(), 100)));
 				
