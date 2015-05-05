@@ -150,5 +150,16 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    
+    
+     <style name="OtherUserTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+     <!--    <item name="homeAsUpIndicator">@drawable/abc_ic_ab_back_holo_dark</item> -->
+     <item name="windowActionBar">false</item>
+        <item name="android:actionBarStyle">@style/ActionBarStyle.Transparent</item>
+        <item name="actionBarStyle">@style/ActionBarStyle.Transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="windowActionBarOverlay">true</item>
+    </style>
   
 </resources>

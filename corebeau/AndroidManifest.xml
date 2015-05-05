@@ -94,7 +94,7 @@
             <activity
             android:name="com.zifei.corebeau.user.ui.OtherUserActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyPageTheme" >
+            android:theme="@style/OtherUserTheme" >
         </activity>
         
         

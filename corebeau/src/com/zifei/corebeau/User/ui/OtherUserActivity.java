@@ -1,9 +1,14 @@
 package com.zifei.corebeau.user.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -16,6 +21,7 @@ import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
+import com.zifei.corebeau.common.ui.widget.NavigationBar;
 import com.zifei.corebeau.post.ui.PostDetailActivity;
 import com.zifei.corebeau.user.bean.OtherUserInfo;
 import com.zifei.corebeau.user.task.OtherUserTask;
@@ -38,6 +44,7 @@ public class OtherUserActivity extends ActionBarActivity implements OnUserDetail
 	private ImageView backgroundImageView;
 	private ProgressBar progressBar;
 	private String userId;
+	private MenuItem menuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +67,30 @@ public class OtherUserActivity extends ActionBarActivity implements OnUserDetail
 				.delayBeforeLoading(200) // 载入之前的延迟时间
 				.cacheInMemory(false).cacheOnDisk(true).build();
 	}
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+      MenuInflater inflater = getMenuInflater();
+      inflater.inflate(R.menu.bar_other_user, menu);
+      return true;
+    } 
+    
+    @SuppressLint("NewApi")
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+      switch (item.getItemId()) {
+      case R.id.other_user:
+    	  menuItem=item;
+    	  menuItem.expandActionView();
+        break;
+      default:
+        break;
+      }
+
+      return true;
+    } 
+
+
 
 	private void init() {
 		otherUserTask = new OtherUserTask(this);
