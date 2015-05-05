@@ -1,10 +1,6 @@
 package com.zifei.corebeau.user.ui;
 
-import java.util.List;
-
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
@@ -18,15 +14,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
-import com.zifei.corebeau.bean.PageBean;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
-import com.zifei.corebeau.my.bean.response.MyPostListResponse;
-import com.zifei.corebeau.my.task.MyTask;
-import com.zifei.corebeau.my.ui.MyItemDetailActivity;
-import com.zifei.corebeau.my.ui.MyItemListActivity;
-import com.zifei.corebeau.my.ui.UploadActivity;
-import com.zifei.corebeau.my.ui.adapter.MyItemListAdapter;
 import com.zifei.corebeau.post.ui.PostDetailActivity;
 import com.zifei.corebeau.user.bean.OtherUserInfo;
 import com.zifei.corebeau.user.task.OtherUserTask;

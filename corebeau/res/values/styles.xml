@@ -129,7 +129,8 @@
     <style name="MyPageTheme" parent="TransparentTheme"></style>
     
     <style name="TransparentTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-        <item name="homeAsUpIndicator">@drawable/abc_ic_ab_back_holo_dark</item>
+     <!--    <item name="homeAsUpIndicator">@drawable/abc_ic_ab_back_holo_dark</item> -->
+     <item name="windowActionBar">false</item>
         <item name="android:actionBarStyle">@style/ActionBarStyle.Transparent</item>
         <item name="actionBarStyle">@style/ActionBarStyle.Transparent</item>
         <item name="android:windowContentOverlay">@null</item>
