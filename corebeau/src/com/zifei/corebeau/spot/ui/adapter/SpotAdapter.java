@@ -19,11 +19,11 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.zifei.corebeau.R;
-import com.zifei.corebeau.User.ui.OtherUserActivity;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.common.CorebeauApp;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
 import com.zifei.corebeau.post.ui.PostDetailActivity;
+import com.zifei.corebeau.user.ui.OtherUserActivity;
 import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
 
@@ -60,6 +60,11 @@ public class SpotAdapter extends BaseAdapter {
 		.showImageOnLoading(R.drawable.my_default)
 		.cacheInMemory(true)
 		.build();
+	}
+	
+	public void clearAdapter(){
+		this.data.clear();
+		notifyDataSetChanged();
 	}
 	
 	private void getConfig(){
@@ -135,9 +140,9 @@ public class SpotAdapter extends BaseAdapter {
 		}
 		
 		holder.goPostDetail = (TextView) convertView
-				.findViewById(R.id.tv_go_detail);
+				.findViewById(R.id.tv_spot_go_detail);
 		holder.commentCnt = (TextView)convertView.findViewById(R.id.tv_spot_comment_cnt);
-		
+		holder.likeCnt = (TextView)convertView.findViewById(R.id.tv_spot_like_cnt);
 
 		
 		imageLoader.displayImage("drawable://" + R.drawable.my_default, holder.usericon, iconImageOptions);
@@ -148,9 +153,17 @@ public class SpotAdapter extends BaseAdapter {
 		}
 
 		holder.nickName.setText(p.getNickName());
-		holder.message.setText(p.getTitle());
-		holder.commentCnt.setText(String.valueOf(p.getCommentCnt()));
 		
+		String title = p.getTitle();
+		if(title.length()>50){
+			holder.message.setText(title.substring(0, 50)+"...");
+		}else{
+			holder.message.setText(title);
+		}
+		
+		
+		holder.commentCnt.setText(String.valueOf(p.getCommentCnt()));
+		holder.likeCnt.setText(String.valueOf(p.getLikeCnt()));
 		String url = p.getShowUrl();
 		
 		if (!StringUtil.isEmpty(url)) {
@@ -198,6 +211,7 @@ public class SpotAdapter extends BaseAdapter {
 		ImageView image;
 		TextView goPostDetail;
 		TextView commentCnt;
+		TextView likeCnt;
 	}
 
 }

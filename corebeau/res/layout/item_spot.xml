@@ -68,20 +68,36 @@
                     android:orientation="horizontal" >
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="20dp"
                         android:background="@drawable/post_icon_comment" />
 
                     <TextView
                         android:id="@+id/tv_spot_comment_cnt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="20dp"
                         android:textColor="#FFFFFF"
-                        android:textSize="20sp" />
+                        android:textSize="12sp" />
+                    
+                     <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="20dp"
+                        android:background="@drawable/spot_like_cnt" />
+
+                    <TextView
+                        android:id="@+id/tv_spot_like_cnt"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="20dp"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
                 </LinearLayout>
             </FrameLayout>
 
@@ -97,6 +113,15 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:textColor="#404040" />
+            
+            <TextView
+                android:id="@+id/tv_spot_go_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:paddingBottom="15dp"
+                android:text="..."
+                android:textSize="20dp" />
 
 
             <View

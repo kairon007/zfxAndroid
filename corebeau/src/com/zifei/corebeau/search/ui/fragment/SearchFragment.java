@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 
@@ -23,6 +27,11 @@ import com.zifei.corebeau.common.ui.view.HorizontalListView;
 import com.zifei.corebeau.common.ui.widget.progress.CircularProgressBar;
 import com.zifei.corebeau.common.ui.widget.progress.CircularProgressDrawable;
 import com.zifei.corebeau.common.ui.widget.staggered.StaggeredGridView;
+import com.zifei.corebeau.my.ui.FollowActivity;
+import com.zifei.corebeau.my.ui.MyInfoActivity;
+import com.zifei.corebeau.my.ui.MyItemListActivity;
+import com.zifei.corebeau.my.ui.OptionActivity;
+import com.zifei.corebeau.post.ui.PostDetailActivity;
 import com.zifei.corebeau.search.bean.Response.RecommendPostResponse;
 import com.zifei.corebeau.search.bean.Response.RecommendUserResponse;
 import com.zifei.corebeau.search.task.SearchTask;
@@ -32,9 +41,9 @@ import com.zifei.corebeau.utils.Utils;
 
 public class SearchFragment extends Fragment implements
 		AbsListView.OnScrollListener, AbsListView.OnItemClickListener,
-		AdapterView.OnItemLongClickListener {
+		AdapterView.OnItemLongClickListener, View.OnClickListener {
 
-	private SearchView searchView;
+//	private SearchView searchView;
 	private HorizontalListView horizontalListView;
 	private StaggeredGridView staggeredGridView;
 	private RecommedUserAdapter recommedUserAdapter;
@@ -46,6 +55,7 @@ public class SearchFragment extends Fragment implements
 	private ArrayList<ItemInfo> mData;
 	public static final String SAVED_DATA_KEY = "SAVED_DATA";
 	private static final int FETCH_DATA_TASK_DURATION = 2000;
+	private ImageView refreshBtn;
 
 	public static SearchFragment newInstance(String param1, String param2) {
 		SearchFragment fragment = new SearchFragment();
@@ -78,7 +88,7 @@ public class SearchFragment extends Fragment implements
 		staggeredGridView = (StaggeredGridView) view
 				.findViewById(R.id.sgv_search);
 		staggeredGridView.setOnItemClickListener(this);
-		
+
 		LayoutInflater layoutInflater = getActivity().getLayoutInflater();
 		View header = layoutInflater.inflate(R.layout.layout_search_header,
 				null);
@@ -92,7 +102,8 @@ public class SearchFragment extends Fragment implements
 		recommedUserAdapter = new RecommedUserAdapter(getActivity(),
 				horizontalListView);
 		horizontalListView.setAdapter(recommedUserAdapter);
-
+		refreshBtn = (ImageView) view.findViewById(R.id.refresh_search);
+		refreshBtn.setOnClickListener(this);
 		getRecommendPostList();
 		return view;
 	}
@@ -107,7 +118,7 @@ public class SearchFragment extends Fragment implements
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 	}
-	
+
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -121,13 +132,10 @@ public class SearchFragment extends Fragment implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		// RecommendPostList mData =
-		// (RecommendPostList)parent.getAdapter().getItem(position);
-		// if(mData != null){
-		// Intent intent = new Intent(getActivity(), PostActivity.class);
-		// intent.putExtra("postId", mData.getPostId());
-		// getActivity().startActivity(intent);
-		// }
+		ItemInfo itemInfo = mAdapter.getItem(position);
+		Intent intent = new Intent(getActivity(), PostDetailActivity.class);
+		intent.putExtra("itemInfo", itemInfo);
+		startActivity(intent);
 	}
 
 	@Override
@@ -191,7 +199,7 @@ public class SearchFragment extends Fragment implements
 	}
 
 	private void getRecommendPostList() {
-		progressBar.setVisibility(View.GONE);
+		progressBar.setVisibility(View.VISIBLE);
 		searchTask
 				.getRecommendPostList(new AsyncCallBacks.OneOne<RecommendPostResponse, String>() {
 					@Override
@@ -205,7 +213,8 @@ public class SearchFragment extends Fragment implements
 						} else {
 							mAdapter = new SampleAdapter(getActivity(),
 									android.R.layout.simple_list_item_1, list);
-							mAdapter.setColumnWidth(staggeredGridView.getColumnWidth());
+							mAdapter.setColumnWidth(staggeredGridView
+									.getColumnWidth());
 							staggeredGridView.setAdapter(mAdapter);
 
 						}
@@ -233,6 +242,11 @@ public class SearchFragment extends Fragment implements
 	// }
 	// }.execute();
 	// }
+	
+	private void refresh(){
+		mAdapter.clear();
+		getRecommendPostList();
+	}
 
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view,
@@ -244,4 +258,14 @@ public class SearchFragment extends Fragment implements
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 	}
 
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.refresh_search:
+			refresh();
+			break;
+		default:
+			break;
+		}
+	}
 }

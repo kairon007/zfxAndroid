@@ -38,6 +38,11 @@ public class SampleAdapter extends ArrayAdapter<ItemInfo> {
 				.build();
 	}
 	
+	@Override
+	public ItemInfo getItem(int position) {
+		return super.getItem(position);
+	}
+	
 	public void setColumnWidth(int columnWidth){
 		this.columnWidth = columnWidth;
 	}

@@ -1,4 +1,4 @@
-package com.zifei.corebeau.User.bean;
+package com.zifei.corebeau.user.bean;
 
 /**
  * Created by im14s_000 on 2015/3/23.

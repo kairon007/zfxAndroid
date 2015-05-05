@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.zifei.corebeau"
+    android:layout_width="match_parent"
+    android:layout_height="250dp" >
+
+    <ImageView
+        android:id="@+id/iv_userpage_background"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/common_orange"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/tv_userpage_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:text="aaaaaa" />
+
+    <com.zifei.corebeau.common.ui.view.CircularImageView
+        android:id="@+id/civ_userpage_icon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal|bottom"
+        app:border="true"
+        app:border_color="@color/common_background_white"
+        app:border_width="4dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:layout_margin="20dp"
+        android:layout_marginRight="30dp" >
+
+        <TextView
+            android:id="@+id/tv_otheruser_follow_cnt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+             />
+
+        <TextView
+            android:id="@+id/tv_otheruser_post_cnt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical" />
+    </LinearLayout>
+
+</FrameLayout>

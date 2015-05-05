@@ -91,6 +91,13 @@
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         
+            <activity
+            android:name="com.zifei.corebeau.user.ui.OtherUserActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyPageTheme" >
+        </activity>
+        
+        
          <service
             android:name="com.zifei.corebeau.my.task.service.UploadService"
             android:enabled="true" >

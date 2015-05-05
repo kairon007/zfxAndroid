@@ -3,13 +3,16 @@ package com.zifei.corebeau.spot.ui.fragment;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -17,18 +20,21 @@ import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.bean.PageBean;
 import com.zifei.corebeau.common.AsyncCallBacks;
+import com.zifei.corebeau.my.ui.MyItemDetailActivity;
+import com.zifei.corebeau.post.ui.PostDetailActivity;
 import com.zifei.corebeau.spot.bean.response.SpotListResponse;
 import com.zifei.corebeau.spot.task.SpotTask;
 import com.zifei.corebeau.spot.ui.adapter.SpotAdapter;
 import com.zifei.corebeau.utils.Utils;
 
 public class SpotFragment extends Fragment implements
-		AbsListView.OnItemClickListener {
+		AbsListView.OnItemClickListener, View.OnClickListener {
 
 	private SpotAdapter spotAdapter;
 	private ListView listview;
 	private SpotTask spotTask;
 	private ProgressBar progressBar;
+	private ImageView refreshBtn;
 
 	public SpotFragment() {
 
@@ -57,6 +63,9 @@ public class SpotFragment extends Fragment implements
 		listview = (ListView) view.findViewById(R.id.lv_spot);
 		listview.setEmptyView(view.findViewById(android.R.id.empty));
 		listview.setAdapter(spotAdapter);
+		
+		refreshBtn = (ImageView)view.findViewById(R.id.refresh_spot);
+		refreshBtn.setOnClickListener(this);
 		getSpotTask();
 		return view;
 	}
@@ -75,7 +84,6 @@ public class SpotFragment extends Fragment implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		
 	}
 
 	private void getSpotTask() {
@@ -100,6 +108,22 @@ public class SpotFragment extends Fragment implements
 				Utils.showToast(getActivity(), msg);
 			}
 		});
+	}
+	
+	private void refresh(){
+		spotAdapter.clearAdapter();
+		getSpotTask();
+	}
+	
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.refresh_spot:
+			refresh();
+			break;
+		default:
+			break;
+		}
 	}
 
 }

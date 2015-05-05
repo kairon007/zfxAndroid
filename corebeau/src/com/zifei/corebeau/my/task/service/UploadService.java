@@ -53,7 +53,7 @@ public class UploadService extends Service {
 				} else {
 					
 					BitmapFactory.Options option = new BitmapFactory.Options();
-					option.inSampleSize = UploadTask.getImageScale(stringPath);
+					option.inSampleSize = 1;
 					 Bitmap bitmap = BitmapFactory.decodeStream(
 							cr.openInputStream(Uri.fromFile(file)),
 							null, option);

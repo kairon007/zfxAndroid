@@ -118,5 +118,9 @@ public class UrlConstants {
 	public static String DELETE_ACCOUNT = BASE_URL + "get_user_page";
 
 	public static String CHECK_VERSION = BASE_URL + "get_user_page";
+	
+	//otherUser
+	
+	public static String GET_OTHER_USERINFO = BASE_URL + "....";
 
 }
