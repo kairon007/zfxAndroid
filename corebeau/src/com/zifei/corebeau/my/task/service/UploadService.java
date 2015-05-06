@@ -44,7 +44,7 @@ public class UploadService extends Service {
 				.getStringArrayListExtra("stringPathList");
 		final String token = intent.getStringExtra("token");
 		message = intent.getStringExtra("message");
-		ContentResolver cr = this.getContentResolver();
+//		ContentResolver cr = this.getContentResolver();
 		for (String stringPath : stringPathList) {
 			Uri uri = null;
 			File file = new File(stringPath);
@@ -53,11 +53,11 @@ public class UploadService extends Service {
 					uri = Uri.fromFile(file);
 				} else {
 					
-					BitmapFactory.Options option = new BitmapFactory.Options();
-					option.inSampleSize = 1;
-					 Bitmap bitmap = BitmapFactory.decodeStream(
-							cr.openInputStream(Uri.fromFile(file)),
-							null, option);
+//					BitmapFactory.Options option = new BitmapFactory.Options();
+//					option.inSampleSize = 1;
+//					 Bitmap bitmap = BitmapFactory.decodeStream(
+//							cr.openInputStream(Uri.fromFile(file)),
+//							null, option);
 					 //uri = getUriFromBitmap( file,uploadTask.compressImage(bitmap));
 					 uri = Uri.fromFile(PictureUtil.compressImage(this, stringPath, file.getName(), 90));
 				}

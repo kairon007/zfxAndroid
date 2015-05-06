@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
@@ -63,6 +64,7 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 	private GenderSettingDialog genderDialog;
 	private CitySettingDialog cityDialog;
 	private PassWordSettingDialog passwordDialog;
+	private BoundAccountDialog boundDialog;
 	private short genderShort;
 
 	@Override
@@ -72,6 +74,7 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 		initLoader();
 		init();
 		myInfoTask = new MyInfoTask(this);
+		profileImageTask = new ProfileImageTask(this);
 	}
 
 	private void init() {
@@ -172,6 +175,21 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 	private void updateUserInfo(final UserInfo userInfo) {
 		// progressBar.setVisibility(View.VISIBLE); // 셀렉션 부분에다가 조그만하게 프로그레스바
 		// 돌리기
+		String tmpNick = nickname.getText().toString();
+		if(this.userInfo.getNickName()!=null){
+			if (!this.userInfo.getNickName().equals(tmpNick)) {
+				tmpUserInfo.setNickName(tmpNick);
+			}
+		}else{
+			if (tmpNick.length()<5 || tmpNick.length()>10) {
+				Utils.showToast(this, "nickname 5~10 word");
+				return;
+			}else{
+				tmpUserInfo.setNickName(tmpNick);
+			}
+		}
+		
+		
 		myInfoTask.updateUserInfo(userInfo,
 				new AsyncCallBacks.OneOne<Response, String>() {
 
@@ -198,10 +216,7 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 		switch (v.getId()) {
 		case R.id.my_info_bind_account:
 			if (!isFocus) {
-				String tmpNick = nickname.getText().toString();
-				if (!userInfo.getNickName().equals(tmpNick)) {
-					tmpUserInfo.setNickName(tmpNick);
-				}
+				
 			}
 			break;
 
@@ -224,7 +239,8 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 
 	private void handleCrop(int resultCode, Intent result) {
 		if (resultCode == RESULT_OK) {
-			setProfileImage(Crop.getOutput(result));
+			Uri uri = Crop.getOutput(result);
+			setProfileImage(uri);
 		} else if (resultCode == Crop.RESULT_ERROR) {
 			Toast.makeText(this, Crop.getError(result).getMessage(),
 					Toast.LENGTH_SHORT).show();
@@ -232,6 +248,7 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 	}
 
 	private void setProfileImage(Uri uri) {
+		icon.setImageURI(uri);
 		profileImageTask.getProfileToken(uri.getPath(),
 				new AsyncCallBacks.TwoTwo<Integer, String, Integer, String>() {
 
@@ -411,7 +428,7 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 		}
 		
 		private void updatePassword(String oldPassword, String newPassword){
-			myInfoTask.updateNickName(oldPassword, newPassword,
+			myInfoTask.updatePassword(oldPassword, newPassword,
 					new AsyncCallBacks.OneOne<Response, String>() {
 
 				@Override
@@ -425,7 +442,76 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 					Utils.showToast(MyInfoActivity.this, "change fail");
 				}
 			});
-}
+		}
+	}
+	
+	
+	
+	private void showBoundAccountDialog() {
+		boundDialog = new BoundAccountDialog(MyInfoActivity.this,
+				R.style.new_setting_dialog);
+		boundDialog.show();
+	}
+	
+	public class BoundAccountDialog extends Dialog {
+		
+		private EditText etBoundPassword, etBoundAccount;
+		private RelativeLayout submit;
+		
+		public BoundAccountDialog(Context context, int theme) {
+			super(context, theme);
+		}
+
+		@Override
+		protected void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.dialog_bound_account);
+			
+			
+			etBoundAccount = (EditText)findViewById(R.id.et_bound_account);
+			etBoundPassword = (EditText)findViewById(R.id.et_bound_password);
+			submit = (RelativeLayout)findViewById(R.id.rl_submit_password);
+			submit.setOnClickListener(new View.OnClickListener() { 
+	            public void onClick(View v) { 
+	            	
+	            	String boundAccount = etBoundAccount.getText().toString();
+	            	String boundPassword = etBoundPassword.getText().toString();
+	            	if(paramCheck(boundAccount,boundPassword))
+	            		boundAccount(boundAccount, boundPassword);
+	            } 
+	        }); 
+		}
+		
+		private boolean paramCheck(String boundAccount, String boundPassword) {
+			if (TextUtils.isEmpty(boundAccount)) {
+				Utils.showToast(MyInfoActivity.this, "boundAccount empty");
+				return false;
+			} else if (TextUtils.isEmpty(boundPassword)) {
+					Utils.showToast(MyInfoActivity.this, "boundPassword empty");
+					return false;
+			} else if (!StringUtil.isEmail(boundAccount)) {
+				Utils.showToast(MyInfoActivity.this, "please set right email");
+				return false;
+			}
+			return true;
+		}
+		
+		private void boundAccount(String boundAccount, String boundPassword){
+			myInfoTask.bindAccount(boundAccount, boundPassword,"",
+					new AsyncCallBacks.OneOne<Response, String>() {
+
+				@Override
+				public void onSuccess(Response state) {
+					Utils.showToast(MyInfoActivity.this, "change success");
+					passwordDialog.dismiss();
+				}
+
+				@Override
+				public void onError(String msg) {
+					Utils.showToast(MyInfoActivity.this, "change fail");
+				}
+			});
+		}
 	}
 
 }

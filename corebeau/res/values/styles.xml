@@ -128,7 +128,7 @@
     
     <style name="MyPageTheme" parent="TransparentTheme"></style>
     
-    <style name="TransparentTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <style name="TransparentTheme" parent="@style/Theme.Sherlock.Light.DarkActionBar">
      <!--    <item name="homeAsUpIndicator">@drawable/abc_ic_ab_back_holo_dark</item> -->
      <item name="windowActionBar">false</item>
         <item name="android:actionBarStyle">@style/ActionBarStyle.Transparent</item>
@@ -138,7 +138,7 @@
         <item name="windowActionBarOverlay">true</item>
     </style>
 
-    <style name="ActionBarStyle.Transparent" parent="@style/Widget.AppCompat.ActionBar">
+    <style name="ActionBarStyle.Transparent" parent="@style/Widget.Sherlock.ActionBar">
         <item name="android:background">@null</item>
         <item name="android:displayOptions">homeAsUp|showHome|showTitle</item>
         <item name="displayOptions">homeAsUp|showHome|showTitle</item>
@@ -146,13 +146,13 @@
         <item name="titleTextStyle">@style/ActionBarStyle.Transparent.TitleTextStyle</item>
     </style>
 
-    <style name="ActionBarStyle.Transparent.TitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+    <style name="ActionBarStyle.Transparent.TitleTextStyle" parent="@style/TextAppearance.Sherlock.Widget.ActionBar.Title">
         <item name="android:textColor">@android:color/white</item>
     </style>
 
     
     
-     <style name="OtherUserTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+     <style name="OtherUserTheme" parent="@style/Theme.Sherlock.Light.DarkActionBar">
      <!--    <item name="homeAsUpIndicator">@drawable/abc_ic_ab_back_holo_dark</item> -->
      <item name="windowActionBar">false</item>
         <item name="android:actionBarStyle">@style/ActionBarStyle.Transparent</item>

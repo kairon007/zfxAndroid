@@ -16,7 +16,7 @@
 
     <uses-sdk
         android:minSdkVersion="11"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="22" />
 
     <application
         android:name="com.zifei.corebeau.common.CorebeauApp"

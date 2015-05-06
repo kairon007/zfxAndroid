@@ -3,8 +3,7 @@ package com.zifei.corebeau.user.ui;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,7 +20,6 @@ import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
-import com.zifei.corebeau.common.ui.widget.NavigationBar;
 import com.zifei.corebeau.post.ui.PostDetailActivity;
 import com.zifei.corebeau.user.bean.OtherUserInfo;
 import com.zifei.corebeau.user.task.OtherUserTask;
@@ -32,7 +30,7 @@ import com.zifei.corebeau.utils.Utils;
 /**
  * Created by im14s_000 on 2015/3/28.
  */
-public class OtherUserActivity extends ActionBarActivity implements OnUserDetailStartClickListener{
+public class OtherUserActivity extends FragmentActivity implements OnUserDetailStartClickListener{
 
 	private ListView postList;
 	private CircularImageView circularImageView;
@@ -52,7 +50,7 @@ public class OtherUserActivity extends ActionBarActivity implements OnUserDetail
         setContentView(R.layout.activity_another_user);
         Intent intent = getIntent();
         userId = intent.getStringExtra("userId");
-        getSupportActionBar().setTitle("nickname..");
+        getActionBar().setTitle("nickname..");
         initLoader();
 		init();
 		

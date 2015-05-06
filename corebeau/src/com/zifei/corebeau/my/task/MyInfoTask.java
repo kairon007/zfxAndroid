@@ -20,7 +20,7 @@ public class MyInfoTask {
 		userInfoService = new UserInfoService(context);
 	}
 
-	public void updateUserInfo(UserInfo userInfo,
+	public void updateUserInfo(final UserInfo userInfo,
 			final AsyncCallBacks.OneOne<Response, String> callback) {
 
 		Map<String, Object> params = Utils.buildMap("userInfo", userInfo);
@@ -36,6 +36,8 @@ public class MyInfoTask {
 						if (status == Response.SUCCESS) {
 							callback.onSuccess(response);
 							// save userInfo on db
+							userInfoService.updateCurentUserInfo(userInfo);
+							callback.onSuccess(response);
 						} else {
 							callback.onError(msg);
 						}
@@ -48,12 +50,10 @@ public class MyInfoTask {
 				});
 	}
 
-	public void updateNickName(final String oldPassword, final String newPassword,
-			final AsyncCallBacks.OneOne<Response, String> callback) {
-
-		Map<String, Object> params = Utils.buildMap("oldPassword", oldPassword,"newPassword",newPassword);
-
-		NetworkExecutor.post(UrlConstants.UPDATE_NICKNAME, params,
+	public void bindAccount(final String account, String password, String verifyCode, final AsyncCallBacks.OneOne<Response, String> callback){
+		
+		Map<String, Object> params = Utils.buildMap("account", account, "password", password, "verifyCode", verifyCode);
+		NetworkExecutor.post(UrlConstants.BOUND_ACCOUNT, params,
 				Response.class, new NetworkExecutor.CallBack<Response>() {
 					@Override
 					public void onSuccess(Response response) {
@@ -62,9 +62,36 @@ public class MyInfoTask {
 						String msg = response.getMsg();
 
 						if (status == Response.SUCCESS) {
-							UserInfo userInfo = new UserInfo();
-							userInfo.setNickName(newPassword);
+							callback.onSuccess(response);
+							// save userInfo on db
+							UserInfo userInfo = userInfoService.getCurentUserInfo();
+							userInfo.setAccount(account);
 							userInfoService.updateCurentUserInfo(userInfo);
+							callback.onSuccess(response);
+						} else {
+							callback.onError(msg);
+						}
+					}
+
+					@Override
+					public void onError(Integer status, String msg) {
+						callback.onError(msg);
+					}
+				});
+	}
+	
+	public void updatePassword(String oldPassword, String newPassword, final AsyncCallBacks.OneOne<Response, String> callback){
+		
+		Map<String, Object> params = Utils.buildMap("oldPassword", oldPassword, "newPassword", newPassword);
+		NetworkExecutor.post(UrlConstants.BOUND_ACCOUNT, params,
+				Response.class, new NetworkExecutor.CallBack<Response>() {
+					@Override
+					public void onSuccess(Response response) {
+
+						int status = response.getStatusCode();
+						String msg = response.getMsg();
+
+						if (status == Response.SUCCESS) {
 							callback.onSuccess(response);
 						} else {
 							callback.onError(msg);

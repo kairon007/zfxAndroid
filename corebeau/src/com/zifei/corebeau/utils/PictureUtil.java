@@ -1,5 +1,6 @@
 package com.zifei.corebeau.utils;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -50,26 +51,12 @@ public class PictureUtil {
 	public static int calculateInSampleSize(BitmapFactory.Options options,
 			int reqWidth, int reqHeight) {
 		// Raw height and width of image
-		final int height = options.outHeight;
-		final int width = options.outWidth;
-		int inSampleSize = 1;
-
-		if (height > reqHeight || width > reqWidth) {
-
-			// Calculate ratios of height and width to requested height and
-			// width
-			final int heightRatio = Math.round((float) height
-					/ (float) reqHeight);
-			final int widthRatio = Math.round((float) width / (float) reqWidth);
-
-			// Choose the smallest ratio as inSampleSize value, this will
-			// guarantee
-			// a final image with both dimensions larger than or equal to the
-			// requested height and width.
-			inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+		int scale = 1;
+		while (options.outWidth / scale >= reqWidth
+				|| options.outHeight / scale >= reqHeight) {
+			scale *= 2;
 		}
-
-		return inSampleSize;
+		return scale;//TODO
 	}
 
 	/**
@@ -84,7 +71,8 @@ public class PictureUtil {
 		BitmapFactory.decodeFile(filePath, options);
 
 		// Calculate inSampleSize
-		options.inSampleSize = calculateInSampleSize(options, 480, 800);
+		
+		options.inSampleSize = calculateInSampleSize(options, 800, 960);
 
 		// Decode bitmap with inSampleSize set
 		options.inJustDecodeBounds = false;
@@ -161,8 +149,19 @@ public class PictureUtil {
 
 		FileOutputStream out = new FileOutputStream(outputFile);
 
-		bm.compress(Bitmap.CompressFormat.PNG, q, out);
+		
+//		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//		bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+//		int options = 100;
+//		while (baos.toByteArray().length / 1024 > CommonConfig.UPLOAD_IMAGE_QUALITY) { // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
+//			baos.reset();// 重置baos即清空baos
+//			bm.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
+//			options -= 10;// 每次都减少10
+//		}
+//		ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
+//		Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
 
+		bm.compress(Bitmap.CompressFormat.JPEG, 100, out);//TODO
 		return outputFile;
 	}
 

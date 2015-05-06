@@ -32,7 +32,7 @@ public class MyItemFragment extends ScrollTabHolderFragment implements OnMyDetai
 	private int mPosition;
 	private MyTask myTask;
 	private MyItemListAdapter myPostAdapter;
-	private final int REQ_CODE_MY_DETAIL = 900002;
+	private final int REQ_CODE_MY_DETAIL = 111;
 	
 	public static Fragment newInstance(int position) {
 		MyItemFragment fragment = new MyItemFragment();
