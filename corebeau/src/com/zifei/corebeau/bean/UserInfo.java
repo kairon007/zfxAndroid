@@ -1,55 +1,145 @@
 package com.zifei.corebeau.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by im14s_000 on 2015/3/23.
  */
-public class UserInfo {
-	
-	public static final short GENDER_MALE = 1;
-	public static final short GENDER_FEMALE = 2;
+public class UserInfo implements Serializable {
+
+	public static final boolean GENDER_MALE = true;
+	public static final boolean GENDER_FEMALE = false;
+
+	private static final long serialVersionUID = 6720546254540185313L;
+
+	private String userId;
 	
 	private String loginId;
 
-    private String userId;
+	private String nickName;
 
-    private String account;
+	private Short appVersion;
 
-    private String nickName;
+	private Short state;
 
-    private String picUrl;
+	private String userEmail;
 
-    private String picThumbUrl;
-    
-    private String userPhone;
+	private Short userAge;
 
-    private short gender;
+	private Integer userBirthday;
 
-    private boolean isMailReceive;
+	private String userCity;
 
-    private String location;
+	private Boolean userGender;
 
-    private short payLvl;
+	private String userPassword;
 
-    private boolean emailVerfied;
-    
-    private Long userRegtime;
-    
-    private short state;
-    
-	public short getState() {
+	private String userPhone;
+
+	private String userProvince;
+
+	private Long userRegtime;
+
+	private String userZone;
+
+	private String userManufacturer;
+
+	private String userImei;
+
+	private String userImageUrl;
+
+	private String androidId;
+
+	private String macAddress;
+
+	public UserInfo() {
+
+	}
+
+	public UserInfo(String userId, String nickName, Short userAge) {
+		this.userId = userId;
+		this.nickName = nickName;
+		this.userAge = userAge;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public Short getUserAge() {
+		return userAge;
+	}
+
+	public void setUserAge(Short userAge) {
+		this.userAge = userAge;
+	}
+
+	public Short getAppVersion() {
+		return appVersion;
+	}
+
+	public void setAppVersion(Short appVersion) {
+		this.appVersion = appVersion;
+	}
+
+	public Short getState() {
 		return state;
 	}
 
-	public void setState(short state) {
+	public void setState(Short state) {
 		this.state = state;
 	}
 
-	public Long getUserRegtime() {
-		return userRegtime;
+	public String getUserEmail() {
+		return userEmail;
 	}
 
-	public void setUserRegtime(Long userRegtime) {
-		this.userRegtime = userRegtime;
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+
+	public Integer getUserBirthday() {
+		return userBirthday;
+	}
+
+	public void setUserBirthday(Integer userBirthday) {
+		this.userBirthday = userBirthday;
+	}
+
+	public String getUserCity() {
+		return userCity;
+	}
+
+	public void setUserCity(String userCity) {
+		this.userCity = userCity;
+	}
+
+	public Boolean getUserGender() {
+		return userGender;
+	}
+
+	public void setUserGender(Boolean userGender) {
+		this.userGender = userGender;
+	}
+
+	public String getUserPassword() {
+		return userPassword;
+	}
+
+	public void setUserPassword(String userPassword) {
+		this.userPassword = userPassword;
 	}
 
 	public String getUserPhone() {
@@ -60,12 +150,68 @@ public class UserInfo {
 		this.userPhone = userPhone;
 	}
 
-	public String getAccount() {
-		return account;
+	public String getUserProvince() {
+		return userProvince;
 	}
 
-	public void setAccount(String account) {
-		this.account = account;
+	public void setUserProvince(String userProvince) {
+		this.userProvince = userProvince;
+	}
+
+	public Long getUserRegtime() {
+		return userRegtime;
+	}
+
+	public void setUserRegtime(Long userRegtime) {
+		this.userRegtime = userRegtime;
+	}
+
+	public String getUserZone() {
+		return userZone;
+	}
+
+	public void setUserZone(String userZone) {
+		this.userZone = userZone;
+	}
+
+	public String getUserManufacturer() {
+		return userManufacturer;
+	}
+
+	public void setUserManufacturer(String userManufacturer) {
+		this.userManufacturer = userManufacturer;
+	}
+
+	public String getUserImei() {
+		return userImei;
+	}
+
+	public void setUserImei(String userImei) {
+		this.userImei = userImei;
+	}
+
+	public String getUserImageUrl() {
+		return userImageUrl;
+	}
+
+	public void setUserImageUrl(String userImageUrl) {
+		this.userImageUrl = userImageUrl;
+	}
+
+	public String getAndroidId() {
+		return androidId;
+	}
+
+	public void setAndroidId(String androidId) {
+		this.androidId = androidId;
+	}
+
+	public String getMacAddress() {
+		return macAddress;
+	}
+
+	public void setMacAddress(String macAddress) {
+		this.macAddress = macAddress;
 	}
 
 	public String getLoginId() {
@@ -75,77 +221,5 @@ public class UserInfo {
 	public void setLoginId(String loginId) {
 		this.loginId = loginId;
 	}
-
-	public boolean isEmailVerfied() {
-        return emailVerfied;
-    }
-
-    public void setEmailVerfied(boolean emailVerfied) {
-        this.emailVerfied = emailVerfied;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
-    public String getPicUrl() {
-        return picUrl;
-    }
-
-    public void setPicUrl(String picUrl) {
-        this.picUrl = picUrl;
-    }
-
-    public String getPicThumbUrl() {
-        return picThumbUrl;
-    }
-
-    public void setPicThumbUrl(String picThumbUrl) {
-        this.picThumbUrl = picThumbUrl;
-    }
-
-    public short getGender() {
-        return gender;
-    }
-
-    public void setGender(short gender) {
-        this.gender = gender;
-    }
-
-    public boolean isMailReceive() {
-        return isMailReceive;
-    }
-
-    public void setMailReceive(boolean isMailReceive) {
-        this.isMailReceive = isMailReceive;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public short getPayLvl() {
-        return payLvl;
-    }
-
-    public void setPayLvl(short payLvl) {
-        this.payLvl = payLvl;
-    }
-
+	
 }

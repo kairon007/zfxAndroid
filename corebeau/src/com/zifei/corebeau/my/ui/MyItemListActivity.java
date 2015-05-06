@@ -131,7 +131,7 @@ public class MyItemListActivity extends FragmentActivity implements
 			nickName.setText("guest" + userInfo.getUserId());
 		}
 
-		String iconUrl = userInfo.getPicThumbUrl();
+		String iconUrl = userInfo.getUserImageUrl();
 		if (iconUrl == null || StringUtil.isEmpty(iconUrl)) {
 			imageLoader.displayImage("drawable://" + R.drawable.my_default,
 					circularImageView, imageOptions);

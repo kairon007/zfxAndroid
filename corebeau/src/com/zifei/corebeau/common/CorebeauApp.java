@@ -61,6 +61,10 @@ public class CorebeauApp extends Application {
 	public void setConfigData(Map<String, String> cfg){
 		config = cfg;
 	}
+	
+	public static String getImageBaseUrl() {
+		return config!=null ? config.get(ConfigInfo.IMAGE_BASE_URL) : "";
+	}
 
 	public static String getBigImageConfig() {
 		return config!=null ? config.get(ConfigInfo.BIG_PIC_STYLE_URL) : "";

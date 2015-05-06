@@ -29,6 +29,7 @@ import com.zifei.corebeau.R;
 import com.zifei.corebeau.account.task.UserInfoService;
 import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
+import com.zifei.corebeau.common.CorebeauApp;
 import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.common.ui.BarActivity;
 import com.zifei.corebeau.common.ui.SplashActivity;
@@ -47,7 +48,7 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 	
 	private MyInfoTask myInfoTask;
 	private UserInfoService userInfoService;
-	private UserInfo userInfo;
+	
 	private EditText nickname;
 	private RelativeLayout rlChangePassword;
 	private RelativeLayout rlBoundAccount;
@@ -59,22 +60,24 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 	private DisplayImageOptions imageOptions;
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
+	private UserInfo userInfo;
 	private UserInfo tmpUserInfo;
 	private TextView tvUserIcon, tvGender;
 	private GenderSettingDialog genderDialog;
 	private CitySettingDialog cityDialog;
 	private PassWordSettingDialog passwordDialog;
 	private BoundAccountDialog boundDialog;
-	private short genderShort;
+	private Boolean genderShort;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_info);
-		initLoader();
-		init();
 		myInfoTask = new MyInfoTask(this);
 		profileImageTask = new ProfileImageTask(this);
+		initLoader();
+		init();
+	
 	}
 
 	private void init() {
@@ -98,6 +101,7 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 		rlChangePassword.setOnClickListener(this);
 		rlCity.setOnClickListener(this);
 		nickname.setOnFocusChangeListener(this);
+		profileImageTask.setOnProfileImgStatusListener(this);
 		getUserInfo();
 	}
 
@@ -145,13 +149,17 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 		// from db
 		userInfoService = new UserInfoService(this);
 		this.userInfo = userInfoService.getCurentUserInfo();
-		this.tmpUserInfo = userInfo;
 		if (userInfo == null) {
 			return;
 		}
 		
-		short tmpGender = userInfo.getGender();
-		tvGender.setText(tmpGender == UserInfo.GENDER_MALE ? "male" : "femal");
+		Boolean tmpGender = userInfo.getUserGender();
+		if(tmpGender==null){
+			tvGender.setText("plz set gender");
+		}else{
+			tvGender.setText(tmpGender == UserInfo.GENDER_MALE ? "male" : "femal");
+		}
+		
 
 		String tmpNick = userInfo.getNickName();
 		if (tmpNick != null) {
@@ -161,7 +169,7 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 		}
 
 		tvUserIcon.setText("plz update my icon image");
-		 String iconUrl = userInfo.getPicThumbUrl();
+		 String iconUrl = userInfo.getUserImageUrl();
 		 if (iconUrl == null || StringUtil.isEmpty(iconUrl)) {
 		 imageLoader.displayImage("drawable://" + R.drawable.my_default,
 				 icon, imageOptions);
@@ -175,21 +183,18 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 	private void updateUserInfo(final UserInfo userInfo) {
 		// progressBar.setVisibility(View.VISIBLE); // 셀렉션 부분에다가 조그만하게 프로그레스바
 		// 돌리기
+		if(tmpUserInfo==null){
+			tmpUserInfo = new UserInfo();
+		}
 		String tmpNick = nickname.getText().toString();
-		if(this.userInfo.getNickName()!=null){
-			if (!this.userInfo.getNickName().equals(tmpNick)) {
-				tmpUserInfo.setNickName(tmpNick);
-			}
-		}else{
-			if (tmpNick.length()<5 || tmpNick.length()>10) {
+		if(!StringUtil.isEmpty(tmpNick)){
+			if (tmpNick.length()<3 || tmpNick.length()>8) {
 				Utils.showToast(this, "nickname 5~10 word");
 				return;
 			}else{
 				tmpUserInfo.setNickName(tmpNick);
 			}
 		}
-		
-		
 		myInfoTask.updateUserInfo(userInfo,
 				new AsyncCallBacks.OneOne<Response, String>() {
 
@@ -267,7 +272,10 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 
 	@Override
 	public void uploadFinish(String url) {
-		tmpUserInfo.setPicUrl(url);
+		if(tmpUserInfo==null){
+			tmpUserInfo = new UserInfo();
+		}
+		tmpUserInfo.setUserImageUrl(CorebeauApp.getImageBaseUrl()+url);
 	}
 	
 	private void showChangeGenderDialog() {
@@ -279,9 +287,9 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 	public class GenderSettingDialog extends Dialog {
 		private ImageView maleRadio;
 		private ImageView femaleRadio;
-		private short sexShort;
+		private Boolean sexShort;
 
-		public GenderSettingDialog(Context context, int theme, short sex_status) {
+		public GenderSettingDialog(Context context, int theme, Boolean sex_status) {
 			super(context, theme);
 			sexShort = sex_status;
 		}
@@ -296,7 +304,9 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 
 			RelativeLayout M = (RelativeLayout) findViewById(R.id.gender_setting_rl_male_m);
 			RelativeLayout F = (RelativeLayout) findViewById(R.id.gender_setting_rl_female_f);
-
+			if(tmpUserInfo==null){
+				tmpUserInfo = new UserInfo();
+			}
 			// 判断初始的性别
 			if (sexShort == UserInfo.GENDER_FEMALE) {
 				femaleRadio.setVisibility(View.VISIBLE);
@@ -312,7 +322,7 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 				public void onClick(View v) {
 					maleRadio.setVisibility(View.VISIBLE);
 					femaleRadio.setVisibility(View.GONE);
-					tmpUserInfo.setGender(sexShort);
+					tmpUserInfo.setUserGender(sexShort);
 					tvGender.setText("male");
 					genderDialog.dismiss();
 
@@ -325,7 +335,7 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 				public void onClick(View v) {
 					femaleRadio.setVisibility(View.VISIBLE);
 					maleRadio.setVisibility(View.GONE);
-					tmpUserInfo.setGender(sexShort);
+					tmpUserInfo.setUserGender(sexShort);
 					tvGender.setText("female");
 					genderDialog.dismiss();
 				}
@@ -362,7 +372,10 @@ public class MyInfoActivity extends BarActivity implements OnClickListener,
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 					String region = regionAdapter.getData().get(position);
-					tmpUserInfo.setLocation(region);
+					if(tmpUserInfo==null){
+						tmpUserInfo = new UserInfo();
+					}
+//					tmpUserInfo.setUserLocation(region);  ....
 					cityDialog.dismiss();
 				}
 			});

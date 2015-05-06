@@ -85,7 +85,7 @@ public class PostTask {
 		
         Map<String, Object> params = Utils.buildMap("itemId",itemId,"content",content,
         		"userNickName",userInfo.getNickName() !=null ? userInfo.getNickName() : "",
-        		"userImageUrl",userInfo.getPicThumbUrl() !=null ? userInfo.getPicThumbUrl() : "",
+        		"userImageUrl",userInfo.getUserImageUrl() !=null ? userInfo.getUserImageUrl() : "",
         		"replyUserId",replyUserId !=null ? replyUserId : "",
         		"replyUserNickName",replyUserNickName !=null ? replyUserNickName : "");
 

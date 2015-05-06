@@ -65,7 +65,7 @@ public class MyInfoTask {
 							callback.onSuccess(response);
 							// save userInfo on db
 							UserInfo userInfo = userInfoService.getCurentUserInfo();
-							userInfo.setAccount(account);
+							userInfo.setUserEmail(account);
 							userInfoService.updateCurentUserInfo(userInfo);
 							callback.onSuccess(response);
 						} else {
