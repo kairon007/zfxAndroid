@@ -3,16 +3,17 @@ package com.zifei.corebeau.user.ui;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -30,7 +31,7 @@ import com.zifei.corebeau.utils.Utils;
 /**
  * Created by im14s_000 on 2015/3/28.
  */
-public class OtherUserActivity extends FragmentActivity implements OnUserDetailStartClickListener{
+public class OtherUserActivity extends SherlockActivity implements OnUserDetailStartClickListener{
 
 	private ListView postList;
 	private CircularImageView circularImageView;
@@ -40,21 +41,51 @@ public class OtherUserActivity extends FragmentActivity implements OnUserDetailS
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
 	private ImageView backgroundImageView;
+	private TextView nicknameTextView;
 	private ProgressBar progressBar;
 	private String userId;
-	private MenuItem menuItem;
+	private String nickName;
+	private String userImageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_another_user);
         Intent intent = getIntent();
-        userId = intent.getStringExtra("userId");
-        getActionBar().setTitle("nickname..");
+        ItemInfo itemInfo = (ItemInfo) intent.getSerializableExtra("itemInfo");
+        userId = itemInfo.getUserId();
+        nickName = itemInfo.getNickName();
+        userImageUrl = itemInfo.getUserImageUrl();
+        initActionBar();
         initLoader();
 		init();
 		
     }
+    
+	private void initActionBar(){
+		getSupportActionBar().setTitle("other user");
+		getSupportActionBar().setSubtitle(" "+nickName);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//		getSupportActionBar().setDisplayShowTitleEnabled(false);
+		 getSupportActionBar().setDisplayShowHomeEnabled(false);
+	}
+	
+	 @Override
+	    public boolean onCreateOptionsMenu(Menu menu) {
+	      menu.add("follow")
+       .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+	        return true;
+	    }
+
+	    @Override
+	    public boolean onOptionsItemSelected(MenuItem item) {
+	    	if(item.getTitle().equals("other user")){
+	    		finish();
+	    	}else if(item.getTitle().equals("follow")){
+	    		follow();
+	    	}
+	        return true;
+	    }
     
     private void initLoader() {
 		imageLoader = ImageLoader.getInstance();
@@ -66,29 +97,6 @@ public class OtherUserActivity extends FragmentActivity implements OnUserDetailS
 				.cacheInMemory(false).cacheOnDisk(true).build();
 	}
     
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-      MenuInflater inflater = getMenuInflater();
-      inflater.inflate(R.menu.bar_other_user, menu);
-      return true;
-    } 
-    
-    @SuppressLint("NewApi")
-	@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-      switch (item.getItemId()) {
-      case R.id.other_user:
-    	  menuItem=item;
-    	  menuItem.expandActionView();
-        break;
-      default:
-        break;
-      }
-
-      return true;
-    } 
-
-
 
 	private void init() {
 		otherUserTask = new OtherUserTask(this);
@@ -103,20 +111,27 @@ public class OtherUserActivity extends FragmentActivity implements OnUserDetailS
 		postList.setAdapter(otherUserPostAdapter);
 		circularImageView = (CircularImageView) findViewById(R.id.civ_userpage_icon);
 		backgroundImageView = (ImageView) findViewById(R.id.iv_userpage_background);
-		
-		
-		
+		nicknameTextView = (TextView)findViewById(R.id.tv_userpage_nickname);
 
-		setDefault();
 		otherUserPostAdapter.setOnUserDetailStartClickListener(this);
-		
+		setUserBaseInfo();
 		getOtherUserInfo();
 		postListTask();
 	}
 
-	private void setDefault() {
-		imageLoader.displayImage("drawable://" + R.drawable.my_default,
-				circularImageView, imageOptions);
+	
+	private void setUserBaseInfo(){
+		if(userImageUrl==null){
+			imageLoader.displayImage("drawable://" + R.drawable.my_default,
+					circularImageView, imageOptions);
+		}else{
+			imageLoader.displayImage(userImageUrl,
+					circularImageView, imageOptions);
+		}
+		
+		if(nickName!=null){
+			nicknameTextView.setText(nickName);
+		}
 	}
 
 	private void getOtherUserInfo() {
@@ -171,5 +186,9 @@ public class OtherUserActivity extends FragmentActivity implements OnUserDetailS
 		Intent intent = new Intent(this, PostDetailActivity.class);
 		intent.putExtra("itemInfo", itemInfo);
 		startActivity(intent);
+	}
+	
+	private void follow(){
+		
 	}
 }

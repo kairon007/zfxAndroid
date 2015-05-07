@@ -101,7 +101,7 @@
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingRight">20dp</item>
- <!-- Offsets left drawable -->
+        <!-- Offsets left drawable -->
         <item name="android:drawablePadding">8dp</item>
         <item name="android:textColor">@color/crop__button_text</item>
         <item name="android:textStyle">bold</item>
@@ -125,12 +125,13 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@color/common_background_grey</item>
     </style>
-    
+
     <style name="MyPageTheme" parent="TransparentTheme"></style>
-    
+
     <style name="TransparentTheme" parent="@style/Theme.Sherlock.Light.DarkActionBar">
-     <!--    <item name="homeAsUpIndicator">@drawable/abc_ic_ab_back_holo_dark</item> -->
-     <item name="windowActionBar">false</item>
+
+        <!-- <item name="homeAsUpIndicator">@drawable/abc_ic_ab_back_holo_dark</item> -->
+        <item name="windowActionBar">false</item>
         <item name="android:actionBarStyle">@style/ActionBarStyle.Transparent</item>
         <item name="actionBarStyle">@style/ActionBarStyle.Transparent</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -150,16 +151,24 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    
-    
-     <style name="OtherUserTheme" parent="@style/Theme.Sherlock.Light.DarkActionBar">
-     <!--    <item name="homeAsUpIndicator">@drawable/abc_ic_ab_back_holo_dark</item> -->
-     <item name="windowActionBar">false</item>
+    <style name="OtherUserTheme" parent="@style/Theme.Sherlock.Light.DarkActionBar">
+
+        <!-- <item name="homeAsUpIndicator">@drawable/abc_ic_ab_back_holo_dark</item> -->
+        <item name="windowActionBar">false</item>
         <item name="android:actionBarStyle">@style/ActionBarStyle.Transparent</item>
         <item name="actionBarStyle">@style/ActionBarStyle.Transparent</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="windowActionBarOverlay">true</item>
     </style>
-  
+
+    <style name="Theme.common" parent="Theme.Sherlock">
+        <item name="android:actionBarStyle">@style/RedActionBar</item>
+        <item name="actionBarStyle">@style/RedActionBar</item>
+    </style>
+
+    <style name="RedActionBar" parent="Widget.Sherlock.ActionBar">
+        <item name="android:background">@color/common_bar_navy</item>
+    </style>
+
 </resources>

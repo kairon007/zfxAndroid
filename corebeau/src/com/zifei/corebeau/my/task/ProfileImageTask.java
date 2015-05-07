@@ -22,7 +22,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.zifei.corebeau.bean.UserInfo;
+import com.zifei.corebeau.bean.UserInfoDetail;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.common.net.UrlConstants;
@@ -36,6 +36,7 @@ import com.zifei.corebeau.my.qiniu.up.slice.Block;
 import com.zifei.corebeau.my.task.service.ProfileImageService;
 import com.zifei.corebeau.my.task.service.UploadService;
 import com.zifei.corebeau.utils.CommonConfig;
+import com.zifei.corebeau.utils.PictureUtil;
 import com.zifei.corebeau.utils.Utils;
 
 public class ProfileImageTask {
@@ -85,16 +86,17 @@ public class ProfileImageTask {
 
 						if (status == TokenResponse.SUCCESS) {
 							
-							ContentResolver cr = context.getContentResolver();
-							Bitmap bitmap;
+							Uri uri = null;
+							File file = new File(stringPath);
 							try {
-								BitmapFactory.Options option = new BitmapFactory.Options();
-								option.inSampleSize = UploadTask.getImageScale(stringPath);
-								bitmap = BitmapFactory.decodeStream(
-										cr.openInputStream(Uri.fromFile(new File(stringPath))),
-										null, option);
-								Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(cr,
-										compressImage(bitmap), null, null));
+								
+								if(file.length() / 1024 <=CommonConfig.UPLOAD_IMAGE_QUALITY * 1.5){
+									uri = Uri.fromFile(file);
+								} else {
+									
+									 uri = Uri.fromFile(PictureUtil.compressImage(context, stringPath, file.getName(), 90));
+								}
+								
 								qiniuTask.preUpload(uri, uploadHandler, response.getUploadToken());
 							} catch (FileNotFoundException e) {
 								e.printStackTrace();
@@ -192,7 +194,7 @@ public class ProfileImageTask {
 	}
 
 	
-	public void updateUserInfo(UserInfo userInfo,
+	public void updateUserInfo(UserInfoDetail userInfo,
 			final AsyncCallBacks.ZeroOne<String> callback) {
 		Map<String, Object> params = Utils.buildMap("userInfo", userInfo);
 

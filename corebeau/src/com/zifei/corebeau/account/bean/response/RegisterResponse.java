@@ -20,11 +20,11 @@ public class RegisterResponse extends Response{
         this.loginId = loginId;
     }
 
-    public UserInfo getUserInfo() {
+    public UserInfo getUserInfoSimple() {
         return userInfo;
     }
 
-    public void setUserInfo(UserInfo userInfo) {
+    public void setUserInfoSimple(UserInfo userInfo) {
         this.userInfo = userInfo;
     }
 

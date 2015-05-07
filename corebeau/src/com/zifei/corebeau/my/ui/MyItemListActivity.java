@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.util.SparseArrayCompat;
@@ -19,6 +18,8 @@ import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.nineoldandroids.view.ViewHelper;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -35,7 +36,7 @@ import com.zifei.corebeau.my.ui.parallaxheader.PagerSlidingTabStrip;
 import com.zifei.corebeau.my.ui.parallaxheader.ScrollTabHolder;
 import com.zifei.corebeau.utils.StringUtil;
 
-public class MyItemListActivity extends FragmentActivity implements
+public class MyItemListActivity extends SherlockFragmentActivity implements
 		OnClickListener, ScrollTabHolder, ViewPager.OnPageChangeListener {
 
 	private CircularImageView circularImageView;
@@ -84,9 +85,9 @@ public class MyItemListActivity extends FragmentActivity implements
 		mHeaderHeight = getResources().getDimensionPixelSize(
 				R.dimen.header_height);
 		mMinHeaderTranslation = -mMinHeaderHeight + getActionBarHeight();
-		
+
 		backgroundImageView = (ImageView) findViewById(R.id.header_picture);
-		
+
 		mHeader = findViewById(R.id.fl_my_header);
 		mPagerSlidingTabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
 		mViewPager = (ViewPager) findViewById(R.id.pager_mypage);
@@ -101,12 +102,11 @@ public class MyItemListActivity extends FragmentActivity implements
 		mPagerSlidingTabStrip.setOnPageChangeListener(this);
 		mSpannableString = new SpannableString("aa");
 		mAlphaForegroundColorSpan = new AlphaForegroundColorSpan(0xffffffff);
-		
+
 		ViewHelper.setAlpha(getActionBarIconView(), 0f);
-		
+
 		getActionBar().setBackgroundDrawable(null);
-		
-		
+
 		write = (ImageView) findViewById(R.id.iv_write);
 		write.setOnClickListener(this);
 		circularImageView = (CircularImageView) findViewById(R.id.civ_my_post_icon);
@@ -115,6 +115,14 @@ public class MyItemListActivity extends FragmentActivity implements
 		setUserInfo();
 		circularImageView.setOnClickListener(this);
 		nickName.setOnClickListener(this);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getTitle().equals("aa")) {
+			finish();
+		}
+		return true;
 	}
 
 	private void setUserInfo() {
@@ -131,14 +139,14 @@ public class MyItemListActivity extends FragmentActivity implements
 			nickName.setText("guest" + userInfo.getUserId());
 		}
 
-		String iconUrl = userInfo.getUserImageUrl();
+		String iconUrl = userInfo.getUrl();
 		if (iconUrl == null || StringUtil.isEmpty(iconUrl)) {
 			imageLoader.displayImage("drawable://" + R.drawable.my_default,
 					circularImageView, imageOptions);
 		} else {
 			imageLoader.displayImage(iconUrl, circularImageView, imageOptions);
 		}
-		
+
 	}
 
 	@Override
@@ -166,18 +174,23 @@ public class MyItemListActivity extends FragmentActivity implements
 
 	@Override
 	public void onPageSelected(int position) {
-		SparseArrayCompat<ScrollTabHolder> scrollTabHolders = mPagerAdapter.getScrollTabHolders();
+		SparseArrayCompat<ScrollTabHolder> scrollTabHolders = mPagerAdapter
+				.getScrollTabHolders();
 		ScrollTabHolder currentHolder = scrollTabHolders.valueAt(position);
 
-		currentHolder.adjustScroll((int) (mHeader.getHeight() + ViewHelper.getTranslationY(mHeader)));
+		currentHolder.adjustScroll((int) (mHeader.getHeight() + ViewHelper
+				.getTranslationY(mHeader)));
 	}
 
 	@Override
-	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount, int pagePosition) {
 		if (mViewPager.getCurrentItem() == pagePosition) {
 			int scrollY = getScrollY(view);
-			ViewHelper.setTranslationY(mHeader, Math.max(-scrollY, mMinHeaderTranslation));
-			float ratio = clamp(ViewHelper.getTranslationY(mHeader) / mMinHeaderTranslation, 0.0f, 1.0f);
+			ViewHelper.setTranslationY(mHeader,
+					Math.max(-scrollY, mMinHeaderTranslation));
+			float ratio = clamp(ViewHelper.getTranslationY(mHeader)
+					/ mMinHeaderTranslation, 0.0f, 1.0f);
 			setTitleAlpha(clamp(5.0F * ratio - 4.0F, 0.0F, 1.0F));
 		}
 	}
@@ -208,46 +221,48 @@ public class MyItemListActivity extends FragmentActivity implements
 		return Math.max(Math.min(value, min), max);
 	}
 
-
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public int getActionBarHeight() {
+	public int getActionBarHeight() {
 		if (mActionBarHeight != 0) {
 			return mActionBarHeight;
 		}
-		
-		if(Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB){
-			getTheme().resolveAttribute(android.R.attr.actionBarSize, mTypedValue, true);
+
+		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
+			getTheme().resolveAttribute(android.R.attr.actionBarSize,
+					mTypedValue, true);
 		}
-		
-//		else{
-//			getTheme().resolveAttribute(R.attr.actionBarSize, mTypedValue, true);
-//		}
-		
-		mActionBarHeight = TypedValue.complexToDimensionPixelSize(mTypedValue.data, getResources().getDisplayMetrics());
-		
+
+		// else{
+		// getTheme().resolveAttribute(R.attr.actionBarSize, mTypedValue, true);
+		// }
+
+		mActionBarHeight = TypedValue.complexToDimensionPixelSize(
+				mTypedValue.data, getResources().getDisplayMetrics());
+
 		return mActionBarHeight;
 	}
 
 	private void setTitleAlpha(float alpha) {
 		mAlphaForegroundColorSpan.setAlpha(alpha);
-		mSpannableString.setSpan(mAlphaForegroundColorSpan, 0, mSpannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		mSpannableString.setSpan(mAlphaForegroundColorSpan, 0,
+				mSpannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		getActionBar().setTitle(mSpannableString);
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private ImageView getActionBarIconView() {
-		
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
-			return (ImageView)findViewById(android.R.id.home);
+	private ImageView getActionBarIconView() {
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			return (ImageView) findViewById(android.R.id.home);
 		}
 
-		return (ImageView)findViewById(R.drawable.asv);
+		return (ImageView) findViewById(R.drawable.asv);
 	}
 
 	public class PagerAdapter extends FragmentPagerAdapter {
 
 		private SparseArrayCompat<ScrollTabHolder> mScrollTabHolders;
-		private final String[] TITLES = { "my post", "my scrap"};
+		private final String[] TITLES = { "my post", "my scrap" };
 		private ScrollTabHolder mListener;
 
 		public PagerAdapter(FragmentManager fm) {
@@ -264,37 +279,40 @@ public class MyItemListActivity extends FragmentActivity implements
 			return TITLES[position];
 		}
 
-		
 		@Override
 		public Fragment getItem(int position) {
 			ScrollTabHolderFragment f;
-			if(position == 0){
-				f = (ScrollTabHolderFragment) MyItemFragment.newInstance(position);
-			}else{
-				f = (ScrollTabHolderFragment) ScrapPostFragment.newInstance(position);
+			if (position == 0) {
+				f = (ScrollTabHolderFragment) MyItemFragment
+						.newInstance(position);
+			} else {
+				f = (ScrollTabHolderFragment) ScrapPostFragment
+						.newInstance(position);
 			}
-			
-			
+
 			switch (position) {
 			case 0:
-				f = (ScrollTabHolderFragment) Fragment.instantiate(MyItemListActivity.this,
+				f = (ScrollTabHolderFragment) Fragment.instantiate(
+						MyItemListActivity.this,
 						MyItemFragment.class.getName(), null);
 				break;
 			case 1:
-				f = (ScrollTabHolderFragment) Fragment.instantiate(MyItemListActivity.this,
+				f = (ScrollTabHolderFragment) Fragment.instantiate(
+						MyItemListActivity.this,
 						ScrapPostFragment.class.getName(), null);
 				break;
 			default:
-				f = (ScrollTabHolderFragment) Fragment.instantiate(MyItemListActivity.this,
+				f = (ScrollTabHolderFragment) Fragment.instantiate(
+						MyItemListActivity.this,
 						MyItemFragment.class.getName(), null);
 				break;
 			}
-			
+
 			mScrollTabHolders.put(position, f);
 			if (mListener != null) {
 				f.setScrollTabHolder(mListener);
 			}
-			
+
 			return f;
 		}
 

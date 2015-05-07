@@ -5,6 +5,7 @@ import java.util.Map;
 import android.content.Context;
 
 import com.zifei.corebeau.account.task.UserInfoService;
+import com.zifei.corebeau.bean.UserInfoDetail;
 import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.Response;
@@ -85,7 +86,7 @@ public class PostTask {
 		
         Map<String, Object> params = Utils.buildMap("itemId",itemId,"content",content,
         		"userNickName",userInfo.getNickName() !=null ? userInfo.getNickName() : "",
-        		"userImageUrl",userInfo.getUserImageUrl() !=null ? userInfo.getUserImageUrl() : "",
+        		"userImageUrl",userInfo.getUrl() !=null ? userInfo.getUrl() : "",
         		"replyUserId",replyUserId !=null ? replyUserId : "",
         		"replyUserNickName",replyUserNickName !=null ? replyUserNickName : "");
 

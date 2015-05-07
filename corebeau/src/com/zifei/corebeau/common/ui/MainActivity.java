@@ -11,12 +11,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.my.ui.fragment.MyFragment;
 import com.zifei.corebeau.search.ui.fragment.SearchFragment;
 import com.zifei.corebeau.spot.ui.fragment.SpotFragment;
 
-public class MainActivity extends CommonFragmentActvity implements
+public class MainActivity extends SherlockFragmentActivity implements
 		OnFragmentInteractionListener {
 
 	private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -30,13 +31,15 @@ public class MainActivity extends CommonFragmentActvity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		initActionBar();
 		initView();
 		initTabListener();
 	}
 
-	private void init() {
-
+	
+	private void initActionBar() {
+		getSupportActionBar().setDisplayShowTitleEnabled(true);
+		getSupportActionBar().setDisplayShowHomeEnabled(false);
 	}
 
 	private void initView() {

@@ -5,11 +5,13 @@ import java.util.Map;
 import android.content.Context;
 
 import com.zifei.corebeau.account.task.UserInfoService;
+import com.zifei.corebeau.bean.UserInfoDetail;
 import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.common.net.UrlConstants;
 import com.zifei.corebeau.common.task.NetworkExecutor;
+import com.zifei.corebeau.my.bean.response.UpdateUserInfoResponse;
 import com.zifei.corebeau.utils.Utils;
 
 public class MyInfoTask {
@@ -20,23 +22,24 @@ public class MyInfoTask {
 		userInfoService = new UserInfoService(context);
 	}
 
-	public void updateUserInfo(final UserInfo userInfo,
-			final AsyncCallBacks.OneOne<Response, String> callback) {
+	public void updateUserInfo(UserInfoDetail userInfo,
+			final AsyncCallBacks.OneOne<UpdateUserInfoResponse, String> callback) {
 
 		Map<String, Object> params = Utils.buildMap("userInfo", userInfo);
 
 		NetworkExecutor.post(UrlConstants.UPDATE_USERINFO, params,
-				Response.class, new NetworkExecutor.CallBack<Response>() {
+				UpdateUserInfoResponse.class, new NetworkExecutor.CallBack<UpdateUserInfoResponse>() {
 					@Override
-					public void onSuccess(Response response) {
+					public void onSuccess(UpdateUserInfoResponse response) {
 
 						int status = response.getStatusCode();
 						String msg = response.getMsg();
 
 						if (status == Response.SUCCESS) {
 							callback.onSuccess(response);
-							// save userInfo on db
-							userInfoService.updateCurentUserInfo(userInfo);
+							
+							userInfoService.updateCurentUserInfo(response.getUserInfoSimple());
+							
 							callback.onSuccess(response);
 						} else {
 							callback.onError(msg);

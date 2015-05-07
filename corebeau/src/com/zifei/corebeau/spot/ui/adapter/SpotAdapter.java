@@ -185,7 +185,7 @@ public class SpotAdapter extends BaseAdapter {
 		holder.usericon.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				goUserPage(p.getUserId());
+				goUserPage(p);
 			}
 		});
 
@@ -205,9 +205,9 @@ public class SpotAdapter extends BaseAdapter {
 				.putExtra("itemInfo", itemInfo));
 	}
 
-	private void goUserPage(String userId) {
+	private void goUserPage(ItemInfo itemInfo) {
 		context.startActivity(new Intent(context, OtherUserActivity.class)
-				.putExtra("userId", userId));
+				.putExtra("itemInfo", itemInfo));
 	}
 
 	private class ViewHolder {

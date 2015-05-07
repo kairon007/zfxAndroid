@@ -15,8 +15,7 @@
         android:id="@+id/tv_userpage_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:text="aaaaaa" />
+        android:layout_gravity="center_horizontal|center_vertical" />
 
     <com.zifei.corebeau.common.ui.view.CircularImageView
         android:id="@+id/civ_userpage_icon"

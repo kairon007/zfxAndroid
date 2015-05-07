@@ -36,7 +36,7 @@
         <activity
             android:name=".common.ui.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@style/Theme.common" >
         </activity>
         <activity
             android:name=".post.ui.PostDetailActivity"
@@ -77,7 +77,7 @@
         <activity
             android:name="com.zifei.corebeau.my.ui.MyInfoActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@style/Theme.common" >
         </activity>
         <activity
             android:name="com.zifei.corebeau.my.ui.OptionActivity"

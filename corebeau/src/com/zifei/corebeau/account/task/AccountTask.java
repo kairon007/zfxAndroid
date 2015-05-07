@@ -213,7 +213,7 @@ public class AccountTask {
 						if (status == RegisterResponse.SUCCESS) {
 
 							UserInfo userInfo = new UserInfo();
-							userInfo.setUserId(response.getUserInfo()
+							userInfo.setUserId(response.getUserInfoSimple()
 									.getUserId());
 							userInfo.setLoginId(response.getLoginId());
 							userInfoService.updateCurentUserInfo(userInfo);
