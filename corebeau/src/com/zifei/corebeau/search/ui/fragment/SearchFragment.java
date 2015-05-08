@@ -244,7 +244,8 @@ public class SearchFragment extends Fragment implements
 	// }
 	
 	private void refresh(){
-		mAdapter.clear();
+		if(mAdapter.getCount()>0){
+		mAdapter.clear();}
 		getRecommendPostList();
 	}
 

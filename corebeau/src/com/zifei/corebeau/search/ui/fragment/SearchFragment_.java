@@ -114,7 +114,7 @@ public class SearchFragment_ extends Fragment implements
 
 	private void fillAdapter() {
 		for (ItemInfo data : mData) {
-			mAdapter.add(data);
+//			mAdapter.add(data);
 		}
 	}
 
@@ -136,10 +136,10 @@ public class SearchFragment_ extends Fragment implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		ItemInfo itemInfo = mAdapter.getItem(position);
-		Intent intent = new Intent(getActivity(), PostDetailActivity.class);
-		intent.putExtra("itemInfo", itemInfo);
-		startActivity(intent);
+//		ItemInfo itemInfo = mAdapter.getItem(position);
+//		Intent intent = new Intent(getActivity(), PostDetailActivity.class);
+//		intent.putExtra("itemInfo", itemInfo);
+//		startActivity(intent);
 	}
 
 	@Override
@@ -215,11 +215,11 @@ public class SearchFragment_ extends Fragment implements
 						if (response.getPageBean().getList().size() <= 0) {
 
 						} else {
-							mAdapter = new SampleAdapter(getActivity(),
-									android.R.layout.simple_list_item_1, list);
-							mAdapter.setColumnWidth(staggeredGridView
-									.getColumnWidth());
-							staggeredGridView.setAdapter(mAdapter);
+//							mAdapter = new SampleAdapter(getActivity(),
+//									android.R.layout.simple_list_item_1, list);
+//							mAdapter.setColumnWidth(staggeredGridView
+//									.getColumnWidth());
+//							staggeredGridView.setAdapter(mAdapter);
 
 						}
 					}

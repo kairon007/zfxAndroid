@@ -6,6 +6,7 @@ import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.UrlConstants;
 import com.zifei.corebeau.common.task.NetworkExecutor;
 import com.zifei.corebeau.spot.bean.response.SpotListResponse;
+import com.zifei.corebeau.utils.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,9 +22,9 @@ public class SpotTask {
         this.context = context;
     }
 
-    public void getSpotList(final AsyncCallBacks.OneOne<SpotListResponse, String> callback) {
+    public void getSpotList(int currentPage, final AsyncCallBacks.OneOne<SpotListResponse, String> callback) {
 
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = Utils.buildMap("currentPage", currentPage);
 
         NetworkExecutor.post(UrlConstants.GET_SEARCH_RECOMMEND_POST, params, SpotListResponse.class, new NetworkExecutor.CallBack<SpotListResponse>() {
             @Override

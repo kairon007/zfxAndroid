@@ -22,7 +22,7 @@ public class MyInfoTask {
 		userInfoService = new UserInfoService(context);
 	}
 
-	public void updateUserInfo(UserInfoDetail userInfo,
+	public void updateUserInfo(final UserInfoDetail userInfo,
 			final AsyncCallBacks.OneOne<UpdateUserInfoResponse, String> callback) {
 
 		Map<String, Object> params = Utils.buildMap("userInfo", userInfo);
@@ -37,8 +37,19 @@ public class MyInfoTask {
 
 						if (status == Response.SUCCESS) {
 							callback.onSuccess(response);
+							UserInfo userInfoSimple = userInfoService.getCurentUserInfo();
 							
-							userInfoService.updateCurentUserInfo(response.getUserInfoSimple());
+							if(userInfo.getUserGender()!= null ){
+								userInfoSimple.setUserGender(userInfo.getUserGender());
+							}
+							if(userInfo.getNickName()!= null){
+								userInfoSimple.setNickName(userInfo.getNickName());
+							}
+							if(userInfo.getUserImageUrl()!= null){
+								userInfoSimple.setUrl(userInfo.getUserImageUrl());
+							}
+							
+							userInfoService.updateCurentUserInfo(userInfoSimple);
 							
 							callback.onSuccess(response);
 						} else {

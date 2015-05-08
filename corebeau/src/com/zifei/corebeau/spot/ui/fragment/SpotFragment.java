@@ -3,14 +3,13 @@ package com.zifei.corebeau.spot.ui.fragment;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -20,21 +19,21 @@ import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.bean.PageBean;
 import com.zifei.corebeau.common.AsyncCallBacks;
-import com.zifei.corebeau.my.ui.MyItemDetailActivity;
-import com.zifei.corebeau.post.ui.PostDetailActivity;
 import com.zifei.corebeau.spot.bean.response.SpotListResponse;
 import com.zifei.corebeau.spot.task.SpotTask;
 import com.zifei.corebeau.spot.ui.adapter.SpotAdapter;
 import com.zifei.corebeau.utils.Utils;
 
 public class SpotFragment extends Fragment implements
-		AbsListView.OnItemClickListener, View.OnClickListener {
+		AbsListView.OnItemClickListener, View.OnClickListener, OnScrollListener {
 
 	private SpotAdapter spotAdapter;
 	private ListView listview;
 	private SpotTask spotTask;
 	private ProgressBar progressBar;
 	private ImageView refreshBtn;
+	private boolean isLast = false;
+	private int currentPage;
 
 	public SpotFragment() {
 
@@ -63,13 +62,12 @@ public class SpotFragment extends Fragment implements
 		listview = (ListView) view.findViewById(R.id.lv_spot);
 		listview.setEmptyView(view.findViewById(android.R.id.empty));
 		listview.setAdapter(spotAdapter);
-		
-		refreshBtn = (ImageView)view.findViewById(R.id.refresh_spot);
+		listview.setOnScrollListener(this);
+		refreshBtn = (ImageView) view.findViewById(R.id.refresh_spot);
 		refreshBtn.setOnClickListener(this);
 		getSpotTask();
 		return view;
 	}
-	
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -87,19 +85,43 @@ public class SpotFragment extends Fragment implements
 	}
 
 	private void getSpotTask() {
+		if(isLast){
+			return;
+		}
+		
 		progressBar.setVisibility(View.VISIBLE);
-		spotTask.getSpotList(new AsyncCallBacks.OneOne<SpotListResponse, String>() {
+		spotTask.getSpotList(currentPage,new AsyncCallBacks.OneOne<SpotListResponse, String>() {
 			@Override
 			public void onSuccess(SpotListResponse response) {
 				progressBar.setVisibility(View.GONE);
 				PageBean<ItemInfo> pageBean = (PageBean<ItemInfo>) response
 						.getPageBean();
 				List<ItemInfo> list = pageBean.getList();
-				if (response.getPageBean().getList().size() <= 0) {
-
-				} else {
-					spotAdapter.addData(list, false);
-				}
+				currentPage = pageBean.getCurrentPage();
+				
+					
+					if(list.size() >= 30){
+						isLast = false;
+						if(currentPage==1){
+							spotAdapter.addData(list, false);
+						}else{
+							spotAdapter.addData(list, true);
+						}
+						currentPage = currentPage+1;
+					}else if(list.size() < 30){
+						isLast = true;
+						if(currentPage==1){
+							spotAdapter.addData(list, false);
+						}else{
+							spotAdapter.addData(list, true);
+						}
+					}else{
+						isLast = true;
+					}
+				
+				
+				
+				
 			}
 
 			@Override
@@ -109,12 +131,12 @@ public class SpotFragment extends Fragment implements
 			}
 		});
 	}
-	
-	private void refresh(){
+
+	private void refresh() {
 		spotAdapter.clearAdapter();
 		getSpotTask();
 	}
-	
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -124,6 +146,21 @@ public class SpotFragment extends Fragment implements
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
+			if (view.getLastVisiblePosition() == view.getCount() - 10) {
+				getSpotTask();
+			}
+		}
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+
 	}
 
 }
