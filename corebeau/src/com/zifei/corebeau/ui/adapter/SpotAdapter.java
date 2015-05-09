@@ -148,7 +148,7 @@ public class SpotAdapter extends BaseAdapter {
 			imageLoader.displayImage(urlThumb, imageAwareIcon,
 					iconImageOptions);
 		} else {
-			imageLoader.displayImage("drawable://" + R.drawable.my_default,
+			imageLoader.displayImage("drawable://" + R.drawable.user_icon_default,
 					imageAwareIcon, iconImageOptions);
 		}
 

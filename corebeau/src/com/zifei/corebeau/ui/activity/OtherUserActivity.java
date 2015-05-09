@@ -105,8 +105,8 @@ public class OtherUserActivity extends SherlockActivity implements OnUserDetailS
 
 	private void init() {
 		otherUserTask = new OtherUserTask(this);
-		postList = (ListView) findViewById(R.id.lv_my_post);
-		progressBar = (ProgressBar) findViewById(R.id.pb_my_post);
+		postList = (ListView) findViewById(R.id.lv_another_user_post);
+		progressBar = (ProgressBar) findViewById(R.id.pb_another_user_post);
 		LayoutInflater layoutInflater = getLayoutInflater();
 		
 		View header = layoutInflater.inflate(R.layout.layout_userpage_header,

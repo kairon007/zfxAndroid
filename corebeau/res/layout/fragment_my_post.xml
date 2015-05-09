@@ -1,4 +1,4 @@
-<com.zifei.corebeau.extra.pla.PullSingleListView xmlns:android="http://schemas.android.com/apk/res/android"
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lv_my_post"
     android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
@@ -6,4 +6,4 @@
     android:divider="@null"
     android:scrollbars="none" >
 
-</com.zifei.corebeau.extra.pla.PullSingleListView>
+</ListView>
