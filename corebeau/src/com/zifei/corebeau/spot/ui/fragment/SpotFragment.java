@@ -38,6 +38,7 @@ public class SpotFragment extends Fragment implements
 	private ImageView refreshBtn;
 	private boolean isLast = false;
 	private int currentPage;
+	private boolean isRequestPost = false;
 
 	public SpotFragment() {
 
@@ -87,7 +88,7 @@ public class SpotFragment extends Fragment implements
 		if(isLast){
 			return;
 		}
-		
+		isRequestPost = true;
 		progressBar.setVisibility(View.VISIBLE);
 		spotTask.getSpotList(currentPage,new AsyncCallBacks.OneOne<SpotListResponse, String>() {
 			@Override
@@ -122,13 +123,14 @@ public class SpotFragment extends Fragment implements
 					}else{
 						isLast = true;
 					}
-				
+					isRequestPost = false;
 			}
 
 			@Override
 			public void onError(String msg) {
 				progressBar.setVisibility(View.GONE);
 				Utils.showToast(getActivity(), msg);
+				isRequestPost = false;
 			}
 		});
 	}
@@ -143,7 +145,7 @@ public class SpotFragment extends Fragment implements
 						.getPageBean();
 				List<ItemInfo> list = pageBean.getList();
 				currentPage = pageBean.getCurrentPage();
-				
+				spotAdapter.clearAdapter();
 					if(list.size() >= 30){
 						isLast = false;
 						if(currentPage==1){
@@ -191,8 +193,10 @@ public class SpotFragment extends Fragment implements
 	@Override
 	public void onScrollStateChanged(PLA_AbsListView view, int scrollState) {
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
-			if (view.getLastVisiblePosition() == view.getCount() - 10) {
-				getSpotTask();
+			if (view.getLastVisiblePosition() == (view.getCount()-1)) {
+				if(!isRequestPost){
+					getSpotTask();
+				}
 			}
 		}
 	}

@@ -62,10 +62,7 @@ public class SpotAdapter extends BaseAdapter {
 		if (this.data != null) {
 			this.data.clear();
 		}
-//		notifyDataSetChanged();
 	}
-	
-	
 
 	private void getConfig() {
 		bigImageConfig = CorebeauApp.getBigImageConfig();

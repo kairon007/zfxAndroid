@@ -240,7 +240,6 @@ public class XListView extends MultiColumnListView implements OnScrollListener {
 	public interface IXListViewListener {
 		public void onRefresh();
 
-		public void onLoadMore();
 	}
 
 	@Override

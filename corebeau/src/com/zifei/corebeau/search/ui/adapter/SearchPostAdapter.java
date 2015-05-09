@@ -46,7 +46,6 @@ public class SearchPostAdapter extends BaseAdapter {
 		if (this.data != null) {
 			this.data.clear();
 		}
-		notifyDataSetChanged();
 	}
 
 	public void addItemLast(List<ItemInfo> datas) {
