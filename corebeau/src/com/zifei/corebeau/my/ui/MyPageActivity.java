@@ -29,18 +29,18 @@ import com.zifei.corebeau.account.task.UserInfoService;
 import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.common.ui.view.CircularImageView;
 import com.zifei.corebeau.my.ui.fragment.MyItemFragment;
-import com.zifei.corebeau.my.ui.fragment.ScrapPostFragment;
+import com.zifei.corebeau.my.ui.fragment.ScrapItemFragment;
 import com.zifei.corebeau.my.ui.fragment.ScrollTabHolderFragment;
 import com.zifei.corebeau.my.ui.parallaxheader.AlphaForegroundColorSpan;
 import com.zifei.corebeau.my.ui.parallaxheader.PagerSlidingTabStrip;
 import com.zifei.corebeau.my.ui.parallaxheader.ScrollTabHolder;
 import com.zifei.corebeau.utils.StringUtil;
 
-public class MyItemListActivity extends SherlockFragmentActivity implements
+public class MyPageActivity extends SherlockFragmentActivity implements
 		OnClickListener, ScrollTabHolder, ViewPager.OnPageChangeListener {
 
 	private CircularImageView circularImageView;
-	private DisplayImageOptions imageOptions;
+	private DisplayImageOptions imageOptions,iconImageOptions;
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
 	private ImageView backgroundImageView;
@@ -76,6 +76,12 @@ public class MyItemListActivity extends SherlockFragmentActivity implements
 		imageOptions = new DisplayImageOptions.Builder()
 				.delayBeforeLoading(200) // 载入之前的延迟时间
 				.cacheInMemory(false).cacheOnDisk(true).build();
+		iconImageOptions = new DisplayImageOptions.Builder()
+		.cacheInMemory(true)
+		.showImageOnFail(R.drawable.user_icon_default)
+		.showImageForEmptyUri(R.drawable.user_icon_default)
+		.showImageOnLoading(R.drawable.user_icon_default)
+		.build();
 	}
 
 	private void init() {
@@ -140,11 +146,8 @@ public class MyItemListActivity extends SherlockFragmentActivity implements
 		}
 
 		String iconUrl = userInfo.getUrl();
-		if (iconUrl == null || StringUtil.isEmpty(iconUrl)) {
-			imageLoader.displayImage("drawable://" + R.drawable.my_default,
-					circularImageView, imageOptions);
-		} else {
-			imageLoader.displayImage(iconUrl, circularImageView, imageOptions);
+		if (iconUrl != null && !StringUtil.isEmpty(iconUrl)) {
+			imageLoader.displayImage(iconUrl, circularImageView, iconImageOptions);
 		}
 
 	}
@@ -286,24 +289,24 @@ public class MyItemListActivity extends SherlockFragmentActivity implements
 				f = (ScrollTabHolderFragment) MyItemFragment
 						.newInstance(position);
 			} else {
-				f = (ScrollTabHolderFragment) ScrapPostFragment
+				f = (ScrollTabHolderFragment) ScrapItemFragment
 						.newInstance(position);
 			}
 
 			switch (position) {
 			case 0:
 				f = (ScrollTabHolderFragment) Fragment.instantiate(
-						MyItemListActivity.this,
+						MyPageActivity.this,
 						MyItemFragment.class.getName(), null);
 				break;
 			case 1:
 				f = (ScrollTabHolderFragment) Fragment.instantiate(
-						MyItemListActivity.this,
-						ScrapPostFragment.class.getName(), null);
+						MyPageActivity.this,
+						ScrapItemFragment.class.getName(), null);
 				break;
 			default:
 				f = (ScrollTabHolderFragment) Fragment.instantiate(
-						MyItemListActivity.this,
+						MyPageActivity.this,
 						MyItemFragment.class.getName(), null);
 				break;
 			}

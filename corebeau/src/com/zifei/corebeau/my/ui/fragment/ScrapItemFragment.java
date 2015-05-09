@@ -16,7 +16,7 @@ import com.zifei.corebeau.my.task.ScrapTask;
 import com.zifei.corebeau.my.ui.adapter.ScrapPostAdapter;
 import com.zifei.corebeau.utils.Utils;
 
-public class ScrapPostFragment extends ScrollTabHolderFragment implements OnScrollListener {
+public class ScrapItemFragment extends ScrollTabHolderFragment implements OnScrollListener {
 	
 	private static final String ARG_POSITION = "position";
 	private int mPosition;
@@ -24,8 +24,8 @@ public class ScrapPostFragment extends ScrollTabHolderFragment implements OnScro
 	private ScrapTask scrapTask;
 	private ListView listView;
 	
-	public static ScrapPostFragment newInstance(int position) {
-		ScrapPostFragment fragment = new ScrapPostFragment();
+	public static ScrapItemFragment newInstance(int position) {
+		ScrapItemFragment fragment = new ScrapItemFragment();
 		Bundle args = new Bundle();
 		args.putInt(ARG_POSITION, position);
 		fragment.setArguments(args);
@@ -51,7 +51,7 @@ public class ScrapPostFragment extends ScrollTabHolderFragment implements OnScro
 		listView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 		scrapPostAdapter = new ScrapPostAdapter(getActivity(), listView);
 		listView.setAdapter(scrapPostAdapter);
-		
+		getScrapList();
 		return view;
 	}
 	

@@ -49,7 +49,7 @@
             android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity
-            android:name=".my.ui.MyItemListActivity"
+            android:name=".my.ui.MyPageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyPageTheme" >
         </activity>

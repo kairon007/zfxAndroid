@@ -37,7 +37,7 @@ public class OtherUserActivity extends SherlockActivity implements OnUserDetailS
 	private CircularImageView circularImageView;
 	private OtherUserTask otherUserTask;
 	private OtherUserPostAdapter otherUserPostAdapter;
-	private DisplayImageOptions imageOptions;
+	private DisplayImageOptions imageOptions, iconImageOptions;
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
 	private ImageView backgroundImageView;
@@ -94,6 +94,13 @@ public class OtherUserActivity extends SherlockActivity implements OnUserDetailS
 		imageOptions = new DisplayImageOptions.Builder()
 				.delayBeforeLoading(200) // 载入之前的延迟时间
 				.cacheInMemory(false).cacheOnDisk(true).build();
+		
+		iconImageOptions = new DisplayImageOptions.Builder()
+		.cacheInMemory(true)
+		.showImageOnFail(R.drawable.user_icon_default)
+		.showImageForEmptyUri(R.drawable.user_icon_default)
+		.showImageOnLoading(R.drawable.user_icon_default)
+		.build();
 	}
     
 
@@ -122,11 +129,12 @@ public class OtherUserActivity extends SherlockActivity implements OnUserDetailS
 	private void setUserBaseInfo(){
 		if(userImageUrl==null){
 			imageLoader.displayImage("drawable://" + R.drawable.my_default,
-					circularImageView, imageOptions);
+					circularImageView, iconImageOptions);
 		}else{
 			imageLoader.displayImage(userImageUrl,
-					circularImageView, imageOptions);
+					circularImageView, iconImageOptions);
 		}
+		
 		
 		if(nickName!=null){
 			nicknameTextView.setText(nickName);

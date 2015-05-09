@@ -55,6 +55,9 @@ public class SpotAdapter extends BaseAdapter {
 				//
 				.delayBeforeLoading(200)
 				.cacheInMemory(true)
+				.showImageOnFail(R.drawable.user_icon_default)
+				.showImageForEmptyUri(R.drawable.user_icon_default)
+				.showImageOnLoading(R.drawable.user_icon_default)
 				.build();
 	}
 

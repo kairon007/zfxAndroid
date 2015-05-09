@@ -79,8 +79,12 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 		config = new ImageLoaderConfiguration.Builder(context)
 				.threadPoolSize(3).build();
 		imageLoader.init(config);
-		iconImageOptions = new DisplayImageOptions.Builder() //
-				.cacheInMemory(false).cacheOnDisk(true).build();
+		iconImageOptions = new DisplayImageOptions.Builder()
+		.cacheInMemory(true)
+		.showImageOnFail(R.drawable.user_icon_default)
+		.showImageForEmptyUri(R.drawable.user_icon_default)
+		.showImageOnLoading(R.drawable.user_icon_default)
+		.build();
 	}
 
 	private void setDefault() {
