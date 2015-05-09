@@ -54,7 +54,7 @@ public class SearchPostAdapter extends BaseAdapter {
 
 	public void addItemTop(List<ItemInfo> datas) {
 		for (ItemInfo info : datas) {
-			data.addFirst(info);
+			data.addLast(info);
 		}
 	}
 
