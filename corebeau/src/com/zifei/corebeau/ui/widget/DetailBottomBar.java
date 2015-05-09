@@ -16,11 +16,11 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
+import com.zifei.corebeau.bean.response.LikeActionResponse;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.extra.CircularImageView;
 import com.zifei.corebeau.task.PostTask;
-import com.zifei.corebeau.task.UserInfoService;
 import com.zifei.corebeau.ui.activity.CommentActivity;
 import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
@@ -227,12 +227,13 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 	private void insertLike() {
 		ivLike.setClickable(false);
 		postTask.insertLike(itemId,
-				new AsyncCallBacks.OneOne<Response, String>() {
+				new AsyncCallBacks.OneOne<LikeActionResponse, String>() {
 
 					@Override
-					public void onSuccess(Response response) {
+					public void onSuccess(LikeActionResponse response) {
 						if (isLike == false) {
 							isLike = true;
+							tvLikeCnt.setText(String.valueOf(response.getLikeCnt()));
 							ivLike.setBackgroundResource(R.drawable.bottom_like_pressed);
 						}
 						ivLike.setClickable(true);
@@ -268,12 +269,13 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 	private void deleteLike() {
 		ivLike.setClickable(false);
 		postTask.deleteLike(itemId,
-				new AsyncCallBacks.OneOne<Response, String>() {
+				new AsyncCallBacks.OneOne<LikeActionResponse, String>() {
 
 					@Override
-					public void onSuccess(Response response) {
+					public void onSuccess(LikeActionResponse response) {
 						if (isLike == true) {
 							isLike = false;
+							tvLikeCnt.setText(String.valueOf(response.getLikeCnt()));
 							ivLike.setBackgroundResource(R.drawable.bottom_like_normal);
 						}
 						ivLike.setClickable(true);

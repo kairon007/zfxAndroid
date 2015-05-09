@@ -108,11 +108,6 @@ public class MyItemDetailBottomBar extends RelativeLayout implements
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.iv_post_like:
-			if (isLike) {
-				deleteLike();
-			} else {
-				insertLike();
-			}
 			break;
 		case R.id.iv_post_comment:
 			Intent intent = new Intent(context, CommentActivity.class);
@@ -233,54 +228,8 @@ public class MyItemDetailBottomBar extends RelativeLayout implements
 				});
 	}
 
-	// 해놓고 백그라운드에서 돌린다
-	private void insertLike() {
-		postTask.insertLike(itemId,
-				new AsyncCallBacks.OneOne<Response, String>() {
+	
 
-					@Override
-					public void onSuccess(Response response) {
-						if (isLike == false) {
-							isLike = true;
-							ivLike.setBackgroundResource(R.drawable.bottom_like_pressed);
-						}
-						Utils.showToast(context, response.getMsg());
-					}
-
-					@Override
-					public void onError(String msg) {
-						if (isLike == true) {
-							isLike = false;
-							ivLike.setBackgroundResource(R.drawable.bottom_like_normal);
-						}
-						Utils.showToast(context, msg);
-					}
-				});
-	}
-
-	private void deleteLike() {
-		postTask.deleteLike(itemId,
-				new AsyncCallBacks.OneOne<Response, String>() {
-
-					@Override
-					public void onSuccess(Response response) {
-						if (isLike == true) {
-							isLike = false;
-							ivLike.setBackgroundResource(R.drawable.bottom_like_normal);
-						}
-						Utils.showToast(context, response.getMsg());
-					}
-
-					@Override
-					public void onError(String msg) {
-						if (isLike == false) {
-							isLike = true;
-							ivLike.setBackgroundResource(R.drawable.bottom_like_pressed);
-						}
-						Utils.showToast(context, msg);
-					}
-				});
-	}
 
 	private void deleteItem() {
 		myTask.deleteItem(itemId,

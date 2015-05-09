@@ -4,10 +4,10 @@ import java.util.Map;
 
 import android.content.Context;
 
-import com.zifei.corebeau.bean.UserInfoDetail;
 import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.bean.response.CommentListResponse;
 import com.zifei.corebeau.bean.response.ItemDetailResponse;
+import com.zifei.corebeau.bean.response.LikeActionResponse;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.common.net.UrlConstants;
@@ -190,12 +190,12 @@ public class PostTask {
     }
 
     // db에 쌓아놓고 나중에 서버와 싱크 맞춤
-    public void insertLike(String itemId, final AsyncCallBacks.OneOne<Response, String> callback) {
+    public void insertLike(String itemId, final AsyncCallBacks.OneOne<LikeActionResponse, String> callback) {
         Map<String, Object> params = Utils.buildMap("itemId",itemId);
 
-        NetworkExecutor.post(UrlConstants.LIKE, params, Response.class, new NetworkExecutor.CallBack<Response>() {
+        NetworkExecutor.post(UrlConstants.LIKE, params, LikeActionResponse.class, new NetworkExecutor.CallBack<LikeActionResponse>() {
             @Override
-            public void onSuccess(Response response) {
+            public void onSuccess(LikeActionResponse response) {
 
                 int status = response.getStatusCode();
                 String msg = response.getMsg();
@@ -214,12 +214,12 @@ public class PostTask {
         });
     }
 
-    public void deleteLike(String itemId, final AsyncCallBacks.OneOne<Response, String> callback) {
+    public void deleteLike(String itemId, final AsyncCallBacks.OneOne<LikeActionResponse, String> callback) {
         Map<String, Object> params = Utils.buildMap("itemId",itemId);
 
-        NetworkExecutor.post(UrlConstants.LIKE_DEL, params, Response.class, new NetworkExecutor.CallBack<Response>() {
+        NetworkExecutor.post(UrlConstants.LIKE_DEL, params, LikeActionResponse.class, new NetworkExecutor.CallBack<LikeActionResponse>() {
             @Override
-            public void onSuccess(Response response) {
+            public void onSuccess(LikeActionResponse response) {
 
                 int status = response.getStatusCode();
                 String msg = response.getMsg();
