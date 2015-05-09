@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,45 +15,40 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.bean.PageBean;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.ui.view.HorizontalListView;
-import com.zifei.corebeau.common.ui.widget.progress.CircularProgressBar;
-import com.zifei.corebeau.common.ui.widget.progress.CircularProgressDrawable;
-import com.zifei.corebeau.common.ui.widget.staggered.StaggeredGridView;
-import com.zifei.corebeau.my.ui.FollowActivity;
-import com.zifei.corebeau.my.ui.MyInfoActivity;
-import com.zifei.corebeau.my.ui.MyItemListActivity;
-import com.zifei.corebeau.my.ui.OptionActivity;
 import com.zifei.corebeau.post.ui.PostDetailActivity;
 import com.zifei.corebeau.search.bean.Response.RecommendPostResponse;
 import com.zifei.corebeau.search.bean.Response.RecommendUserResponse;
 import com.zifei.corebeau.search.task.SearchTask;
 import com.zifei.corebeau.search.ui.adapter.RecommedUserAdapter;
-import com.zifei.corebeau.search.ui.adapter.SampleAdapter;
+import com.zifei.corebeau.search.ui.adapter.SearchPostAdapter;
+import com.zifei.corebeau.search.ui.view.pla.XListView;
+import com.zifei.corebeau.search.ui.view.pla.internal.PLA_AbsListView;
+import com.zifei.corebeau.search.ui.view.pla.internal.PLA_AbsListView.OnScrollListener;
+import com.zifei.corebeau.search.ui.view.pla.internal.PLA_AdapterView;
+import com.zifei.corebeau.search.ui.view.pla.internal.PLA_AdapterView.OnItemClickListener;
 import com.zifei.corebeau.utils.Utils;
 
 public class SearchFragment extends Fragment implements
-		AbsListView.OnScrollListener, AbsListView.OnItemClickListener,
-		AdapterView.OnItemLongClickListener, View.OnClickListener {
+		OnScrollListener, OnItemClickListener, View.OnClickListener {
 
-//	private SearchView searchView;
+	// private SearchView searchView;
 	private HorizontalListView horizontalListView;
-	private StaggeredGridView staggeredGridView;
+	private XListView mAdapterView;
 	private RecommedUserAdapter recommedUserAdapter;
 	private SearchTask searchTask;
 	private ProgressBar progressBar;
-	private SampleAdapter mAdapter;
-	private boolean mHasRequestedMore;
-	private static final String TAG = "StaggeredGridActivity";
-	private ArrayList<ItemInfo> mData;
+	private SearchPostAdapter mAdapter;
 	public static final String SAVED_DATA_KEY = "SAVED_DATA";
-	private static final int FETCH_DATA_TASK_DURATION = 2000;
 	private ImageView refreshBtn;
+	private boolean isLast = false;
+	private int currentPage;
+	private boolean isRequestPost = false;
 
 	public static SearchFragment newInstance(String param1, String param2) {
 		SearchFragment fragment = new SearchFragment();
@@ -85,33 +78,25 @@ public class SearchFragment extends Fragment implements
 		View view = inflater
 				.inflate(R.layout.fragment_search, container, false);
 		progressBar = (ProgressBar) view.findViewById(R.id.pb_search);
-		staggeredGridView = (StaggeredGridView) view
-				.findViewById(R.id.sgv_search);
-		staggeredGridView.setOnItemClickListener(this);
+		mAdapterView = (XListView) view.findViewById(R.id.sgv_search);
 
 		LayoutInflater layoutInflater = getActivity().getLayoutInflater();
 		View header = layoutInflater.inflate(R.layout.layout_search_header,
 				null);
 		horizontalListView = (HorizontalListView) header
 				.findViewById(R.id.hlv_search);
-		staggeredGridView.addHeaderView(header);
-		staggeredGridView.setEmptyView(view.findViewById(android.R.id.empty));
-		staggeredGridView.setOnItemClickListener(this);
-		staggeredGridView.setOnScrollListener(this);
-		staggeredGridView.setOnItemLongClickListener(this);
+		mAdapterView.addHeaderView(header);
 		recommedUserAdapter = new RecommedUserAdapter(getActivity(),
 				horizontalListView);
+		mAdapter = new SearchPostAdapter(getActivity(), mAdapterView);
+		mAdapterView.setAdapter(mAdapter);
 		horizontalListView.setAdapter(recommedUserAdapter);
 		refreshBtn = (ImageView) view.findViewById(R.id.refresh_search);
 		refreshBtn.setOnClickListener(this);
+		mAdapterView.setOnItemClickListener(this);
+		mAdapterView.setOnScrollListener(this);
 		getRecommendPostList();
 		return view;
-	}
-
-	private void fillAdapter() {
-		for (ItemInfo data : mData) {
-			mAdapter.add(data);
-		}
 	}
 
 	@Override
@@ -127,49 +112,6 @@ public class SearchFragment extends Fragment implements
 	@Override
 	public void onDetach() {
 		super.onDetach();
-	}
-
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		ItemInfo itemInfo = mAdapter.getItem(position);
-		Intent intent = new Intent(getActivity(), PostDetailActivity.class);
-		intent.putExtra("itemInfo", itemInfo);
-		startActivity(intent);
-	}
-
-	@Override
-	public void onScroll(final AbsListView view, final int firstVisibleItem,
-			final int visibleItemCount, final int totalItemCount) {
-		Log.d(TAG, "onScroll firstVisibleItem:" + firstVisibleItem
-				+ " visibleItemCount:" + visibleItemCount + " totalItemCount:"
-				+ totalItemCount);
-		// our handling
-		if (!mHasRequestedMore) {
-			int lastInScreen = firstVisibleItem + visibleItemCount;
-			if (lastInScreen >= totalItemCount) {
-				Log.d(TAG, "onScroll lastInScreen - so load more");
-				mHasRequestedMore = true;
-				onLoadMoreItems();
-			}
-		}
-	}
-
-	private void onLoadMoreItems() {
-		// final ArrayList<RecommendPostList> sampleData =
-		// SampleData.generateSampleData();
-		// for (RecommendPostList data : sampleData) {
-		// mAdapter.add(data);
-		// }
-		// // stash all the data in our backing store
-		// mData.addAll(sampleData);
-		// // notify the adapter that we can update now
-		// mAdapter.notifyDataSetChanged();
-		// mHasRequestedMore = false;
-	}
-
-	private ArrayList<ItemInfo> generateData() {
-		return mData;
 	}
 
 	private void getRecommendUserList() {
@@ -199,65 +141,67 @@ public class SearchFragment extends Fragment implements
 	}
 
 	private void getRecommendPostList() {
+		if(isLast){
+			return;
+		}
+		
+		isRequestPost = true;
 		progressBar.setVisibility(View.VISIBLE);
 		searchTask
-				.getRecommendPostList(new AsyncCallBacks.OneOne<RecommendPostResponse, String>() {
+				.getRecommendPostList(currentPage, new AsyncCallBacks.OneOne<RecommendPostResponse, String>() {
 					@Override
 					public void onSuccess(RecommendPostResponse response) {
 						progressBar.setVisibility(View.GONE);
 						PageBean<ItemInfo> pageBean = (PageBean<ItemInfo>) response
 								.getPageBean();
 						List<ItemInfo> list = pageBean.getList();
-						if (response.getPageBean().getList().size() <= 0) {
-
-						} else {
-							mAdapter = new SampleAdapter(getActivity(),
-									android.R.layout.simple_list_item_1, list);
-							mAdapter.setColumnWidth(staggeredGridView
-									.getColumnWidth());
-							staggeredGridView.setAdapter(mAdapter);
-
+						currentPage = pageBean.getCurrentPage();
+							mAdapter.setColumnWidth(mAdapterView
+									.getColumnWidth(0));
+							
+						
+						if(list.size() >= 30){
+							isLast = false;
+							if(currentPage==1){
+								mAdapter.addItemTop(list);
+								mAdapter.notifyDataSetChanged();
+								mAdapterView.stopRefresh();
+							}else{
+				                mAdapter.addItemLast(list);
+				                mAdapter.notifyDataSetChanged();
+							}
+							currentPage = currentPage+1;
+						}else if(list.size() < 30){
+							isLast = true;
+							if(currentPage==1){
+								mAdapter.addItemTop(list);
+								mAdapter.notifyDataSetChanged();
+								mAdapterView.stopRefresh();
+							}else{
+				                mAdapter.addItemLast(list);
+				                mAdapter.notifyDataSetChanged();
+							}
+						}else{
+							isLast = true;
 						}
+						
+						isRequestPost = false;
 					}
 
 					@Override
 					public void onError(String msg) {
 						progressBar.setVisibility(View.GONE);
 						Utils.showToast(getActivity(), msg);
+						isRequestPost = false;
 					}
 				});
 	}
 
-	// private void fetchData() {
-	// new AsyncTask<Void, Void, Void>() {
-	// @Override
-	// protected Void doInBackground(Void... params) {
-	// SystemClock.sleep(FETCH_DATA_TASK_DURATION);
-	// return null;
-	// }
-	//
-	// @Override
-	// protected void onPostExecute(Void aVoid) {
-	// fillAdapter();
-	// }
-	// }.execute();
-	// }
-	
-	private void refresh(){
-		if(mAdapter.getCount()>0){
-		mAdapter.clear();}
+	private void refresh() {
+		mAdapter.clearAdapter();
 		getRecommendPostList();
 	}
 
-	@Override
-	public boolean onItemLongClick(AdapterView<?> parent, View view,
-			int position, long id) {
-		return true;
-	}
-
-	@Override
-	public void onScrollStateChanged(AbsListView view, int scrollState) {
-	}
 
 	@Override
 	public void onClick(View v) {
@@ -268,5 +212,31 @@ public class SearchFragment extends Fragment implements
 		default:
 			break;
 		}
+	}
+
+
+	@Override
+	public void onItemClick(PLA_AdapterView<?> parent, View view, int position,
+			long id) {
+		ItemInfo itemInfo = mAdapter.getItem(position-2);
+		Intent intent = new Intent(getActivity(), PostDetailActivity.class);
+		intent.putExtra("itemInfo", itemInfo);
+		startActivity(intent);
+	}
+
+	@Override
+	public void onScrollStateChanged(PLA_AbsListView view, int scrollState) {
+		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
+			if (view.getLastVisiblePosition() > view.getCount() - 10) {
+				if(!isRequestPost){
+					getRecommendPostList();
+				}
+			}
+		}
+	}
+
+	@Override
+	public void onScroll(PLA_AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
 	}
 }

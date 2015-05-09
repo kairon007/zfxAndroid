@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.zifei.corebeau.common.ui.view.pla.internal;
+package com.zifei.corebeau.search.ui.view.pla.internal;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -36,7 +36,7 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.zifei.corebeau.common.ui.view.pla.DebugUtil;
+import com.zifei.corebeau.search.ui.view.pla.DebugUtil;
 
 
 /**

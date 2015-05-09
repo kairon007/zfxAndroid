@@ -13,8 +13,6 @@ import com.zifei.corebeau.my.ui.FollowActivity;
 import com.zifei.corebeau.my.ui.MyInfoActivity;
 import com.zifei.corebeau.my.ui.MyItemListActivity;
 import com.zifei.corebeau.my.ui.OptionActivity;
-import com.zifei.corebeau.my.ui.ScrapPostActivity;
-import com.zifei.corebeau.post.ui.CommentActivity;
 
 public class MyFragment extends Fragment implements View.OnClickListener {
 

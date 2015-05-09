@@ -2,13 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/common_background_grey"
-    android:padding="8dp">
-<RelativeLayout 
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     android:background="@color/inner_white"
-    android:descendantFocusability="blocksDescendants">
+    android:descendantFocusability="blocksDescendants" >
 
     <View
         android:id="@+id/search_image_top_divider"
@@ -16,9 +11,11 @@
         android:layout_width="match_parent" />
 
     <com.zifei.corebeau.search.ui.view.ScaleImageView
-        android:id="@+id/iv_search_post"
+        android:id="@+id/iv_search_post_"
+        android:scrollbars="vertical"
+         android:fastScrollEnabled="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="match_parent" 
         android:layout_below="@id/search_image_top_divider" />
 
     <View
@@ -26,23 +23,13 @@
         style="@style/spot_top_divider"
         android:layout_width="match_parent"
         android:layout_below="@id/iv_search_post" />
-    
-     <TextView
-        android:id="@+id/tv_search_nickname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/search_image_bottom_divider"
-        android:textColor="#6B9900"
-        android:padding="7dp"
-        android:textSize="10sp" />
 
     <TextView
-        android:id="@+id/tv_search_message"
+        android:id="@+id/tv_search_message_"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_search_nickname"
-        android:padding="7dp" />
-		
+        android:layout_below="@id/search_image_bottom_divider" />
+
     <View
         android:id="@+id/search_text_bottom_divider"
         style="@style/spot_top_divider"
@@ -71,7 +58,7 @@
                 android:layout_gravity="center_horizontal" />
 
             <TextView
-                android:id="@+id/tv_comment_cnt"
+                android:id="@+id/tv_comment_cnt_"
                 android:layout_width="15dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -93,7 +80,7 @@
                 android:layout_gravity="center_horizontal" />
 
             <TextView
-                android:id="@+id/tv_search_like"
+                android:id="@+id/tv_search_like_"
                 android:layout_width="15dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -106,5 +93,4 @@
         android:layout_width="match_parent"
         android:layout_below="@id/tv_search_message" />
 
-</RelativeLayout>
 </RelativeLayout>

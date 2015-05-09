@@ -8,8 +8,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -19,16 +17,21 @@ import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.bean.PageBean;
 import com.zifei.corebeau.common.AsyncCallBacks;
+import com.zifei.corebeau.search.ui.view.pla.PullSingleListView;
+import com.zifei.corebeau.search.ui.view.pla.internal.PLA_AbsListView;
+import com.zifei.corebeau.search.ui.view.pla.internal.PLA_AbsListView.OnScrollListener;
+import com.zifei.corebeau.search.ui.view.pla.internal.PLA_AdapterView;
+import com.zifei.corebeau.search.ui.view.pla.internal.PLA_AdapterView.OnItemClickListener;
 import com.zifei.corebeau.spot.bean.response.SpotListResponse;
 import com.zifei.corebeau.spot.task.SpotTask;
 import com.zifei.corebeau.spot.ui.adapter.SpotAdapter;
 import com.zifei.corebeau.utils.Utils;
 
 public class SpotFragment extends Fragment implements
-		AbsListView.OnItemClickListener, View.OnClickListener, OnScrollListener {
+		OnItemClickListener, View.OnClickListener, OnScrollListener {
 
 	private SpotAdapter spotAdapter;
-	private ListView listview;
+	private PullSingleListView listview;
 	private SpotTask spotTask;
 	private ProgressBar progressBar;
 	private ImageView refreshBtn;
@@ -59,7 +62,7 @@ public class SpotFragment extends Fragment implements
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_spot, container, false);
 		progressBar = (ProgressBar) view.findViewById(R.id.pb_spot);
-		listview = (ListView) view.findViewById(R.id.lv_spot);
+		listview = (PullSingleListView) view.findViewById(R.id.lv_spot);
 		listview.setEmptyView(view.findViewById(android.R.id.empty));
 		listview.setAdapter(spotAdapter);
 		listview.setOnScrollListener(this);
@@ -79,11 +82,6 @@ public class SpotFragment extends Fragment implements
 		super.onDetach();
 	}
 
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-	}
-
 	private void getSpotTask() {
 		if(isLast){
 			return;
@@ -99,28 +97,30 @@ public class SpotFragment extends Fragment implements
 				List<ItemInfo> list = pageBean.getList();
 				currentPage = pageBean.getCurrentPage();
 				
-					
 					if(list.size() >= 30){
 						isLast = false;
 						if(currentPage==1){
-							spotAdapter.addData(list, false);
+							spotAdapter.addItemTop(list);
+							spotAdapter.notifyDataSetChanged();
+							listview.stopRefresh();
 						}else{
-							spotAdapter.addData(list, true);
+							spotAdapter.addItemLast(list);
+							spotAdapter.notifyDataSetChanged();
 						}
 						currentPage = currentPage+1;
 					}else if(list.size() < 30){
 						isLast = true;
 						if(currentPage==1){
-							spotAdapter.addData(list, false);
+							spotAdapter.addItemTop(list);
+							spotAdapter.notifyDataSetChanged();
+							listview.stopRefresh();
 						}else{
-							spotAdapter.addData(list, true);
+							spotAdapter.addItemLast(list);
+							spotAdapter.notifyDataSetChanged();
 						}
 					}else{
 						isLast = true;
 					}
-				
-				
-				
 				
 			}
 
@@ -148,8 +148,9 @@ public class SpotFragment extends Fragment implements
 		}
 	}
 
+
 	@Override
-	public void onScrollStateChanged(AbsListView view, int scrollState) {
+	public void onScrollStateChanged(PLA_AbsListView view, int scrollState) {
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
 			if (view.getLastVisiblePosition() == view.getCount() - 10) {
 				getSpotTask();
@@ -158,9 +159,13 @@ public class SpotFragment extends Fragment implements
 	}
 
 	@Override
-	public void onScroll(AbsListView view, int firstVisibleItem,
+	public void onScroll(PLA_AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
+	}
 
+	@Override
+	public void onItemClick(PLA_AdapterView<?> parent, View view, int position,
+			long id) {
 	}
 
 }

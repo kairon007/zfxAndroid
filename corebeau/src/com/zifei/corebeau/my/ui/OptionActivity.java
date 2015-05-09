@@ -2,10 +2,10 @@ package com.zifei.corebeau.my.ui;
 
 import android.os.Bundle;
 
+import com.actionbarsherlock.app.SherlockActivity;
 import com.zifei.corebeau.R;
-import com.zifei.corebeau.common.ui.BarActivity;
 
-public class OptionActivity extends BarActivity{
+public class OptionActivity extends SherlockActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

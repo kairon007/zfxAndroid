@@ -3,14 +3,14 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@color/common_background_grey">
 
-    <ListView
+    <com.zifei.corebeau.search.ui.view.pla.PullSingleListView
         android:id="@+id/lv_spot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:listSelector="@android:color/transparent"
         android:scrollbars="none"
         android:divider="@null"
-        ></ListView>
+        />
 
     <ProgressBar
         android:id="@+id/pb_spot"

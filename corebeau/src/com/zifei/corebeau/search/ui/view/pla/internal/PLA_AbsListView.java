@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.zifei.corebeau.common.ui.view.pla.internal;
+package com.zifei.corebeau.search.ui.view.pla.internal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +43,9 @@ import android.widget.ListAdapter;
 import android.widget.Scroller;
 
 import com.zifei.corebeau.R;
-import com.zifei.corebeau.common.ui.view.pla.DebugUtil;
-import com.zifei.corebeau.common.ui.view.pla.internal.PLA_AdapterView.AdapterContextMenuInfo;
-import com.zifei.corebeau.common.ui.view.pla.internal.PLA_AdapterView.AdapterDataSetObserver;
+import com.zifei.corebeau.search.ui.view.pla.DebugUtil;
+import com.zifei.corebeau.search.ui.view.pla.internal.PLA_AdapterView.AdapterContextMenuInfo;
+import com.zifei.corebeau.search.ui.view.pla.internal.PLA_AdapterView.AdapterDataSetObserver;
 
 /**
  * Base class that can be used to implement virtualized lists of items. A list does

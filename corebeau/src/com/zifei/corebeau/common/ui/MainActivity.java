@@ -1,5 +1,6 @@
 package com.zifei.corebeau.common.ui;
 
+import android.content.Intent;
 import android.graphics.PorterDuff.Mode;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,12 +14,13 @@ import android.widget.ImageView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.zifei.corebeau.R;
+import com.zifei.corebeau.TestService;
+import com.zifei.corebeau.my.task.service.UploadService;
 import com.zifei.corebeau.my.ui.fragment.MyFragment;
 import com.zifei.corebeau.search.ui.fragment.SearchFragment;
 import com.zifei.corebeau.spot.ui.fragment.SpotFragment;
 
-public class MainActivity extends SherlockFragmentActivity implements
-		OnFragmentInteractionListener {
+public class MainActivity extends SherlockFragmentActivity {
 
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewPager mViewPager;
@@ -35,7 +37,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 		initView();
 		initTabListener();
 	}
-
 	
 	private void initActionBar() {
 		getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -190,13 +191,4 @@ public class MainActivity extends SherlockFragmentActivity implements
 		} 
 	}
 
-	@Override
-	public void onFragmentInteraction(String id) {
-
-	}
-
-	@Override
-	public void onFragmentInteraction(Uri uri) {
-
-	}
 }

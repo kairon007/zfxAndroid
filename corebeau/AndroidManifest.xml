@@ -61,7 +61,7 @@
         <activity
             android:name=".my.ui.UploadActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"
+            android:theme="@style/Theme.common"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
@@ -72,7 +72,7 @@
         <activity
             android:name="com.zifei.corebeau.my.ui.FollowActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@style/Theme.common" >
         </activity>
         <activity
             android:name="com.zifei.corebeau.my.ui.MyInfoActivity"
@@ -82,7 +82,7 @@
         <activity
             android:name="com.zifei.corebeau.my.ui.OptionActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@style/Theme.common" >
         </activity>
         
          <activity
@@ -96,7 +96,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/OtherUserTheme" >
         </activity>
-        
         
          <service
             android:name="com.zifei.corebeau.my.task.service.UploadService"

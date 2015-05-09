@@ -15,17 +15,19 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.common.AsyncCallBacks;
-import com.zifei.corebeau.common.ui.BarActivity;
 import com.zifei.corebeau.my.task.UploadTask;
 import com.zifei.corebeau.my.ui.selector.MultiImageSelectorActivity;
 import com.zifei.corebeau.utils.Utils;
 
-public class UploadActivity extends BarActivity implements OnClickListener{
+public class UploadActivity extends SherlockActivity {
 
 	private static final int REQUEST_IMAGE = 2;
 	private ArrayList<String> mSelectPath;
@@ -41,21 +43,43 @@ public class UploadActivity extends BarActivity implements OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_upload);
+		initActionBar();
 		startSelectActivity();
-		gridView = (GridView)findViewById(R.id.gv_upload_image);
-		progressBar = (ProgressBar)findViewById(R.id.pb_upload);
-		editText = (EditText)findViewById(R.id.et_upload_text);
-		
+		gridView = (GridView) findViewById(R.id.gv_upload_image);
+		progressBar = (ProgressBar) findViewById(R.id.pb_upload);
+		editText = (EditText) findViewById(R.id.et_upload_text);
+
 		initLoader();
-		setActivityStatus();
 		uploadTask = new UploadTask(this);
 	}
-	
-	private void setActivityStatus(){
-		setNavTitle("upload");
-		setNavRightText("submit");
-		navi.setRightTextVisible(true);
-		navi.rightTextClicker.setOnClickListener(this);
+
+	private void initActionBar() {
+		getSupportActionBar().setTitle(" upload");
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayShowTitleEnabled(true);
+		getSupportActionBar().setDisplayShowHomeEnabled(false);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add("submit").setShowAsAction(
+				MenuItem.SHOW_AS_ACTION_IF_ROOM
+						| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getTitle().equals("submit")) {
+			if (mSelectPath.isEmpty()) {
+				
+			} else {
+				submit();
+			}
+		} else if (item.getTitle().equals(" upload")) {
+			finish();
+		}
+		return true;
 	}
 
 	private void initLoader() {
@@ -84,30 +108,32 @@ public class UploadActivity extends BarActivity implements OnClickListener{
 			if (resultCode == RESULT_OK) {
 				mSelectPath = data
 						.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-				gridView.setAdapter(new ImageAdapter(UploadActivity.this, mSelectPath));
+				gridView.setAdapter(new ImageAdapter(UploadActivity.this,
+						mSelectPath));
 			}
 		}
 	}
-	
-	private void submit(){
+
+	private void submit() {
 		final String message = editText.getText().toString();
 		progressBar.setVisibility(View.VISIBLE);
-		navi.rightTextClicker.setClickable(false);
-		uploadTask.getToken(mSelectPath, message, new AsyncCallBacks.TwoTwo<Integer, String, Integer, String>() {
+		// navi.rightTextClicker.setClickable(false);
+		uploadTask.getToken(mSelectPath, message,
+				new AsyncCallBacks.TwoTwo<Integer, String, Integer, String>() {
 
-			@Override
-			public void onSuccess(Integer state, String msg) {
-				Utils.showToast(UploadActivity.this, "soon upload");
-				finish();
-			}
+					@Override
+					public void onSuccess(Integer state, String msg) {
+						Utils.showToast(UploadActivity.this, "soon upload");
+						finish();
+					}
 
-			@Override
-			public void onError(Integer state, String msg) {
-				progressBar.setVisibility(View.GONE);
-				navi.rightTextClicker.setClickable(true);
-				Utils.showToast(UploadActivity.this, msg);
-			}
-		});
+					@Override
+					public void onError(Integer state, String msg) {
+						progressBar.setVisibility(View.GONE);
+						// navi.rightTextClicker.setClickable(true);
+						Utils.showToast(UploadActivity.this, msg);
+					}
+				});
 	}
 
 	public class ImageAdapter extends BaseAdapter {
@@ -147,22 +173,10 @@ public class UploadActivity extends BarActivity implements OnClickListener{
 				imageView = (ImageView) convertView;
 			}
 
-			imageLoader.displayImage("file:///"+urls.get(position), imageView,
-					imageOptions);
+			imageLoader.displayImage("file:///" + urls.get(position),
+					imageView, imageOptions);
 
 			return imageView;
-		}
-	}
-
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.navi_bar_text_clicker:
-			if(mSelectPath.isEmpty()){
-				return;
-			}
-			submit();
-			break;
 		}
 	}
 

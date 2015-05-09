@@ -1,20 +1,20 @@
 /*******************************************************************************
  * Copyright 2012 huewu.yang <hueuw.yang@gmail.com>
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*******************************************************************************/
 
-package com.zifei.corebeau.common.ui.view.pla;
+package com.zifei.corebeau.search.ui.view.pla;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -25,18 +25,18 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 
 import com.zifei.corebeau.R;
-import com.zifei.corebeau.common.ui.view.pla.internal.PLA_ListView;
+import com.zifei.corebeau.search.ui.view.pla.internal.PLA_ListView;
 
 /**
- * @author huewu.ynag
- * @date 2012-11-06
- */
-public class MultiColumnListView extends PLA_ListView {
+* @author huewu.ynag
+* @date 2012-11-06
+*/
+public class SingleColumnListView extends PLA_ListView {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "MultiColumnListView";
 
-	private static final int DEFAULT_COLUMN_NUMBER = 2;
+	private static final int DEFAULT_COLUMN_NUMBER = 1;
 
 	private int mColumnNumber = 2;
 	private Column[] mColumns = null;
@@ -46,17 +46,17 @@ public class MultiColumnListView extends PLA_ListView {
 	private int mColumnPaddingLeft = 0;
 	private int mColumnPaddingRight = 0;
 
-	public MultiColumnListView(Context context) {
+	public SingleColumnListView(Context context) {
 		super(context);
 		init(null);
 	}
 
-	public MultiColumnListView(Context context, AttributeSet attrs) {
+	public SingleColumnListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init(attrs);
 	}
 
-	public MultiColumnListView(Context context, AttributeSet attrs, int defStyle) {
+	public SingleColumnListView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init(attrs);
 	}
@@ -311,7 +311,7 @@ public class MultiColumnListView extends PLA_ListView {
 		return mColumns[colIndex].getColumnLeft();
 	}
 
-	private int getColumnWidth(int pos) {
+	public int getColumnWidth(int pos) {
 		int colIndex = mItems.get(pos, -1 );
 
 		if( colIndex == -1 )

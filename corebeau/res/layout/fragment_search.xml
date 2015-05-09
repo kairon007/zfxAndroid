@@ -5,13 +5,13 @@
     android:layout_height="match_parent"
     android:background="@color/common_background_grey" >
 
-    <com.zifei.corebeau.common.ui.widget.staggered.StaggeredGridView
+  <com.zifei.corebeau.search.ui.view.pla.XListView
+      xmlns:pla="http://schemas.android.com/apk/res-auto"
         android:id="@+id/sgv_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:column_count="2"
-        app:item_margin="8dp" >
-    </com.zifei.corebeau.common.ui.widget.staggered.StaggeredGridView>
+        android:background="@color/common_background_grey"  >
+    </com.zifei.corebeau.search.ui.view.pla.XListView>  
 
     <ProgressBar
         android:id="@+id/pb_search"

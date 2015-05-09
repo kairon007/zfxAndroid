@@ -5,15 +5,16 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.common.AsyncCallBacks;
-import com.zifei.corebeau.common.ui.BarActivity;
 import com.zifei.corebeau.my.bean.response.FollowListResponse;
 import com.zifei.corebeau.my.task.FollowTask;
 import com.zifei.corebeau.my.ui.adapter.FollowAdapter;
 import com.zifei.corebeau.utils.Utils;
 
-public class FollowActivity extends BarActivity{
+public class FollowActivity extends SherlockActivity{
 	
 	private ListView followList;
 	private FollowTask followTask;
@@ -24,18 +25,34 @@ public class FollowActivity extends BarActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_follow);
+		initActionBar();
 		init();
 		getFollowList();
 	}
 	
 	private void init(){
-		setNavTitle("follow");
 		progressBar = (ProgressBar)findViewById(R.id.pb_follow);
 		followList = (ListView) findViewById(R.id.lv_follow);
 		followTask = new FollowTask(this);
 		followAdapter = new FollowAdapter(this, followList);
 		followList.setAdapter(followAdapter);
 	}
+	
+	private void initActionBar() {
+		getSupportActionBar().setTitle(" follow");
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayShowTitleEnabled(true);
+		getSupportActionBar().setDisplayShowHomeEnabled(false);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getTitle().equals(" follow")) {
+			finish();
+		}
+		return true;
+	}
+
 	
 	private void getFollowList(){
 		progressBar.setVisibility(View.VISIBLE);

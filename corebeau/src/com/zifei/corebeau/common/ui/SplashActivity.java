@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -28,7 +29,7 @@ import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
 
-public class SplashActivity extends CommonFragmentActvity implements
+public class SplashActivity extends Activity implements
 		View.OnClickListener {
 
 	private final int DELAY_MILLIS = 1000;

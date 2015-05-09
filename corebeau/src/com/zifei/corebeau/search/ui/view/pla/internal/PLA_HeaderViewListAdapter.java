@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.zifei.corebeau.common.ui.view.pla.internal;
+package com.zifei.corebeau.search.ui.view.pla.internal;
 
 import java.util.ArrayList;
 

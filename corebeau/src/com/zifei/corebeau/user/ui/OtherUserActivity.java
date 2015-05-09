@@ -66,7 +66,6 @@ public class OtherUserActivity extends SherlockActivity implements OnUserDetailS
 		getSupportActionBar().setTitle("other user");
 		getSupportActionBar().setSubtitle(" "+nickName);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//		getSupportActionBar().setDisplayShowTitleEnabled(false);
 		 getSupportActionBar().setDisplayShowHomeEnabled(false);
 	}
 	

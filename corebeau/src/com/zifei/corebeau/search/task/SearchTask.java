@@ -14,6 +14,7 @@ import com.zifei.corebeau.common.net.UrlConstants;
 import com.zifei.corebeau.common.task.NetworkExecutor;
 import com.zifei.corebeau.search.bean.Response.RecommendPostResponse;
 import com.zifei.corebeau.search.bean.Response.RecommendUserResponse;
+import com.zifei.corebeau.utils.Utils;
 
 /**
  * Created by im14s_000 on 2015/4/2.
@@ -55,10 +56,10 @@ public class SearchTask {
 				});
 	}
 
-	public void getRecommendPostList(
+	public void getRecommendPostList(int currentPage, 
 			final AsyncCallBacks.OneOne<RecommendPostResponse, String> callback) {
 
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = Utils.buildMap("currentPage", currentPage);
 		
 		NetworkExecutor.post(UrlConstants.GET_SEARCH_RECOMMEND_POST, params,
 				RecommendPostResponse.class,

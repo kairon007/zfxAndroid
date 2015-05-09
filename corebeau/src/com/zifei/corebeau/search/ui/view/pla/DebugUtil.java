@@ -1,4 +1,4 @@
-package com.zifei.corebeau.common.ui.view.pla;
+package com.zifei.corebeau.search.ui.view.pla;
 
 import android.util.Log;
 
