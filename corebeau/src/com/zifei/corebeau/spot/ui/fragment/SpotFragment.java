@@ -104,7 +104,6 @@ public class SpotFragment extends Fragment implements
 						if(currentPage==1){
 							spotAdapter.addItemTop(list);
 							spotAdapter.notifyDataSetChanged();
-							listview.stopRefresh();
 						}else{
 							spotAdapter.addItemLast(list);
 							spotAdapter.notifyDataSetChanged();
@@ -115,7 +114,6 @@ public class SpotFragment extends Fragment implements
 						if(currentPage==1){
 							spotAdapter.addItemTop(list);
 							spotAdapter.notifyDataSetChanged();
-							listview.stopRefresh();
 						}else{
 							spotAdapter.addItemLast(list);
 							spotAdapter.notifyDataSetChanged();
@@ -176,6 +174,7 @@ public class SpotFragment extends Fragment implements
 			@Override
 			public void onError(String msg) {
 				Utils.showToast(getActivity(), msg);
+				listview.stopRefresh();
 			}
 		});
 	}

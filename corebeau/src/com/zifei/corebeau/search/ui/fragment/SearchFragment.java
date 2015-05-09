@@ -167,7 +167,7 @@ public class SearchFragment extends Fragment implements
 							if(requestCurrentPage==1){
 								mAdapter.addItemTop(list);
 								mAdapter.notifyDataSetChanged();
-								mAdapterView.stopRefresh();
+								
 							}else{
 				                mAdapter.addItemLast(list);
 				                mAdapter.notifyDataSetChanged();
@@ -178,7 +178,6 @@ public class SearchFragment extends Fragment implements
 							if(requestCurrentPage==1){
 								mAdapter.addItemTop(list);
 								mAdapter.notifyDataSetChanged();
-								mAdapterView.stopRefresh();
 							}else{
 				                mAdapter.addItemLast(list);
 				                mAdapter.notifyDataSetChanged();
@@ -196,6 +195,7 @@ public class SearchFragment extends Fragment implements
 						progressBar.setVisibility(View.GONE);
 						Utils.showToast(getActivity(), msg);
 						isRequestPost = false;
+						mAdapterView.stopRefresh();
 					}
 				});
 	}
