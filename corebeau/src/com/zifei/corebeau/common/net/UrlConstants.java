@@ -2,12 +2,10 @@ package com.zifei.corebeau.common.net;
 
 public class UrlConstants {
 
-	// public static final String BASE_URL = "http://api.huaqianapp.com";
+//	 public static final String BASE_URL =
+//	 "http://115.28.175.29:8080/frontend";
 
-	 public static final String BASE_URL =
-	 "http://115.28.175.29:8080/frontend";
-
-//	public static final String BASE_URL = "http://192.168.91.100:8080/frontend";
+	public static final String BASE_URL = "http://192.168.91.103:8080/frontend";
 
 	// config
 	
