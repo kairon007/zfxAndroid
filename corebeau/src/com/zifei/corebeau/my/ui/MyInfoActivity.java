@@ -213,6 +213,9 @@ public class MyInfoActivity extends SherlockActivity implements
 	private void updateUserInfo(final UserInfoDetail userInfoDetail) {
 		// progressBar.setVisibility(View.VISIBLE); // 셀렉션 부분에다가 조그만하게 프로그레스바
 		// 돌리기
+		if(userInfoDetail == null ){
+			return ;
+		}
 		if (uploadUserInfo == null) {
 			uploadUserInfo = new UserInfoDetail();
 		}
@@ -231,6 +234,7 @@ public class MyInfoActivity extends SherlockActivity implements
 					@Override
 					public void onSuccess(UpdateUserInfoResponse response) {
 						// progressBar.setVisibility(View.INVISIBLE);
+						uploadUserInfo = new UserInfoDetail();
 						Utils.showToast(MyInfoActivity.this, "update success");
 						// 셋팅창 userinfo 셋팅
 
@@ -241,6 +245,7 @@ public class MyInfoActivity extends SherlockActivity implements
 					@Override
 					public void onError(String msg) {
 						// progressBar.setVisibility(View.INVISIBLE);
+						uploadUserInfo = new UserInfoDetail();
 						Utils.showToast(MyInfoActivity.this, msg);
 						finish();
 					}
