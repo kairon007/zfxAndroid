@@ -16,9 +16,9 @@ import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.zifei.corebeau.account.task.ConfigTask;
-import com.zifei.corebeau.account.task.UserInfoService;
 import com.zifei.corebeau.bean.ConfigInfo;
+import com.zifei.corebeau.task.ConfigTask;
+import com.zifei.corebeau.task.UserInfoService;
 
 /**
  * Created by im14s_000 on 2015/3/23.

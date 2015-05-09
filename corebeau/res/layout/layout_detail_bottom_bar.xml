@@ -13,13 +13,12 @@
         android:layout_height="match_parent"
         android:orientation="horizontal" >
 
-        <com.zifei.corebeau.common.ui.view.CircularImageView
+        <com.zifei.corebeau.extra.CircularImageView
             android:id="@+id/iv_post_icon"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp" >
-        </com.zifei.corebeau.common.ui.view.CircularImageView>
+            android:layout_marginLeft="20dp" />
 
         <TextView
             android:id="@+id/tv_post_nickname"

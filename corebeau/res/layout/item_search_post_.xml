@@ -10,7 +10,7 @@
         style="@style/spot_top_divider"
         android:layout_width="match_parent" />
 
-    <com.zifei.corebeau.search.ui.view.ScaleImageView
+    <com.zifei.corebeau.extra.ScaleImageView
         android:id="@+id/iv_search_post_"
         android:scrollbars="vertical"
          android:fastScrollEnabled="true"

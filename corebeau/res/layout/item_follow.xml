@@ -5,7 +5,7 @@
     android:orientation="horizontal"
    	>
     
-    <com.zifei.corebeau.common.ui.view.CircularImageView
+    <com.zifei.corebeau.extra.CircularImageView
         android:id="@+id/civ_follow_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"

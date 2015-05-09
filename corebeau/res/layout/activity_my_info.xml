@@ -17,7 +17,7 @@
             android:id="@+id/rl_my_info_user_icon"
              style="@style/other_rl_btn" >
 
-            <com.zifei.corebeau.common.ui.view.CircularImageView
+            <com.zifei.corebeau.extra.CircularImageView
                 android:id="@+id/my_info_user_icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp" />

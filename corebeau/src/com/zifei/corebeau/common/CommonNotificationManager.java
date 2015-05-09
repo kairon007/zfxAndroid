@@ -11,7 +11,7 @@ import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 
 import com.zifei.corebeau.R;
-import com.zifei.corebeau.common.ui.MainActivity;
+import com.zifei.corebeau.ui.activity.MainActivity;
 
 public class CommonNotificationManager {
 

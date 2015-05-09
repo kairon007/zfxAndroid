@@ -31,7 +31,7 @@
                 android:layout_margin="5dp"
                 android:orientation="horizontal" >
 
-                <com.zifei.corebeau.common.ui.view.CircularImageView
+                <com.zifei.corebeau.extra.CircularImageView
                     android:id="@+id/spot_user_thumb"
                     android:layout_width="40dp"
                     android:layout_height="40dp" />
@@ -54,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
-                <com.zifei.corebeau.search.ui.view.ScaleImageView
+                <com.zifei.corebeau.extra.ScaleImageView
                     android:id="@+id/spot_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

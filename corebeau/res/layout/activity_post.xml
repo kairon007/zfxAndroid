@@ -11,13 +11,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <com.zifei.corebeau.post.ui.view.PostViewPager
+        <com.zifei.corebeau.ui.view.PostViewPager
             android:id="@+id/vp_post_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
-        </com.zifei.corebeau.post.ui.view.PostViewPager>
+        </com.zifei.corebeau.ui.view.PostViewPager>
 
-        <com.zifei.corebeau.common.ui.widget.indicator.CirclePageIndicator
+        <com.zifei.corebeau.extra.indicator.CirclePageIndicator
             android:id="@+id/indicator"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

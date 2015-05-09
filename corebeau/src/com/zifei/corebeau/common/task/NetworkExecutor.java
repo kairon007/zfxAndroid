@@ -6,12 +6,12 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import android.os.AsyncTask;
 
-import com.zifei.corebeau.account.task.UserInfoService;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.CorebeauApp;
 import com.zifei.corebeau.common.net.CustomHttpResponse;
 import com.zifei.corebeau.common.net.HttpNetworkClient;
 import com.zifei.corebeau.common.net.Response;
+import com.zifei.corebeau.task.UserInfoService;
 import com.zifei.corebeau.utils.StringUtil;
 
 public class NetworkExecutor {
