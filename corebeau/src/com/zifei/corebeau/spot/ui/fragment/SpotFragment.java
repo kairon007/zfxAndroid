@@ -18,6 +18,7 @@ import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.bean.PageBean;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.search.ui.view.pla.PullSingleListView;
+import com.zifei.corebeau.search.ui.view.pla.PullSingleListView.SingleRefreshListener;
 import com.zifei.corebeau.search.ui.view.pla.internal.PLA_AbsListView;
 import com.zifei.corebeau.search.ui.view.pla.internal.PLA_AbsListView.OnScrollListener;
 import com.zifei.corebeau.search.ui.view.pla.internal.PLA_AdapterView;
@@ -28,7 +29,7 @@ import com.zifei.corebeau.spot.ui.adapter.SpotAdapter;
 import com.zifei.corebeau.utils.Utils;
 
 public class SpotFragment extends Fragment implements
-		OnItemClickListener, View.OnClickListener, OnScrollListener {
+		OnItemClickListener, View.OnClickListener, OnScrollListener, SingleRefreshListener {
 
 	private SpotAdapter spotAdapter;
 	private PullSingleListView listview;
@@ -66,8 +67,8 @@ public class SpotFragment extends Fragment implements
 		listview.setEmptyView(view.findViewById(android.R.id.empty));
 		listview.setAdapter(spotAdapter);
 		listview.setOnScrollListener(this);
-		refreshBtn = (ImageView) view.findViewById(R.id.refresh_spot);
-		refreshBtn.setOnClickListener(this);
+		listview.setSingleRefreshListener(this);
+		
 		getSpotTask();
 		return view;
 	}
@@ -131,18 +132,56 @@ public class SpotFragment extends Fragment implements
 			}
 		});
 	}
+	
+	
+	private void getSpotTaskRefresh() {
+		currentPage = 0;
+		spotTask.getSpotList(currentPage,new AsyncCallBacks.OneOne<SpotListResponse, String>() {
+			@Override
+			public void onSuccess(SpotListResponse response) {
+				PageBean<ItemInfo> pageBean = (PageBean<ItemInfo>) response
+						.getPageBean();
+				List<ItemInfo> list = pageBean.getList();
+				currentPage = pageBean.getCurrentPage();
+				
+					if(list.size() >= 30){
+						isLast = false;
+						if(currentPage==1){
+							spotAdapter.addItemTop(list);
+							spotAdapter.notifyDataSetChanged();
+							listview.stopRefresh();
+						}else{
+							spotAdapter.addItemLast(list);
+							spotAdapter.notifyDataSetChanged();
+						}
+						currentPage = currentPage+1;
+					}else if(list.size() < 30){
+						isLast = true;
+						if(currentPage==1){
+							spotAdapter.addItemTop(list);
+							spotAdapter.notifyDataSetChanged();
+							listview.stopRefresh();
+						}else{
+							spotAdapter.addItemLast(list);
+							spotAdapter.notifyDataSetChanged();
+						}
+					}else{
+						isLast = true;
+					}
+				
+			}
 
-	private void refresh() {
-		spotAdapter.clearAdapter();
-		getSpotTask();
+			@Override
+			public void onError(String msg) {
+				Utils.showToast(getActivity(), msg);
+			}
+		});
 	}
+
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.refresh_spot:
-			refresh();
-			break;
 		default:
 			break;
 		}
@@ -166,6 +205,11 @@ public class SpotFragment extends Fragment implements
 	@Override
 	public void onItemClick(PLA_AdapterView<?> parent, View view, int position,
 			long id) {
+	}
+
+	@Override
+	public void onRefresh() {
+		getSpotTaskRefresh();
 	}
 
 }

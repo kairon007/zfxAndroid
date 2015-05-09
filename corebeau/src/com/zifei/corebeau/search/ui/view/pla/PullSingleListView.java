@@ -22,7 +22,7 @@ public class PullSingleListView extends SingleColumnListView implements OnScroll
 	private OnScrollListener mScrollListener; // user's scroll listener
 
 	// the interface to trigger refresh and load more.
-	private IXListViewListener mListViewListener;
+	private SingleRefreshListener singleRefreshListener;
 
 	// -- header view
 	private XListViewHeader mHeaderView;
@@ -189,8 +189,8 @@ public class PullSingleListView extends SingleColumnListView implements OnScroll
 				if (mEnablePullRefresh && mHeaderView.getVisiableHeight() > mHeaderViewHeight) {
 					mPullRefreshing = true;
 					mHeaderView.setState(XListViewHeader.STATE_REFRESHING);
-					if (mListViewListener != null) {
-						mListViewListener.onRefresh();
+					if (singleRefreshListener != null) {
+						singleRefreshListener.onRefresh();
 					}
 				}
 				resetHeaderHeight();
@@ -213,8 +213,8 @@ public class PullSingleListView extends SingleColumnListView implements OnScroll
 	}
 
 
-	public void setXListViewListener(IXListViewListener l) {
-		mListViewListener = l;
+	public void setSingleRefreshListener(SingleRefreshListener l) {
+		singleRefreshListener = l;
 	}
 
 	/**
@@ -228,10 +228,8 @@ public class PullSingleListView extends SingleColumnListView implements OnScroll
 	/**
 	 * implements this interface to get refresh/load more event.
 	 */
-	public interface IXListViewListener {
+	public interface SingleRefreshListener {
 		public void onRefresh();
-
-		public void onLoadMore();
 	}
 
 	@Override

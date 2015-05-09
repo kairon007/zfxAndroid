@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,7 +62,7 @@ public class SpotAdapter extends BaseAdapter {
 		if (this.data != null) {
 			this.data.clear();
 		}
-		notifyDataSetChanged();
+//		notifyDataSetChanged();
 	}
 	
 	
@@ -112,10 +113,6 @@ public class SpotAdapter extends BaseAdapter {
 		int bigIwidth = p.getBwidth();
 		int screenWidth = Utils.getScreenWidth(context);
 		
-		Log.i("","screenWidth : "+screenWidth);
-		Log.i("","");
-		Log.i("","");
-
 		ViewHolder holder;
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.item_spot, parent, false);
@@ -160,7 +157,9 @@ public class SpotAdapter extends BaseAdapter {
 		if (title.length() > 50) {
 			holder.message.setText(title.substring(0, 50) + "...");
 		} else {
-			holder.message.setText(title);
+//			holder.message.setText(title);
+			holder.message.setText(String.valueOf(position));
+			holder.message.setTextColor(Color.RED);
 		}
 
 		holder.commentCnt.setText(String.valueOf(p.getCommentCnt()));

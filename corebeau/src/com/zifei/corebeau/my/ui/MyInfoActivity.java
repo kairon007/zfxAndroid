@@ -210,7 +210,7 @@ public class MyInfoActivity extends SherlockActivity implements
 
 	}
 
-	private void updateUserInfo(final UserInfoDetail userInfo) {
+	private void updateUserInfo(final UserInfoDetail userInfoDetail) {
 		// progressBar.setVisibility(View.VISIBLE); // 셀렉션 부분에다가 조그만하게 프로그레스바
 		// 돌리기
 		if (uploadUserInfo == null) {
@@ -225,7 +225,7 @@ public class MyInfoActivity extends SherlockActivity implements
 				uploadUserInfo.setNickName(tmpNick);
 			}
 		}
-		myInfoTask.updateUserInfo(userInfo,
+		myInfoTask.updateUserInfo(userInfoDetail,
 				new AsyncCallBacks.OneOne<UpdateUserInfoResponse, String>() {
 
 					@Override
@@ -242,6 +242,7 @@ public class MyInfoActivity extends SherlockActivity implements
 					public void onError(String msg) {
 						// progressBar.setVisibility(View.INVISIBLE);
 						Utils.showToast(MyInfoActivity.this, msg);
+						finish();
 					}
 				});
 	}

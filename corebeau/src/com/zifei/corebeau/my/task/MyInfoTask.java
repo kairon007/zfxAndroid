@@ -22,10 +22,10 @@ public class MyInfoTask {
 		userInfoService = new UserInfoService(context);
 	}
 
-	public void updateUserInfo(final UserInfoDetail userInfo,
+	public void updateUserInfo(final UserInfoDetail userInfoDetail,
 			final AsyncCallBacks.OneOne<UpdateUserInfoResponse, String> callback) {
 
-		Map<String, Object> params = Utils.buildMap("userInfo", userInfo);
+		Map<String, Object> params = Utils.buildMap("userInfoDetail", userInfoDetail);
 
 		NetworkExecutor.post(UrlConstants.UPDATE_USERINFO, params,
 				UpdateUserInfoResponse.class, new NetworkExecutor.CallBack<UpdateUserInfoResponse>() {
@@ -37,19 +37,19 @@ public class MyInfoTask {
 
 						if (status == Response.SUCCESS) {
 							callback.onSuccess(response);
-							UserInfo userInfoSimple = userInfoService.getCurentUserInfo();
+							UserInfo userInfo = userInfoService.getCurentUserInfo();
 							
-							if(userInfo.getUserGender()!= null ){
-								userInfoSimple.setUserGender(userInfo.getUserGender());
+							if(userInfoDetail.getUserGender()!= null ){
+								userInfo.setUserGender(userInfoDetail.getUserGender());
 							}
-							if(userInfo.getNickName()!= null){
-								userInfoSimple.setNickName(userInfo.getNickName());
+							if(userInfoDetail.getNickName()!= null){
+								userInfo.setNickName(userInfoDetail.getNickName());
 							}
-							if(userInfo.getUserImageUrl()!= null){
-								userInfoSimple.setUrl(userInfo.getUserImageUrl());
+							if(userInfoDetail.getUserImageUrl()!= null){
+								userInfo.setUrl(userInfoDetail.getUserImageUrl());
 							}
 							
-							userInfoService.updateCurentUserInfo(userInfoSimple);
+							userInfoService.updateCurentUserInfo(userInfo);
 							
 							callback.onSuccess(response);
 						} else {
