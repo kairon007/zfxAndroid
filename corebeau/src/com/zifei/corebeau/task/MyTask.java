@@ -49,10 +49,10 @@ public class MyTask {
 		
 	}
 
-	public void getMyItemList(
+	public void getMyItemList(int currentPage, 
 			final AsyncCallBacks.OneOne<MyPostListResponse, String> callback) {
 
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = Utils.buildMap("currentPage", currentPage);
 
 		NetworkExecutor.post(UrlConstants.GET_MY_POST, params,
 				MyPostListResponse.class,

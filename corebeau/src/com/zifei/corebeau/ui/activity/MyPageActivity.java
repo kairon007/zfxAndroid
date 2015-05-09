@@ -11,10 +11,10 @@ import android.support.v4.util.SparseArrayCompat;
 import android.support.v4.view.ViewPager;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,16 +28,18 @@ import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.extra.CircularImageView;
 import com.zifei.corebeau.extra.parallaxheader.AlphaForegroundColorSpan;
+import com.zifei.corebeau.extra.parallaxheader.PLAScrollTabHolder;
 import com.zifei.corebeau.extra.parallaxheader.PagerSlidingTabStrip;
-import com.zifei.corebeau.extra.parallaxheader.ScrollTabHolder;
+import com.zifei.corebeau.extra.pla.internal.PLA_AbsListView;
 import com.zifei.corebeau.task.UserInfoService;
 import com.zifei.corebeau.ui.fragment.MyItemFragment;
+import com.zifei.corebeau.ui.fragment.PLAScrollTabHolderFragment;
 import com.zifei.corebeau.ui.fragment.ScrapItemFragment;
 import com.zifei.corebeau.ui.fragment.ScrollTabHolderFragment;
 import com.zifei.corebeau.utils.StringUtil;
 
 public class MyPageActivity extends SherlockFragmentActivity implements
-		OnClickListener, ScrollTabHolder, ViewPager.OnPageChangeListener {
+		OnClickListener, PLAScrollTabHolder, ViewPager.OnPageChangeListener {
 
 	private CircularImageView circularImageView;
 	private DisplayImageOptions imageOptions,iconImageOptions;
@@ -106,7 +108,7 @@ public class MyPageActivity extends SherlockFragmentActivity implements
 		mViewPager.setOverScrollMode(View.OVER_SCROLL_NEVER);
 		mPagerSlidingTabStrip.setViewPager(mViewPager);
 		mPagerSlidingTabStrip.setOnPageChangeListener(this);
-		mSpannableString = new SpannableString("aa");
+		mSpannableString = new SpannableString("my page");
 		mAlphaForegroundColorSpan = new AlphaForegroundColorSpan(0xffffffff);
 
 		ViewHelper.setAlpha(getActionBarIconView(), 0f);
@@ -125,9 +127,9 @@ public class MyPageActivity extends SherlockFragmentActivity implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getTitle().equals("aa")) {
+//		if (item.getTitle().equals("my page")) {
 			finish();
-		}
+//		}
 		return true;
 	}
 
@@ -146,10 +148,12 @@ public class MyPageActivity extends SherlockFragmentActivity implements
 		}
 
 		String iconUrl = userInfo.getUrl();
-		if (iconUrl != null && !StringUtil.isEmpty(iconUrl)) {
-			imageLoader.displayImage(iconUrl, circularImageView, iconImageOptions);
-		}
-
+        if (iconUrl == null || StringUtil.isEmpty(iconUrl)) {
+            imageLoader.displayImage("drawable://" + R.drawable.my_default,
+                    circularImageView, iconImageOptions);
+        } else {
+        	imageLoader.displayImage(iconUrl, circularImageView, iconImageOptions);
+        }
 	}
 
 	@Override
@@ -177,16 +181,16 @@ public class MyPageActivity extends SherlockFragmentActivity implements
 
 	@Override
 	public void onPageSelected(int position) {
-		SparseArrayCompat<ScrollTabHolder> scrollTabHolders = mPagerAdapter
+		SparseArrayCompat<PLAScrollTabHolder> scrollTabHolders = mPagerAdapter
 				.getScrollTabHolders();
-		ScrollTabHolder currentHolder = scrollTabHolders.valueAt(position);
+		PLAScrollTabHolder currentHolder = scrollTabHolders.valueAt(position);
 
 		currentHolder.adjustScroll((int) (mHeader.getHeight() + ViewHelper
 				.getTranslationY(mHeader)));
 	}
 
 	@Override
-	public void onScroll(AbsListView view, int firstVisibleItem,
+	public void onScroll(PLA_AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount, int pagePosition) {
 		if (mViewPager.getCurrentItem() == pagePosition) {
 			int scrollY = getScrollY(view);
@@ -203,7 +207,7 @@ public class MyPageActivity extends SherlockFragmentActivity implements
 		// nothing
 	}
 
-	public int getScrollY(AbsListView view) {
+	public int getScrollY(PLA_AbsListView view) {
 		View c = view.getChildAt(0);
 		if (c == null) {
 			return 0;
@@ -216,6 +220,8 @@ public class MyPageActivity extends SherlockFragmentActivity implements
 		if (firstVisiblePosition >= 1) {
 			headerHeight = mHeaderHeight;
 		}
+		
+		Log.i("","headerHeight : "+headerHeight);
 
 		return -top + firstVisiblePosition * c.getHeight() + headerHeight;
 	}
@@ -264,16 +270,16 @@ public class MyPageActivity extends SherlockFragmentActivity implements
 
 	public class PagerAdapter extends FragmentPagerAdapter {
 
-		private SparseArrayCompat<ScrollTabHolder> mScrollTabHolders;
+		private SparseArrayCompat<PLAScrollTabHolder> mScrollTabHolders;
 		private final String[] TITLES = { "my post", "my scrap" };
-		private ScrollTabHolder mListener;
+		private PLAScrollTabHolder mListener;
 
 		public PagerAdapter(FragmentManager fm) {
 			super(fm);
-			mScrollTabHolders = new SparseArrayCompat<ScrollTabHolder>();
+			mScrollTabHolders = new SparseArrayCompat<PLAScrollTabHolder>();
 		}
 
-		public void setTabHolderScrollingContent(ScrollTabHolder listener) {
+		public void setTabHolderScrollingContent(PLAScrollTabHolder listener) {
 			mListener = listener;
 		}
 
@@ -284,28 +290,28 @@ public class MyPageActivity extends SherlockFragmentActivity implements
 
 		@Override
 		public Fragment getItem(int position) {
-			ScrollTabHolderFragment f;
+			PLAScrollTabHolderFragment f;
 			if (position == 0) {
-				f = (ScrollTabHolderFragment) MyItemFragment
+				f = (PLAScrollTabHolderFragment) MyItemFragment
 						.newInstance(position);
 			} else {
-				f = (ScrollTabHolderFragment) ScrapItemFragment
+				f = (PLAScrollTabHolderFragment) ScrapItemFragment
 						.newInstance(position);
 			}
 
 			switch (position) {
 			case 0:
-				f = (ScrollTabHolderFragment) Fragment.instantiate(
+				f = (PLAScrollTabHolderFragment) Fragment.instantiate(
 						MyPageActivity.this,
 						MyItemFragment.class.getName(), null);
 				break;
 			case 1:
-				f = (ScrollTabHolderFragment) Fragment.instantiate(
+				f = (PLAScrollTabHolderFragment) Fragment.instantiate(
 						MyPageActivity.this,
 						ScrapItemFragment.class.getName(), null);
 				break;
 			default:
-				f = (ScrollTabHolderFragment) Fragment.instantiate(
+				f = (PLAScrollTabHolderFragment) Fragment.instantiate(
 						MyPageActivity.this,
 						MyItemFragment.class.getName(), null);
 				break;
@@ -324,9 +330,10 @@ public class MyPageActivity extends SherlockFragmentActivity implements
 			return TITLES.length;
 		}
 
-		public SparseArrayCompat<ScrollTabHolder> getScrollTabHolders() {
+		public SparseArrayCompat<PLAScrollTabHolder> getScrollTabHolders() {
 			return mScrollTabHolders;
 		}
 
 	}
+
 }

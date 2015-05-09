@@ -10,6 +10,7 @@ import com.zifei.corebeau.bean.response.ScrapItemListResponse;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.UrlConstants;
 import com.zifei.corebeau.common.task.NetworkExecutor;
+import com.zifei.corebeau.utils.Utils;
 
 public class ScrapTask {
 	
@@ -19,10 +20,10 @@ public class ScrapTask {
 		this.context = context;
 	}
 	
-	public void getScrapList(
+	public void getScrapList(int currentPage,
 			final AsyncCallBacks.OneOne<ScrapItemListResponse, String> callback) {
 
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = Utils.buildMap("currentPage", currentPage);
 
 		NetworkExecutor.post(UrlConstants.GET_SCRAP_LIST, params,
 				ScrapItemListResponse.class,

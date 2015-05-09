@@ -1,10 +1,9 @@
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zifei.corebeau.extra.pla.PullSingleListView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lv_my_post"
     android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
     android:background="@color/common_background_white"
     android:divider="@null"
-    android:listSelector="@android:color/transparent"
     android:scrollbars="none" >
 
-</ListView>
+</com.zifei.corebeau.extra.pla.PullSingleListView>

@@ -142,13 +142,14 @@ public class SpotAdapter extends BaseAdapter {
 		holder.image.setImageHeight((int) (((double) screenWidth) * ((double) bigImgHeight / (double) bigIwidth)));
 		
 		ImageAware imageAwareIcon = new ImageViewAware(holder.usericon, false);
-		imageLoader.displayImage("drawable://" + R.drawable.my_default,
-				imageAwareIcon, iconImageOptions);
+		
 		String urlThumb = p.getUserImageUrl();
 		if (!StringUtil.isEmpty(urlThumb)) {
 			imageLoader.displayImage(urlThumb, imageAwareIcon,
 					iconImageOptions);
 		} else {
+			imageLoader.displayImage("drawable://" + R.drawable.my_default,
+					imageAwareIcon, iconImageOptions);
 		}
 
 		holder.nickName.setText(p.getNickName());

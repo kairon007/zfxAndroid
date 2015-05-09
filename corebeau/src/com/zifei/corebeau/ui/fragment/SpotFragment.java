@@ -66,6 +66,7 @@ public class SpotFragment extends Fragment implements
 		progressBar = (ProgressBar) view.findViewById(R.id.pb_spot);
 		listview = (PullSingleListView) view.findViewById(R.id.lv_spot);
 		listview.setEmptyView(view.findViewById(android.R.id.empty));
+		listview.setOverScrollMode(View.OVER_SCROLL_NEVER);
 		listview.setAdapter(spotAdapter);
 		listview.setOnScrollListener(this);
 		listview.setSingleRefreshListener(this);
