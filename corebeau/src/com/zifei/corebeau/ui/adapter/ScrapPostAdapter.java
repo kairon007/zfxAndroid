@@ -15,11 +15,14 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.imageaware.ImageAware;
+import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.extra.CircularImageView;
 import com.zifei.corebeau.ui.activity.PostDetailActivity;
 import com.zifei.corebeau.utils.StringUtil;
+import com.zifei.corebeau.utils.Utils;
 
 public class ScrapPostAdapter  extends BaseAdapter {
 
@@ -28,15 +31,11 @@ public class ScrapPostAdapter  extends BaseAdapter {
 	private List<ItemInfo> data = null;
 	private DisplayImageOptions imageOptions, iconImageOptions;
 	private ImageLoader imageLoader;
-	private ImageLoaderConfiguration config;
 
 	public ScrapPostAdapter(Context context, ListView listView) {
 		inflater = LayoutInflater.from(context);
 		this.context = context;
 		imageLoader = ImageLoader.getInstance();
-		config = new ImageLoaderConfiguration.Builder(context)
-				.threadPoolSize(3).build();
-		imageLoader.init(config);
 
 		imageOptions = new DisplayImageOptions.Builder() //
 				.delayBeforeLoading(200) // 载入之前的延迟时间
@@ -62,6 +61,12 @@ public class ScrapPostAdapter  extends BaseAdapter {
 
 	public List<ItemInfo> getData() {
 		return this.data;
+	}
+	
+	public void clearAdapter(){
+		if(this.data!=null){
+		this.data.clear();
+		}
 	}
 
 	public void startLoading() {
@@ -97,6 +102,10 @@ public class ScrapPostAdapter  extends BaseAdapter {
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.item_scrap, parent, false);
 		}
+		final ItemInfo p = data.get(position);
+		int bigImgHeight = p.getBheight();
+		int bigIwidth = p.getBwidth();
+		int screenWidth = Utils.getScreenWidth(context);
 
 		ViewHolder holder = new ViewHolder();
 		holder.usericon = (CircularImageView) convertView
@@ -108,17 +117,21 @@ public class ScrapPostAdapter  extends BaseAdapter {
 		holder.nickName = (TextView)convertView.findViewById(R.id.scrap_user_nickname);
 		holder.goPostDetail = (TextView) convertView
 				.findViewById(R.id.tv_go_detail);
-
-		final ItemInfo p = data.get(position);
-
+		
+		if (bigImgHeight != 0 && bigIwidth != 0 && screenWidth != 0) {
+			holder.image.getLayoutParams().height = (int) (((double) screenWidth) * ((double) bigImgHeight / (double) bigIwidth));
+		}
+		
 		holder.message.setText(p.getTitle());
 		holder.nickName.setText(p.getNickName());
 		
 		String url = p.getShowUrl();
+		ImageAware imageAware = new ImageViewAware(holder.image, false);
 		if (!StringUtil.isEmpty(url)) {
-			imageLoader.displayImage(url+"", holder.image, imageOptions);
+			imageLoader.displayImage(url+"", imageAware, imageOptions);
 		} else {
 		}
+		holder.image.setTag(p.getShowUrl());
 		
 		String iconUrl = p.getUserImageUrl();
 		if (!StringUtil.isEmpty(iconUrl)) {

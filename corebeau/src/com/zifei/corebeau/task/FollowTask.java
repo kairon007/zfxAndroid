@@ -11,6 +11,7 @@ import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.common.net.UrlConstants;
 import com.zifei.corebeau.common.task.NetworkExecutor;
+import com.zifei.corebeau.utils.Utils;
 
 public class FollowTask {
 	private Context context;
@@ -49,10 +50,10 @@ public class FollowTask {
 				});
 	}
 
-	public void addFollow(
+	public void addFollow(String followUserId,
 			final AsyncCallBacks.OneOne<Response, String> callback) {
 
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = Utils.buildMap("followUserId", followUserId);
 
 		NetworkExecutor.post(UrlConstants.FOLLOW_ADD, params,
 				Response.class,

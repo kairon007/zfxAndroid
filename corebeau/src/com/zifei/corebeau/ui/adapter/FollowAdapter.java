@@ -23,26 +23,22 @@ public class FollowAdapter extends BaseAdapter {
 	private Context context;
 	private LayoutInflater inflater;
 	private List<FollowUserInfo> data = null;
-	private DisplayImageOptions imageOptions;
+	private DisplayImageOptions iconImageOptions;
 	private ImageLoader imageLoader;
-	private ImageLoaderConfiguration config;
 
 	public FollowAdapter(Context context, ListView listView) {
 		inflater = LayoutInflater.from(context);
 		this.context = context;
 		imageLoader = ImageLoader.getInstance();
-		config = new ImageLoaderConfiguration.Builder(context)
-				.threadPoolSize(3).build();
-		imageLoader.init(config);
 
-		imageOptions = new DisplayImageOptions.Builder() //
-				// .showImageOnLoading(R.drawable.mall_item_bg) // 载入时图片设置为黑色
-				// .showImageOnFail(R.drawable.mall_item_bg) // 加载失败时显示的图片
-				.delayBeforeLoading(200) // 载入之前的延迟时间
-				.cacheInMemory(false).cacheOnDisk(true)
-				// .imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
-				// .displayer(new FadeInBitmapDisplayer(500))
-				.build();
+		iconImageOptions = new DisplayImageOptions.Builder()
+		//
+		.delayBeforeLoading(200)
+		.cacheInMemory(true)
+		.showImageOnFail(R.drawable.user_icon_default)
+		.showImageForEmptyUri(R.drawable.user_icon_default)
+		.showImageOnLoading(R.drawable.user_icon_default)
+		.build();
 	}
 
 	public void addData(List<FollowUserInfo> data, boolean append) {
@@ -103,8 +99,10 @@ public class FollowAdapter extends BaseAdapter {
 
 		String urlThumb = p.getUrl();
 		if (!StringUtil.isEmpty(urlThumb)) {
-			imageLoader.displayImage(urlThumb, holder.usericon, imageOptions);
+			imageLoader.displayImage(urlThumb, holder.usericon, iconImageOptions);
 		} else {
+			imageLoader.displayImage("drawable://" + R.drawable.user_icon_default,
+					holder.usericon, iconImageOptions);
 		}
 
 		holder.nickName.setText(p.getNickName());

@@ -62,6 +62,7 @@ public class FollowActivity extends SherlockActivity{
 			public void onSuccess(FollowListResponse response) {
 				progressBar.setVisibility(View.INVISIBLE);
 				followAdapter.addData(response.getPageBean().getList(), false);
+				followAdapter.notifyDataSetChanged();
 			}
 
 			@Override

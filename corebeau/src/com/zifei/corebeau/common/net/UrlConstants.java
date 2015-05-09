@@ -121,6 +121,6 @@ public class UrlConstants {
 	
 	//otherUser
 	
-	public static String GET_OTHER_USERINFO = BASE_URL + "....";
+	public static String GET_OTHER_USERINFO = BASE_URL + "/account/getUserShowInfo";
 
 }

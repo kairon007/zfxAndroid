@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.imageaware.ImageAware;
+import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.utils.StringUtil;
@@ -27,21 +29,15 @@ public class MyItemListAdapter extends BaseAdapter implements OnClickListener {
 	private List<ItemInfo> data = null;
 	private DisplayImageOptions imageOptions;
 	private ImageLoader imageLoader;
-	private ImageLoaderConfiguration config;
 
 	public MyItemListAdapter(Context context, ListView listView) {
 		inflater = LayoutInflater.from(context);
 		this.context = context;
 		imageLoader = ImageLoader.getInstance();
-		config = new ImageLoaderConfiguration.Builder(context)
-				.threadPoolSize(3).build();
-		imageLoader.init(config);
 
 		imageOptions = new DisplayImageOptions.Builder() //
 				.delayBeforeLoading(200) // 载入之前的延迟时间
 				.cacheInMemory(true)
-				// .imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
-				// .displayer(new FadeInBitmapDisplayer(500))
 				.build();
 	}
 
@@ -59,8 +55,9 @@ public class MyItemListAdapter extends BaseAdapter implements OnClickListener {
 	}
 	
 	public void clearAdapter(){
+		if(this.data!=null){
 		this.data.clear();
-//		notifyDataSetChanged();
+		}
 	}
 
 	public void startLoading() {
@@ -117,11 +114,13 @@ public class MyItemListAdapter extends BaseAdapter implements OnClickListener {
 		holder.message.setText(p.getTitle());
 
 		String url = p.getShowUrl();
+		ImageAware imageAware = new ImageViewAware(holder.image, false);
 		if (!StringUtil.isEmpty(url)) {
-			imageLoader.displayImage(url, holder.image, imageOptions);
+			imageLoader.displayImage(url, imageAware, imageOptions);
 		} else {
 			// holder.image.setBackgroundColor(color.blue);
 		}
+		holder.image.setTag(p.getShowUrl());
 
 		convertView.setTag(position);
 		return convertView;
