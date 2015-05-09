@@ -9,8 +9,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
@@ -22,8 +27,8 @@ import com.zifei.corebeau.extra.HorizontalListView;
 import com.zifei.corebeau.extra.pla.XListView;
 import com.zifei.corebeau.extra.pla.XListView.IXListViewListener;
 import com.zifei.corebeau.extra.pla.internal.PLA_AbsListView;
-import com.zifei.corebeau.extra.pla.internal.PLA_AdapterView;
 import com.zifei.corebeau.extra.pla.internal.PLA_AbsListView.OnScrollListener;
+import com.zifei.corebeau.extra.pla.internal.PLA_AdapterView;
 import com.zifei.corebeau.extra.pla.internal.PLA_AdapterView.OnItemClickListener;
 import com.zifei.corebeau.task.SearchTask;
 import com.zifei.corebeau.ui.activity.PostDetailActivity;
@@ -46,6 +51,9 @@ public class SearchFragment extends Fragment implements
 	private boolean isLast = false;
 	private int requestCurrentPage;
 	private boolean isRequestPost = false;
+	private Spinner sortSpinner;
+	private ArrayAdapter sortAdapter;
+	private int sortType = 1;
 
 	public static SearchFragment newInstance(String param1, String param2) {
 		SearchFragment fragment = new SearchFragment();
@@ -82,14 +90,35 @@ public class SearchFragment extends Fragment implements
 				null);
 		horizontalListView = (HorizontalListView) header
 				.findViewById(R.id.hlv_search);
+		 sortSpinner = (Spinner)header.findViewById(R.id.spinner_search);
+		 sortAdapter = ArrayAdapter.createFromResource(getActivity(), 
+		           R.array.search_sort, android.R.layout.simple_spinner_item);
+		 sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		 sortSpinner.setAdapter(sortAdapter);
+		 sortSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			    @Override
+			    public void onItemSelected(AdapterView<?> parent, View view,
+			            int position, long id) {
+			    	sortType = position+1;
+			    	 getRecommendPostListRefresh();
+			    }
+			    @Override
+			    public void onNothingSelected(AdapterView<?> parent) {
+			    }
+			});
+		
+		
 		mAdapterView.addHeaderView(header);
 		recommedUserAdapter = new RecommedUserAdapter(getActivity(),
 				horizontalListView);
 		mAdapter = new SearchPostAdapter(getActivity(), mAdapterView);
 		mAdapterView.setAdapter(mAdapter);
 		horizontalListView.setAdapter(recommedUserAdapter);
-		refreshBtn = (ImageView) view.findViewById(R.id.refresh_search);
-		refreshBtn.setOnClickListener(this);
+		
+		
+		
+		 
+		 
 		mAdapterView.setOnItemClickListener(this);
 		mAdapterView.setOnScrollListener(this);
 		mAdapterView.setXListViewListener(this);
@@ -146,7 +175,7 @@ public class SearchFragment extends Fragment implements
 		isRequestPost = true;
 		progressBar.setVisibility(View.VISIBLE);
 		searchTask
-				.getRecommendPostList(requestCurrentPage, new AsyncCallBacks.OneOne<RecommendPostResponse, String>() {
+				.getRecommendPostList(requestCurrentPage, sortType ,new AsyncCallBacks.OneOne<RecommendPostResponse, String>() {
 					@Override
 					public void onSuccess(RecommendPostResponse response) {
 						progressBar.setVisibility(View.GONE);
@@ -199,7 +228,7 @@ public class SearchFragment extends Fragment implements
 	private void getRecommendPostListRefresh() {
 		requestCurrentPage = 0;
 		searchTask
-				.getRecommendPostList(requestCurrentPage, new AsyncCallBacks.OneOne<RecommendPostResponse, String>() {
+				.getRecommendPostList(requestCurrentPage, sortType,new AsyncCallBacks.OneOne<RecommendPostResponse, String>() {
 					@Override
 					public void onSuccess(RecommendPostResponse response) {
 						PageBean<ItemInfo> pageBean = (PageBean<ItemInfo>) response
@@ -281,4 +310,5 @@ public class SearchFragment extends Fragment implements
 	public void onRefresh() {
 		getRecommendPostListRefresh();
 	}
+	
 }

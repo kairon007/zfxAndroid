@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+      <string-array name="search_sort">
+        <item>latest</item>
+        <item>populate</item>
+        <item>hot topic</item>
+    </string-array>
+
+</resources>

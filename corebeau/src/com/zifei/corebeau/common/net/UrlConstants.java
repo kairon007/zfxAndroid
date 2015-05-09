@@ -37,6 +37,13 @@ public class UrlConstants {
 
 	public static String GET_SEARCH_RECOMMEND_POST = BASE_URL
 			+ "/post/getLatestItemInfo";
+	
+	public static String GET_SEARCH_SORT_BY_LIKE_CNT_POST = BASE_URL
+			+ "/post/getSortByLikeCnt";
+	
+	public static String GET_SEARCH_SORT_BY_COMMENT_CNT_POST = BASE_URL
+			+ "/post/getSortByCommentCnt";
+	
 
 	public static String SEARCH = BASE_URL + "/spot_post";
 

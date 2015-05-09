@@ -145,6 +145,7 @@ public class MyInfoActivity extends SherlockActivity implements
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.my_info_bind_account:
+			showBoundAccountDialog();
 			break;
 		case R.id.my_info_change_password:
 			showChangePassWordDialog();

@@ -5,12 +5,13 @@
     android:orientation="vertical" 
     android:background="@color/common_background_grey">
     
-    <SearchView
-        android:layout_margin="10dp"
-        android:id="@+id/sv_search_bar"
+    <Spinner 
+        android:id="@+id/spinner_search"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#FFFFFF"></SearchView>
+        android:layout_margin="7dp"
+        android:background="@color/common_item_inner"
+        />
 
     <com.zifei.corebeau.extra.HorizontalListView
         android:id="@+id/hlv_search"

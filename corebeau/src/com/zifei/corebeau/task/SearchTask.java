@@ -56,12 +56,12 @@ public class SearchTask {
 				});
 	}
 
-	public void getRecommendPostList(int currentPage, 
+	public void getRecommendPostList(int currentPage,int type,
 			final AsyncCallBacks.OneOne<RecommendPostResponse, String> callback) {
 
 		Map<String, Object> params = Utils.buildMap("currentPage", currentPage);
 		
-		NetworkExecutor.post(UrlConstants.GET_SEARCH_RECOMMEND_POST, params,
+		NetworkExecutor.post(getTargetUrl(type), params,
 				RecommendPostResponse.class,
 				new NetworkExecutor.CallBack<RecommendPostResponse>() {
 					@Override
@@ -84,5 +84,20 @@ public class SearchTask {
 						callback.onError(msg);
 					}
 				});
+	}
+	
+	private String getTargetUrl(int type){
+		
+		switch (type) {
+		case 1:
+			return UrlConstants.GET_SEARCH_RECOMMEND_POST;
+		case 2:
+			return UrlConstants.GET_SEARCH_SORT_BY_LIKE_CNT_POST ;
+		case 3:
+			return UrlConstants.GET_SEARCH_SORT_BY_COMMENT_CNT_POST;
+		default:
+			return UrlConstants.GET_SEARCH_RECOMMEND_POST;
+		}
+		
 	}
 }
