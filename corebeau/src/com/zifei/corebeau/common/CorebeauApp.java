@@ -48,12 +48,10 @@ public class CorebeauApp extends Application {
 	}
 
 	private void loadInitData() {
-		final UserInfoService userInfoService = new UserInfoService(
-				this.getApplicationContext());
 		new Thread() {
 			@Override
 			public void run() {
-				userInfoService.getCurentUserInfo();
+				UserInfoService.getCurentUserInfo();
 			}
 		};
 	}

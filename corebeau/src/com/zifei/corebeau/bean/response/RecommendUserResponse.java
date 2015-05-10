@@ -1,17 +1,19 @@
 package com.zifei.corebeau.bean.response;
 
-import com.zifei.corebeau.bean.PageBean;
+import java.util.List;
+
+import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.common.net.Response;
-@SuppressWarnings("rawtypes")
 public class RecommendUserResponse extends Response {
 
-//	private PageBean pageBean;
-//
-//	public PageBean getPageBean() {
-//		return pageBean;
-//	}
-//
-//	public void setPageBean(PageBean pageBean) {
-//		this.pageBean = pageBean;
-//	}
+	private List<UserInfo> recommendUsers;
+
+	public List<UserInfo> getRecommendUsers() {
+		return recommendUsers;
+	}
+
+	public void setRecommendUsers(List<UserInfo> recommendUsers) {
+		this.recommendUsers = recommendUsers;
+	}
+	
 }

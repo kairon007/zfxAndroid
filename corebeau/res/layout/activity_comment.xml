@@ -3,15 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="500dp"
     android:background="@color/common_item_inner" >
+    
+
+        <TextView
+            android:id="@+id/tv_comment_title"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"/>
+
+    
+        <View 
+            android:id="@+id/comment_divider_1"
+            style="@style/custom_divider_grey"
+            android:layout_below="@id/tv_comment_title" />
 
     <ListView
         android:id="@+id/lv_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FF0000" >
+        android:layout_below="@id/comment_divider_1"
+        android:background="@color/inner_white"
+        android:divider="@null">
     </ListView>
+    
+     
 
     <LinearLayout
+        android:id="@+id/ll_comment_write"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/common_item_inner"
@@ -31,5 +50,10 @@
             android:text="submit"
              android:layout_weight="5" />
     </LinearLayout>
+    
+     <View 
+          android:id="@+id/comment_divider_2"
+          style="@style/custom_divider_grey"
+          android:layout_above="@id/ll_comment_write" />
 
 </RelativeLayout>

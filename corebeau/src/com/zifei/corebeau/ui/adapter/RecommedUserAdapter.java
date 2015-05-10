@@ -16,6 +16,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.R.color;
 import com.zifei.corebeau.bean.RecommendUserList;
+import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.extra.CircularImageView;
 import com.zifei.corebeau.extra.HorizontalListView;
 import com.zifei.corebeau.utils.StringUtil;
@@ -27,7 +28,7 @@ public class RecommedUserAdapter extends BaseAdapter {
 
 	private Context context;
 	private LayoutInflater inflater;
-	private List<RecommendUserList> data = null;
+	private List<UserInfo> data = null;
 	private DisplayImageOptions imageOptions;
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
@@ -43,7 +44,7 @@ public class RecommedUserAdapter extends BaseAdapter {
 				.imageScaleType(ImageScaleType.EXACTLY).build();
 	}
 
-	public void addData(List<RecommendUserList> data, boolean append) {
+	public void addData(List<UserInfo> data, boolean append) {
 		if (append) {
 			this.data.addAll(data);
 		} else {
@@ -87,9 +88,9 @@ public class RecommedUserAdapter extends BaseAdapter {
 		// holder.nickName = (TextView)
 		// convertView.findViewById(R.id.spot_user_nickname);
 
-		final RecommendUserList p = data.get(position);
+		final UserInfo p = data.get(position);
 
-		String urlThumb = p.getPicThumbUrl();
+		String urlThumb = p.getUrl();
 		if (!StringUtil.isEmpty(urlThumb)) {
 			imageLoader.displayImage(urlThumb, holder.usericon, imageOptions);
 			// imageLoader.displayImage("drawable://" + R.drawable.a1,

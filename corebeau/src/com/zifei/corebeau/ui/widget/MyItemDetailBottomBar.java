@@ -46,6 +46,7 @@ public class MyItemDetailBottomBar extends RelativeLayout implements
 	private PostTask postTask;
 	private MyTask myTask;
 	private OnMyItemDeleteListener onMyItemDeleteListener;
+	private int commentCnt ;
 
 	public MyItemDetailBottomBar(Context context) {
 		super(context);
@@ -110,6 +111,7 @@ public class MyItemDetailBottomBar extends RelativeLayout implements
 		case R.id.iv_post_comment:
 			Intent intent = new Intent(context, CommentActivity.class);
 			intent.putExtra("itemId", itemId);
+			intent.putExtra("commentCnt", commentCnt);
 			context.startActivity(intent);
 			break;
 		case R.id.iv_post_scrap:
@@ -127,6 +129,7 @@ public class MyItemDetailBottomBar extends RelativeLayout implements
 	public void setCurrentItem(ItemInfo itemInfo) {
 		this.itemInfo = itemInfo;
 		this.itemId = itemInfo.getItemId();
+		this.commentCnt = itemInfo.getCommentCnt();
 		setWigetImageView();
 		setIconImage();
 	}

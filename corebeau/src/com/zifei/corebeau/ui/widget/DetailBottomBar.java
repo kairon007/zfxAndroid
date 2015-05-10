@@ -40,6 +40,7 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
 	private PostTask postTask;
+	private int commentCnt ;
 
 	public DetailBottomBar(Context context) {
 		super(context);
@@ -107,6 +108,7 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 		case R.id.iv_post_comment:
 			Intent intent = new Intent(context, CommentActivity.class);
 			intent.putExtra("itemId", itemId);
+			intent.putExtra("commentCnt", commentCnt);
 			context.startActivity(intent);
 			break;
 		case R.id.iv_post_scrap:
@@ -126,6 +128,7 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 	public void setCurrentItem(ItemInfo itemInfo) {
 		this.itemInfo = itemInfo;
 		this.itemId = itemInfo.getItemId();
+		this.commentCnt = itemInfo.getCommentCnt();
 		setWigetImageView();
 		setIconImage();
 	}

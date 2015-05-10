@@ -15,11 +15,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.bean.PageBean;
+import com.zifei.corebeau.bean.UserInfo;
 import com.zifei.corebeau.bean.response.RecommendPostResponse;
 import com.zifei.corebeau.bean.response.RecommendUserResponse;
 import com.zifei.corebeau.common.AsyncCallBacks;
@@ -124,6 +124,7 @@ public class SearchFragment extends Fragment implements
 		mAdapterView.setOnScrollListener(this);
 		mAdapterView.setXListViewListener(this);
 		getRecommendPostList();
+		getRecommendUserList();
 		return view;
 	}
 
@@ -143,26 +144,18 @@ public class SearchFragment extends Fragment implements
 	}
 
 	private void getRecommendUserList() {
-		// progressBar.setVisibility(View.VISIBLE);
-		progressBar.setVisibility(View.GONE);
 		searchTask
 				.getRecommendUserList(new AsyncCallBacks.OneOne<RecommendUserResponse, String>() {
 					@Override
 					public void onSuccess(RecommendUserResponse response) {
-						progressBar.setVisibility(View.GONE);
-						// List<RecommendUserList> spotList =
-						// response.getRecommendUserList();
-						// if (spotList.size() <= 0) {
-						// } else {
-						// }
+						List<UserInfo> list = response.getRecommendUsers();
+						if(list.size()>0){
+							recommedUserAdapter.addData(list, false);
+						}
 					}
 
 					@Override
 					public void onError(String msg) {
-						progressBar.setVisibility(View.GONE);
-						// recommedUserAdapter.addData(TestData.getRecommendUserList(),
-						// false);
-						// recommedUserAdapter.notifyDataSetChanged();
 						Utils.showToast(getActivity(), msg);
 					}
 				});

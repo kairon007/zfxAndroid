@@ -13,6 +13,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.zifei.corebeau.R;
 import com.zifei.corebeau.bean.ItemComment;
@@ -33,9 +34,11 @@ public class CommentActivity extends Activity implements View.OnClickListener, O
     private CommentAdapter commentAdapter;
     private ListView listView;
     private EditText commentEditText;
+    private TextView tvCommentCnt;
     private Button commentInsertBtn;
     private String replyUserId;
     private String replyUserNickName;
+    private int commentCnt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class CommentActivity extends Activity implements View.OnClickListener, O
         
         Intent intent = getIntent();
         itemId = intent.getStringExtra("itemId");
+        commentCnt = intent.getIntExtra("commentCnt", 0);
         init();
 
     }
@@ -56,8 +60,9 @@ public class CommentActivity extends Activity implements View.OnClickListener, O
         listView.setAdapter(commentAdapter);
         commentEditText = (EditText)findViewById(R.id.et_comment);
         commentInsertBtn = (Button)findViewById(R.id.btn_comment);
+        tvCommentCnt = (TextView)findViewById(R.id.tv_comment_title);
         getComment();
-        
+        setCommentCount();
         commentInsertBtn.setOnClickListener(this);
     }
 
@@ -85,6 +90,10 @@ public class CommentActivity extends Activity implements View.OnClickListener, O
 //        	}
         }
     }
+    
+    private void setCommentCount(){
+    	tvCommentCnt.setText(String.valueOf("comment "+commentCnt));
+    }
 
     @Override
     protected void onDestroy() {
@@ -98,6 +107,7 @@ public class CommentActivity extends Activity implements View.OnClickListener, O
             @Override
             public void onSuccess(CommentListResponse result) {
                 commentAdapter.addData(result.getPageBean().getList(),false);
+                commentEditText.setText("");
             }
 
             @Override

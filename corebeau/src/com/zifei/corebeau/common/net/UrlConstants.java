@@ -5,7 +5,7 @@ public class UrlConstants {
 	 public static final String BASE_URL =
 	 "http://115.28.175.29:8080/frontend";
 
-//	public static final String BASE_URL = "http://192.168.91.103:8080/frontend";
+//	public static final String BASE_URL = "http://192.168.91.100:8080/frontend";
 
 	// config
 	
@@ -33,7 +33,7 @@ public class UrlConstants {
 
 	// search
 
-	public static String GET_SEARCH_RECOMMEND_USER = BASE_URL + "/spot_post";
+	public static String GET_SEARCH_RECOMMEND_USER = BASE_URL + "/account/getRecommendUsers";
 
 	public static String GET_SEARCH_RECOMMEND_POST = BASE_URL
 			+ "/post/getLatestItemInfo";

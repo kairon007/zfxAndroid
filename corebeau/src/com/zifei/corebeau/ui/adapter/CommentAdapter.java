@@ -26,7 +26,7 @@ public class CommentAdapter extends BaseAdapter {
 
 	private LayoutInflater inflater;
 	private List<ItemComment> data = null;
-	private DisplayImageOptions imageOptions;
+	private DisplayImageOptions iconImageOptions;
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
 
@@ -37,10 +37,14 @@ public class CommentAdapter extends BaseAdapter {
 				.threadPoolSize(3).build();
 		imageLoader.init(config);
 
-		imageOptions = new DisplayImageOptions.Builder()
-				.delayBeforeLoading(200)
-				.cacheInMemory(false).cacheOnDisk(true)
-				.displayer(new RoundedBitmapDisplayer(10)).build();
+		iconImageOptions = new DisplayImageOptions.Builder()
+		//
+		.delayBeforeLoading(200)
+		.cacheInMemory(true)
+		.showImageOnFail(R.drawable.user_icon_default)
+		.showImageForEmptyUri(R.drawable.user_icon_default)
+		.showImageOnLoading(R.drawable.user_icon_default)
+		.build();
 	}
 
 	public void addData(List<ItemComment> data, boolean append) {
@@ -97,18 +101,29 @@ public class CommentAdapter extends BaseAdapter {
 		ViewHolder holder = new ViewHolder();
 		holder.image = (CircularImageView) convertView
 				.findViewById(R.id.iv_comment_icon);
-		holder.image.setBorderWidth(0);
+		holder.image.setBorderWidth(1);
 		holder.message = (TextView) convertView
 				.findViewById(R.id.tv_comment_message);
+		holder.nickName = (TextView) convertView
+				.findViewById(R.id.tv_comment_nickname);
 
 		ItemComment p = data.get(position);
 
+		
 		holder.message.setText(p.getContent());
+		
+		String nick = p.getUserNickName();
+		if(nick!=null){
+			holder.nickName.setText(nick);
+		}else{
+			
+		}
 
 		String url = p.getUserImageUrl();
 		if (!StringUtil.isEmpty(url)) {
-			imageLoader.displayImage(url, holder.image, imageOptions);
+			imageLoader.displayImage(url, holder.image, iconImageOptions);
 		} else {
+			imageLoader.displayImage("drawable://" + R.drawable.user_icon_default, holder.image, iconImageOptions);
 		}
 
 		convertView.setTag(position);
@@ -118,5 +133,6 @@ public class CommentAdapter extends BaseAdapter {
 	private class ViewHolder {
 		CircularImageView image;
 		TextView message;
+		TextView nickName;
 	}
 }
