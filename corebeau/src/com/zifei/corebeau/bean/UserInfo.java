@@ -2,7 +2,7 @@ package com.zifei.corebeau.bean;
 
 import java.io.Serializable;
 
-public class UserInfo {
+public class UserInfo implements Serializable {
 	public static final boolean GENDER_MALE = true;
 	public static final boolean GENDER_FEMALE = false;
 

@@ -29,19 +29,21 @@ public class RecommedUserAdapter extends BaseAdapter {
 	private Context context;
 	private LayoutInflater inflater;
 	private List<UserInfo> data = null;
-	private DisplayImageOptions imageOptions;
+	private DisplayImageOptions iconImageOptions;
 	private ImageLoader imageLoader;
-	private ImageLoaderConfiguration config;
 
 	public RecommedUserAdapter(Context context, HorizontalListView listView) {
 		inflater = LayoutInflater.from(context);
 		imageLoader = ImageLoader.getInstance();
-		config = new ImageLoaderConfiguration.Builder(context)
-				.threadPoolSize(3).build();
-		imageLoader.init(config);
 
-		imageOptions = new DisplayImageOptions.Builder() //
-				.imageScaleType(ImageScaleType.EXACTLY).build();
+		iconImageOptions = new DisplayImageOptions.Builder()
+		//
+		.delayBeforeLoading(200)
+		.cacheInMemory(true)
+		.showImageOnFail(R.drawable.user_icon_default)
+		.showImageForEmptyUri(R.drawable.user_icon_default)
+		.showImageOnLoading(R.drawable.user_icon_default)
+		.build();
 	}
 
 	public void addData(List<UserInfo> data, boolean append) {
@@ -62,7 +64,7 @@ public class RecommedUserAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public Object getItem(int position) {
+	public UserInfo getItem(int position) {
 		if (data == null) {
 			return null;
 		}
@@ -85,19 +87,26 @@ public class RecommedUserAdapter extends BaseAdapter {
 				.findViewById(R.id.civ_search_user_recommend);
 		holder.usericon.setBorderWidth(1);
 		holder.usericon.setBorderColor(color.spot_top_divider);
-		// holder.nickName = (TextView)
-		// convertView.findViewById(R.id.spot_user_nickname);
+		holder.nickName = (TextView) convertView
+				.findViewById(R.id.tv_search_user_nick);
 
 		final UserInfo p = data.get(position);
 
 		String urlThumb = p.getUrl();
+		String nick = p.getNickName();
+		
 		if (!StringUtil.isEmpty(urlThumb)) {
-			imageLoader.displayImage(urlThumb, holder.usericon, imageOptions);
-			// imageLoader.displayImage("drawable://" + R.drawable.a1,
-			// holder.usericon, imageOptions);
+			imageLoader.displayImage(urlThumb, holder.usericon, iconImageOptions);
 		} else {
+			imageLoader.displayImage("drawable://" + R.drawable.user_icon_default, holder.usericon, iconImageOptions);
 		}
-		// holder.nickName.setText(p.getNickName());
+		
+		if(nick!=null){
+		 holder.nickName.setText(p.getNickName());
+		}else{
+			holder.nickName.setText("guest");
+		}
+		
 		convertView.setTag(position);
 		return convertView;
 	}

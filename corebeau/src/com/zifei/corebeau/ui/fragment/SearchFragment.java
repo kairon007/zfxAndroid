@@ -31,13 +31,14 @@ import com.zifei.corebeau.extra.pla.internal.PLA_AbsListView.OnScrollListener;
 import com.zifei.corebeau.extra.pla.internal.PLA_AdapterView;
 import com.zifei.corebeau.extra.pla.internal.PLA_AdapterView.OnItemClickListener;
 import com.zifei.corebeau.task.SearchTask;
+import com.zifei.corebeau.ui.activity.OtherUserActivity;
 import com.zifei.corebeau.ui.activity.PostDetailActivity;
 import com.zifei.corebeau.ui.adapter.RecommedUserAdapter;
 import com.zifei.corebeau.ui.adapter.SearchPostAdapter;
 import com.zifei.corebeau.utils.Utils;
 
 public class SearchFragment extends Fragment implements
-		OnScrollListener, OnItemClickListener, View.OnClickListener, IXListViewListener {
+		OnScrollListener, OnItemClickListener, View.OnClickListener, IXListViewListener, android.widget.AdapterView.OnItemClickListener {
 
 	// private SearchView searchView;
 	private HorizontalListView horizontalListView;
@@ -47,7 +48,6 @@ public class SearchFragment extends Fragment implements
 	private ProgressBar progressBar;
 	private SearchPostAdapter mAdapter;
 	public static final String SAVED_DATA_KEY = "SAVED_DATA";
-	private ImageView refreshBtn;
 	private boolean isLast = false;
 	private int requestCurrentPage;
 	private boolean isRequestPost = false;
@@ -107,22 +107,17 @@ public class SearchFragment extends Fragment implements
 			    public void onNothingSelected(AdapterView<?> parent) {
 			    }
 			});
-		
-		
 		mAdapterView.addHeaderView(header);
 		recommedUserAdapter = new RecommedUserAdapter(getActivity(),
 				horizontalListView);
 		mAdapter = new SearchPostAdapter(getActivity(), mAdapterView);
 		mAdapterView.setAdapter(mAdapter);
 		horizontalListView.setAdapter(recommedUserAdapter);
-		
 		errorImg = (ImageView)view.findViewById(R.id.network_error_search);
-		
-		 
-		 
 		mAdapterView.setOnItemClickListener(this);
 		mAdapterView.setOnScrollListener(this);
 		mAdapterView.setXListViewListener(this);
+		horizontalListView.setOnItemClickListener(this);
 		getRecommendPostList();
 		getRecommendUserList();
 		return view;
@@ -313,6 +308,16 @@ public class SearchFragment extends Fragment implements
 	@Override
 	public void onRefresh() {
 		getRecommendPostListRefresh();
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		UserInfo userInfo = recommedUserAdapter.getItem(position);
+		Intent intent = new Intent(getActivity(), OtherUserActivity.class);
+		intent.putExtra("dataType", "userInfo");
+		intent.putExtra("userInfo", userInfo);
+		startActivity(intent);
 	}
 	
 }

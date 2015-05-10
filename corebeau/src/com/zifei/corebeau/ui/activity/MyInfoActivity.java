@@ -49,7 +49,6 @@ public class MyInfoActivity extends SherlockActivity implements
 		OnClickListener, OnFocusChangeListener, OnProfileImgStatusListener {
 
 	private MyInfoTask myInfoTask;
-
 	private EditText nickname;
 	private RelativeLayout rlChangePassword;
 	private RelativeLayout rlBoundAccount;
@@ -80,7 +79,6 @@ public class MyInfoActivity extends SherlockActivity implements
 		initActionBar();
 		initLoader();
 		init();
-
 	}
 
 	private void initActionBar() {

@@ -65,10 +65,20 @@ public class OtherUserActivity extends SherlockActivity implements
 		setContentView(R.layout.activity_another_user);
 
 		Intent intent = getIntent();
-		ItemInfo itemInfo = (ItemInfo) intent.getSerializableExtra("itemInfo");
-		targetUserId = itemInfo.getUserId();
-		nickName = itemInfo.getNickName();
-		userImageUrl = itemInfo.getUserImageUrl();
+		String dataType = intent.getStringExtra("dataType");
+		if(dataType!=null){
+			UserInfo userInfo = (UserInfo) intent.getSerializableExtra("userInfo");
+			targetUserId = userInfo.getUserId();
+			nickName = userInfo.getNickName();
+			userImageUrl = userInfo.getUrl();
+		}else{
+			ItemInfo itemInfo = (ItemInfo) intent.getSerializableExtra("itemInfo");
+			targetUserId = itemInfo.getUserId();
+			nickName = itemInfo.getNickName();
+			userImageUrl = itemInfo.getUserImageUrl();
+		}
+		
+		
 
 		otherUserTask = new OtherUserTask(this);
 		folowTask = new FollowTask(this);
