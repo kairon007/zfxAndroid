@@ -49,7 +49,7 @@ public class OtherUserActivity extends SherlockActivity implements
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
 	private ImageView backgroundImageView;
-	private TextView nicknameTextView;
+	private TextView nicknameTextView, followCnt, likeCnt, itemCnt;
 	private ProgressBar progressBar;
 	private String targetUserId;
 	private String nickName;
@@ -141,6 +141,9 @@ public class OtherUserActivity extends SherlockActivity implements
 		circularImageView = (CircularImageView) findViewById(R.id.civ_userpage_icon);
 		backgroundImageView = (ImageView) findViewById(R.id.iv_userpage_background);
 		nicknameTextView = (TextView) findViewById(R.id.tv_userpage_nickname);
+		followCnt = (TextView) findViewById(R.id.tv_otheruser_follow_cnt);
+		likeCnt = (TextView) findViewById(R.id.tv_otheruser_like_cnt);
+		itemCnt = (TextView) findViewById(R.id.tv_otheruser_item_cnt);
 
 		otherUserPostAdapter.setOnUserDetailStartClickListener(this);
 		setUserBaseInfo();
@@ -169,6 +172,12 @@ public class OtherUserActivity extends SherlockActivity implements
 			@Override
 			public void onSuccess(Integer status, OtherUserInfoResponse response) {
 				userShowInfo = response.getUserShowInfo();
+				;
+				
+				followCnt.setText(String.valueOf(userShowInfo.getFollowedCount()));
+//				likeCnt.setText(String.valueOf(userShowInfo.l));
+				itemCnt.setText(String.valueOf(userShowInfo.getItemCount()));
+				
 				isFollowed = response.getIsFollowed();
 			}
 
