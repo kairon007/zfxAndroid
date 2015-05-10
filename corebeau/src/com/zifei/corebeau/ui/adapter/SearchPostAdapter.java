@@ -105,14 +105,20 @@ public class SearchPostAdapter extends BaseAdapter {
 		vh.image.setImageWidth(200);
 		vh.image.setImageHeight((int) (((double) 200) * ((double) smallImgHeight / (double) smallImgWidth)));
 
-		// vh.message.setText(itemInfo.getTitle());
+		
+		String message = itemInfo.getTitle();
+		if (message.length() > 50) {
+			vh.message.setText(message.substring(0, 50) + "...");
+		} else {
+			vh.message.setText(message);
+//			vh.message
+//			.setText(String
+//					.valueOf("hei : "
+//							+ (int) (((double) 200) * ((double) smallImgHeight / (double) smallImgWidth))
+//							+ "  idx : " + position));
+//	vh.message.setTextColor(Color.RED);
+		}
 
-		vh.message
-				.setText(String
-						.valueOf("hei : "
-								+ (int) (((double) 200) * ((double) smallImgHeight / (double) smallImgWidth))
-								+ "  idx : " + position));
-		vh.message.setTextColor(Color.RED);
 
 		if (itemInfo.getNickName() != null) {
 			vh.nickName.setText(String.valueOf("by " + itemInfo.getNickName()));

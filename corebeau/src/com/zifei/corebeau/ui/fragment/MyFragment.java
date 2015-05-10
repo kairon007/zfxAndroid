@@ -14,14 +14,21 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.zifei.corebeau.R;
+import com.zifei.corebeau.bean.OtherUserInfo;
 import com.zifei.corebeau.bean.UserInfo;
+import com.zifei.corebeau.bean.UserShowInfo;
+import com.zifei.corebeau.bean.response.OtherUserInfoResponse;
+import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.extra.CircularImageView;
+import com.zifei.corebeau.task.OtherUserTask;
 import com.zifei.corebeau.task.UserInfoService;
 import com.zifei.corebeau.ui.activity.FollowActivity;
 import com.zifei.corebeau.ui.activity.MyInfoActivity;
 import com.zifei.corebeau.ui.activity.MyPageActivity;
 import com.zifei.corebeau.ui.activity.OptionActivity;
+import com.zifei.corebeau.ui.activity.OtherUserActivity;
 import com.zifei.corebeau.utils.StringUtil;
+import com.zifei.corebeau.utils.Utils;
 
 public class MyFragment extends Fragment implements View.OnClickListener {
 
@@ -31,6 +38,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
 	private UserInfoService userInfoService;
 	private DisplayImageOptions iconImageOptions;
 	private ImageLoader imageLoader;
+	private String targetUserId;
 	
 	public static MyFragment newInstance(String param1, String param2) {
 		MyFragment fragment = new MyFragment();
@@ -67,6 +75,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
 		rlLogout.setOnClickListener(this);
 		setLoader();
 		setUserInfo();
+		getUserShowInfo();
 		return view;
 	}
 	
@@ -83,9 +92,15 @@ public class MyFragment extends Fragment implements View.OnClickListener {
 	private void setUserInfo(){
 		userInfoService = new UserInfoService(getActivity());
 		UserInfo userInfo = userInfoService.getCurentUserInfo();
-		
-		String nickName = userInfo.getNickName();
+		targetUserId = userInfo.getUserId();
+		String nickNameString = userInfo.getNickName();
 		String iconUrl = userInfo.getUrl();
+		
+		if(nickNameString!=null){
+			nickName.setText(String.valueOf(nickNameString));
+		}else{
+			nickName.setText(String.valueOf("guest"));
+		}
 		
 		if (!StringUtil.isEmpty(iconUrl)) {
 			imageLoader.displayImage(iconUrl, iconImg, iconImageOptions);
@@ -94,6 +109,27 @@ public class MyFragment extends Fragment implements View.OnClickListener {
 		}
 		
 	}
+	
+	private void getUserShowInfo(){
+		new OtherUserTask(getActivity()).getOtherUserInfo(targetUserId, new AsyncCallBacks.TwoOne<Integer, OtherUserInfoResponse, String>() {
+
+			@Override
+			public void onSuccess(Integer status, OtherUserInfoResponse response) {
+				UserShowInfo userShowInfo = response.getUserShowInfo();
+				
+				followCnt.setText(String.valueOf(userShowInfo.getFollowedCount()));
+//				likeCnt.setText(String.valueOf(userShowInfo.l));
+				itemCnt.setText(String.valueOf(userShowInfo.getItemCount()));
+			}
+
+			@Override
+			public void onError(String msg) {
+				Utils.showToast(getActivity(), msg);
+			}
+
+		});
+	}
+	
 
 	@Override
 	public void onClick(View v) {

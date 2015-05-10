@@ -158,9 +158,9 @@ public class SpotAdapter extends BaseAdapter {
 		if (title.length() > 50) {
 			holder.message.setText(title.substring(0, 50) + "...");
 		} else {
-//			holder.message.setText(title);
-			holder.message.setText(String.valueOf(position));
-			holder.message.setTextColor(Color.RED);
+			holder.message.setText(title);
+//			holder.message.setText(String.valueOf(position));
+//			holder.message.setTextColor(Color.RED);
 		}
 
 		holder.commentCnt.setText(String.valueOf(p.getCommentCnt()));

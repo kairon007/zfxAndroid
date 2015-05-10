@@ -39,10 +39,10 @@ import com.zifei.corebeau.utils.Utils;
 
 public class MyTask {
 
-	private Context context;
+	private UserInfoService userInfoService;
 
 	public MyTask(Context context) {
-		this.context = context;
+		userInfoService = new UserInfoService(context);
 	}
 	
 	public void getUserInfo(){
@@ -52,7 +52,7 @@ public class MyTask {
 	public void getMyItemList(int currentPage, 
 			final AsyncCallBacks.OneOne<MyPostListResponse, String> callback) {
 
-		Map<String, Object> params = Utils.buildMap("currentPage", currentPage);
+		Map<String, Object> params = Utils.buildMap("targetUserId",userInfoService.getUserId(),"currentPage", currentPage);
 
 		NetworkExecutor.post(UrlConstants.GET_MY_POST, params,
 				MyPostListResponse.class,

@@ -22,6 +22,7 @@ import com.zifei.corebeau.common.net.Response;
 import com.zifei.corebeau.extra.CircularImageView;
 import com.zifei.corebeau.task.PostTask;
 import com.zifei.corebeau.ui.activity.CommentActivity;
+import com.zifei.corebeau.ui.activity.OtherUserActivity;
 import com.zifei.corebeau.utils.StringUtil;
 import com.zifei.corebeau.utils.Utils;
 
@@ -68,6 +69,7 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 		ivLike.setOnClickListener(this);
 		ivComment.setOnClickListener(this);
 		ivScrap.setOnClickListener(this);
+		userIcon.setOnClickListener(this);
 		postTask = new PostTask(context);
 		initLoader();
 		setDefault();
@@ -113,6 +115,11 @@ public class DetailBottomBar extends RelativeLayout implements OnClickListener {
 			} else {
 				addScrap();
 			}
+		case R.id.iv_post_icon:
+			Intent intent2 = new Intent(context, OtherUserActivity.class);
+			intent2.putExtra("itemInfo", itemInfo);
+			context.startActivity(intent2);
+			break;
 		}
 	}
 

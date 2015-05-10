@@ -21,6 +21,7 @@ import com.zifei.corebeau.bean.response.MyPostListResponse;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.extra.parallaxheader.ScrollTabHolder;
 import com.zifei.corebeau.task.MyTask;
+import com.zifei.corebeau.task.UserInfoService;
 import com.zifei.corebeau.ui.activity.MyItemDetailActivity;
 import com.zifei.corebeau.ui.adapter.MyItemListAdapter;
 import com.zifei.corebeau.ui.adapter.MyItemListAdapter.OnMyDetailStartClickListener;
