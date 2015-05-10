@@ -16,8 +16,6 @@ import com.zifei.corebeau.utils.StringUtil;
 
 public class NetworkExecutor {
 
-	private static UserInfoService userInfoService = new UserInfoService(CorebeauApp.app);
-
 	public static <T> NetworkAsync<T> post(String url, Map<String, Object> paramData, Class<T> resultType,
 			CallBack<T> callback) {
 		paramData = setUserIdLoginId(paramData);
@@ -33,8 +31,8 @@ public class NetworkExecutor {
 	}
 
 	private static Map<String, Object> setUserIdLoginId(Map<String, Object> paramData) {
-		String userId = userInfoService.getUserId();
-		String loginId = userInfoService.getLoginId();
+		String userId = UserInfoService.getUserId();
+		String loginId = UserInfoService.getLoginId();
 		
 		if (!StringUtil.isEmpty(loginId)) {
 		

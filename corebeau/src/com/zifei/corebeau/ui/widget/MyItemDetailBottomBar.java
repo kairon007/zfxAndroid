@@ -44,7 +44,6 @@ public class MyItemDetailBottomBar extends RelativeLayout implements
 	private ImageLoader imageLoader;
 	private ImageLoaderConfiguration config;
 	private PostTask postTask;
-	private UserInfoService userInfoService;
 	private MyTask myTask;
 	private OnMyItemDeleteListener onMyItemDeleteListener;
 
@@ -78,7 +77,6 @@ public class MyItemDetailBottomBar extends RelativeLayout implements
 		ivLike.setOnClickListener(this);
 		ivComment.setOnClickListener(this);
 		ivScrap.setOnClickListener(this);
-		userInfoService = new UserInfoService(context);
 		postTask = new PostTask(context);
 		myTask = new MyTask(context);
 		initLoader();
@@ -135,7 +133,7 @@ public class MyItemDetailBottomBar extends RelativeLayout implements
 
 	private void setWigetImageView() {
 		// ivScrap = response.get...;
-		if (itemInfo.getUserId().equals(userInfoService.getUserId())) {
+		if (itemInfo.getUserId().equals(UserInfoService.getUserId())) {
 			ivDelete.setBackgroundResource(R.drawable.bottom_delete_normal);
 			ivDelete.setVisibility(View.VISIBLE);
 			ivDelete.setOnClickListener(this);

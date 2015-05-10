@@ -21,10 +21,8 @@ import com.zifei.corebeau.utils.Utils;
 
 public class AccountTask {
 
-	private UserInfoService userInfoService;
 
 	public AccountTask(Context context) {
-		userInfoService = new UserInfoService(context);
 	}
 	
 	public void checkAccount(final String account,
@@ -121,7 +119,7 @@ public class AccountTask {
 							userInfo.setUserId(response.getUserInfo()
 									.getUserId());
 							userInfo.setLoginId(response.getLoginId());
-							userInfoService.updateCurentUserInfo(userInfo);
+							UserInfoService.updateCurentUserInfo(userInfo);
 
 							callback.onSuccess(status, null);
 						} else if (status == LoginResponse.PASSWORD_INCORRECT) {
@@ -166,7 +164,7 @@ public class AccountTask {
 							
 							UserInfo userInfo = response.getUserInfo();
 							userInfo.setLoginId(response.getLoginId());
-							userInfoService.updateCurentUserInfo(userInfo);
+							UserInfoService.updateCurentUserInfo(userInfo);
 							callback.onSuccess(status, msg);
 							
 						} else if (status == LoginByDeviceResponse.IMEI_DUPLICATE){
@@ -216,7 +214,7 @@ public class AccountTask {
 							userInfo.setUserId(response.getUserInfoSimple()
 									.getUserId());
 							userInfo.setLoginId(response.getLoginId());
-							userInfoService.updateCurentUserInfo(userInfo);
+							UserInfoService.updateCurentUserInfo(userInfo);
 
 							callBack.onSuccess();
 

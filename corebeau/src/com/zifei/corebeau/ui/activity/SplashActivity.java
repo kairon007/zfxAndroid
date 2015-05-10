@@ -39,7 +39,6 @@ public class SplashActivity extends Activity implements
 	private ProgressBar progressBar;
 	private TaskType taskType;
 	private TextView logo,tvCheckAccount,tvCheckNickname;
-	private UserInfoService userInfoService;
 
 	private enum TaskType {
 		LOGIN, REGISTER, FINDPASS
@@ -73,7 +72,6 @@ public class SplashActivity extends Activity implements
 	
 	protected void init() {
 		accountTask = new AccountTask(this);
-		userInfoService = new UserInfoService(this);
 	}
 
 	@Override
@@ -92,7 +90,7 @@ public class SplashActivity extends Activity implements
 		@Override
 		public void run() {
 
-			if (!StringUtil.isEmpty(userInfoService.getLoginId()) && !StringUtil.isEmpty(userInfoService.getLoginId())) {
+			if (!StringUtil.isEmpty(UserInfoService.getLoginId()) && !StringUtil.isEmpty(UserInfoService.getLoginId())) {
 				goMainActivity();
 			} else {
 				loginByDevice();

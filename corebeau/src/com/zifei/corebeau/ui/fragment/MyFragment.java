@@ -35,7 +35,6 @@ public class MyFragment extends Fragment implements View.OnClickListener {
 	private RelativeLayout rlFollow, rlProfile, rlSetting, rlLogout;
 	private CircularImageView iconImg;
 	private TextView followCnt, likeCnt, itemCnt, nickName;
-	private UserInfoService userInfoService;
 	private DisplayImageOptions iconImageOptions;
 	private ImageLoader imageLoader;
 	private String targetUserId;
@@ -90,10 +89,10 @@ public class MyFragment extends Fragment implements View.OnClickListener {
 	}
 	
 	private void setUserInfo(){
-		userInfoService = new UserInfoService(getActivity());
-		UserInfo userInfo = userInfoService.getCurentUserInfo();
+		UserInfo userInfo = UserInfoService.getCurentUserInfo();
 		targetUserId = userInfo.getUserId();
 		String nickNameString = userInfo.getNickName();
+		
 		String iconUrl = userInfo.getUrl();
 		
 		if(nickNameString!=null){

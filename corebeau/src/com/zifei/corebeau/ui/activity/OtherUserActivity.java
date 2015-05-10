@@ -55,7 +55,6 @@ public class OtherUserActivity extends SherlockActivity implements
 	private String nickName;
 	private String userImageUrl;
 	private int currentPage;
-	private UserInfoService userInfoService;
 	private String myUserId;
 	private UserShowInfo userShowInfo;
 	private boolean isFollowed = true;
@@ -71,10 +70,9 @@ public class OtherUserActivity extends SherlockActivity implements
 		nickName = itemInfo.getNickName();
 		userImageUrl = itemInfo.getUserImageUrl();
 
-		userInfoService = new UserInfoService(this);
 		otherUserTask = new OtherUserTask(this);
 		folowTask = new FollowTask(this);
-		UserInfo myUserInfo = userInfoService.getCurentUserInfo();
+		UserInfo myUserInfo = UserInfoService.getCurentUserInfo();
 		myUserId = myUserInfo.getUserId();
 
 		initActionBar();
