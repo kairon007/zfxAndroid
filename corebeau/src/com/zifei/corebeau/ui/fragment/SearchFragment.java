@@ -54,6 +54,7 @@ public class SearchFragment extends Fragment implements
 	private Spinner sortSpinner;
 	private ArrayAdapter sortAdapter;
 	private int sortType = 1;
+	private ImageView errorImg;
 
 	public static SearchFragment newInstance(String param1, String param2) {
 		SearchFragment fragment = new SearchFragment();
@@ -115,7 +116,7 @@ public class SearchFragment extends Fragment implements
 		mAdapterView.setAdapter(mAdapter);
 		horizontalListView.setAdapter(recommedUserAdapter);
 		
-		
+		errorImg = (ImageView)view.findViewById(R.id.network_error_search);
 		
 		 
 		 
@@ -182,6 +183,7 @@ public class SearchFragment extends Fragment implements
 						PageBean<ItemInfo> pageBean = (PageBean<ItemInfo>) response
 								.getPageBean();
 						List<ItemInfo> list = pageBean.getList();
+						errorImg.setVisibility(View.GONE);
 						requestCurrentPage = pageBean.getCurrentPage();
 							mAdapter.setColumnWidth(mAdapterView
 									.getColumnWidth(0));
@@ -218,7 +220,11 @@ public class SearchFragment extends Fragment implements
 					@Override
 					public void onError(String msg) {
 						progressBar.setVisibility(View.GONE);
-						Utils.showToast(getActivity(), msg);
+						if(mAdapter.getCount()==0){
+							errorImg.setVisibility(View.VISIBLE);
+						}else{
+							Utils.showToast(getActivity(), msg);
+						}
 						isRequestPost = false;
 						mAdapterView.stopRefresh();
 					}
@@ -235,6 +241,7 @@ public class SearchFragment extends Fragment implements
 								.getPageBean();
 						List<ItemInfo> list = pageBean.getList();
 						requestCurrentPage = pageBean.getCurrentPage();
+						errorImg.setVisibility(View.GONE);
 							mAdapter.setColumnWidth(mAdapterView
 									.getColumnWidth(0));
 							mAdapter.clearAdapter();
@@ -266,7 +273,11 @@ public class SearchFragment extends Fragment implements
 
 					@Override
 					public void onError(String msg) {
-						Utils.showToast(getActivity(), msg);
+						if(mAdapter.getCount()==0){
+							errorImg.setVisibility(View.VISIBLE);
+						}else{
+							Utils.showToast(getActivity(), msg);
+						}
 					}
 				});
 	}

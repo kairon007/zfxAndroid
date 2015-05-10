@@ -1,71 +1,136 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/common_background_grey"    tools:context="com.zifei.corebeau.my.ui.fragment.MyFragment" >
+    android:layout_height="match_parent" >
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" 
-        android:gravity="center_horizontal|center_vertical">
+        android:layout_height="wrap_content"
+        android:background="@color/common_background_grey"
+        android:orientation="vertical" >
+
+        <com.zifei.corebeau.extra.CircularImageView
+            android:id="@+id/my_icon"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp" />
 
         <TextView
-            android:id="@+id/ib_my_post"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:background="@drawable/my_circle_selector"
-            android:text="post"
-            android:gravity="center_horizontal|center_vertical" />
+            android:id="@+id/my_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:textColor="#A6A6A6"
+            android:textSize="30sp" />
 
-        <TextView
-            android:layout_toRightOf="@id/ib_my_post"
-            android:layout_marginLeft="50dp"
-            android:id="@+id/ib_my_option"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:background="@drawable/my_circle_selector"
-            android:text="option"
-            android:textColor="#404040"
-            android:gravity="center_horizontal|center_vertical" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
 
-        <TextView
-            android:layout_below="@id/ib_my_post"
-            android:layout_marginTop="50dp"
-            android:id="@+id/ib_my_follow"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:background="@drawable/my_circle_selector"
-            android:text="follow"
-            android:textColor="#404040"
-            android:gravity="center_horizontal|center_vertical" />
-        
-        <TextView
-            android:layout_below="@id/ib_my_option"
-            android:layout_toRightOf="@id/ib_my_follow"
-            android:layout_marginTop="50dp"
-            android:layout_marginLeft="50dp"
-            android:id="@+id/ib_my_info"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:background="@drawable/my_circle_selector"
-            android:text="my info"
-            android:textColor="#404040"
-            android:gravity="center_horizontal|center_vertical" />
-        
-          
-                  <TextView
-            android:layout_marginTop="50dp"
-            android:layout_below="@id/ib_my_info"
-            android:id="@+id/ib_my_logout"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:background="@drawable/my_circle_selector"
-            android:text="logout"
-            android:textColor="#404040"
-            android:gravity="center_horizontal|center_vertical" />
-          
-        
-        
-    </RelativeLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical" >
 
-</LinearLayout>
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/mypage_follow_cnt" />
+
+                <TextView
+                    android:id="@+id/tv_my_follow_cnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/mypage_like_cnt" />
+
+                <TextView
+                    android:id="@+id/tv_my_like_cnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/mypage_item_cnt" />
+
+                <TextView
+                    android:id="@+id/tv_my_item_cnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_my_follow"
+            style="@style/other_rl_btn" >
+
+            <TextView
+                style="@style/other_rl_btn_text"
+                android:text="follow"
+                android:textColor="#A6A6A6" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_my_profile"
+            style="@style/other_rl_btn" >
+
+            <TextView
+                style="@style/other_rl_btn_text"
+                android:text="profile"
+                android:textColor="#A6A6A6" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_my_setting"
+            style="@style/other_rl_btn" >
+
+            <TextView
+                style="@style/other_rl_btn_text"
+                android:text="setting"
+                android:textColor="#A6A6A6" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_my_logout"
+            style="@style/other_rl_btn" >
+
+            <TextView
+                style="@style/other_rl_btn_text"
+                android:text="logout"
+                android:textColor="#A6A6A6" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</ScrollView>

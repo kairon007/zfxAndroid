@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -34,6 +35,7 @@ public class MyItemFragment extends ScrollTabHolderFragment implements OnMyDetai
 	private MyItemListAdapter myPostAdapter;
 	private final int REQ_CODE_MY_DETAIL = 111;
 	private int currentPage;
+	private ImageView errorImg;
 	
 	public static Fragment newInstance(int position) {
 		MyItemFragment fragment = new MyItemFragment();
@@ -58,6 +60,7 @@ public class MyItemFragment extends ScrollTabHolderFragment implements OnMyDetai
 		myTask = new MyTask(getActivity());
 		postList = (ListView) view.findViewById(R.id.lv_my_post);
 		postList.setOverScrollMode(View.OVER_SCROLL_NEVER);
+		errorImg = (ImageView)view.findViewById(R.id.network_error_my_page);
 
 		View placeHolderView = inflater.inflate(R.layout.view_header_placeholder, postList, false);
 		postList.addHeaderView(placeHolderView);
@@ -76,10 +79,11 @@ public class MyItemFragment extends ScrollTabHolderFragment implements OnMyDetai
 
 			@Override
 			public void onSuccess(MyPostListResponse response) {
-
+				
 				PageBean<ItemInfo> pageBean = (PageBean<ItemInfo>) response
 						.getPageBean();
 				List<ItemInfo> list = pageBean.getList();
+				errorImg.setVisibility(View.GONE);
 				if (response.getPageBean().getList().size() <= 0) {
 
 				} else {
@@ -89,7 +93,7 @@ public class MyItemFragment extends ScrollTabHolderFragment implements OnMyDetai
 
 			@Override
 			public void onError(String msg) {
-				Utils.showToast(getActivity(), msg);
+				errorImg.setVisibility(View.VISIBLE);
 			}
 		});
 	}

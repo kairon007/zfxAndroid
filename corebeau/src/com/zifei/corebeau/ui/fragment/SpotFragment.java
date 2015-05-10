@@ -39,6 +39,7 @@ public class SpotFragment extends Fragment implements
 	private boolean isLast = false;
 	private int currentPage;
 	private boolean isRequestPost = false;
+	private ImageView errorImg;
 
 	public SpotFragment() {
 
@@ -71,6 +72,7 @@ public class SpotFragment extends Fragment implements
 		listview.setOnScrollListener(this);
 		listview.setSingleRefreshListener(this);
 		listview.setSelector(color.transparent);
+		errorImg = (ImageView)view.findViewById(R.id.network_error_spot);
 		
 		getSpotTask();
 		return view;
@@ -100,7 +102,7 @@ public class SpotFragment extends Fragment implements
 						.getPageBean();
 				List<ItemInfo> list = pageBean.getList();
 				currentPage = pageBean.getCurrentPage();
-				
+				errorImg.setVisibility(View.GONE);
 					if(list.size() >= 30){
 						isLast = false;
 						if(currentPage==1){
@@ -129,7 +131,11 @@ public class SpotFragment extends Fragment implements
 			@Override
 			public void onError(String msg) {
 				progressBar.setVisibility(View.GONE);
-				Utils.showToast(getActivity(), msg);
+				if(spotAdapter.getCount()==0){
+					errorImg.setVisibility(View.VISIBLE);
+				}else{
+					Utils.showToast(getActivity(), msg);
+				}
 				isRequestPost = false;
 			}
 		});
@@ -144,6 +150,7 @@ public class SpotFragment extends Fragment implements
 				PageBean<ItemInfo> pageBean = (PageBean<ItemInfo>) response
 						.getPageBean();
 				List<ItemInfo> list = pageBean.getList();
+				errorImg.setVisibility(View.GONE);
 				currentPage = pageBean.getCurrentPage();
 				spotAdapter.clearAdapter();
 					if(list.size() >= 30){
@@ -175,8 +182,13 @@ public class SpotFragment extends Fragment implements
 
 			@Override
 			public void onError(String msg) {
-				Utils.showToast(getActivity(), msg);
+				if(spotAdapter.getCount()==0){
+					errorImg.setVisibility(View.VISIBLE);
+				}else{
+					Utils.showToast(getActivity(), msg);
+				}
 				listview.stopRefresh();
+				
 			}
 		});
 	}
