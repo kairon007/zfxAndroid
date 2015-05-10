@@ -49,7 +49,6 @@ public class MyInfoActivity extends SherlockActivity implements
 		OnClickListener, OnFocusChangeListener, OnProfileImgStatusListener {
 
 	private MyInfoTask myInfoTask;
-	private UserInfoService userInfoService;
 
 	private EditText nickname;
 	private RelativeLayout rlChangePassword;
@@ -177,8 +176,7 @@ public class MyInfoActivity extends SherlockActivity implements
 
 	private void getUserInfo() {
 		// from db
-		userInfoService = new UserInfoService(this);
-		this.simpleUserInfo = userInfoService.getCurentUserInfo();
+		this.simpleUserInfo = UserInfoService.getCurentUserInfo();
 		if (simpleUserInfo == null) {
 			return;
 		}

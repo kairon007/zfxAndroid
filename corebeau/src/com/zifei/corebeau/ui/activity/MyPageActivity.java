@@ -45,7 +45,6 @@ public class MyPageActivity extends SherlockFragmentActivity implements
 	private ImageLoaderConfiguration config;
 	private ImageView backgroundImageView;
 	private ImageView write;
-	private UserInfoService userInfoService;
 	private UserInfo userInfo;
 	private TextView nickName;
 	private View mHeader;
@@ -130,8 +129,7 @@ public class MyPageActivity extends SherlockFragmentActivity implements
 	}
 
 	private void setUserInfo() {
-		userInfoService = new UserInfoService(this);
-		userInfo = userInfoService.getCurentUserInfo();
+		userInfo = UserInfoService.getCurentUserInfo();
 		if (userInfo == null) {
 			return;
 		}

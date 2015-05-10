@@ -1,13 +1,13 @@
 package com.zifei.corebeau.extra.cropimg;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-
-import java.util.ArrayList;
 
 public class CropImageView extends ImageViewTouchBase {
 

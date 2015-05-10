@@ -26,7 +26,7 @@ public class UserInfoService {
 	public UserInfoService(Context context) {
 	}
 	
-	public UserInfo getCurentUserInfo() {
+	public static UserInfo getCurentUserInfo() {
 		userInfoReadLock.lock();
 		try {
 			if (userInfo == null && userInfoLoaded == false) {
@@ -43,7 +43,7 @@ public class UserInfoService {
 		return userInfo;
 	}
 	
-	public void updateCurentUserInfo(UserInfo userInfo) {
+	public static void updateCurentUserInfo(UserInfo userInfo) {
 		userInfoWriteLock.lock();
 		try {
 			if (userInfo != null) {
@@ -55,7 +55,7 @@ public class UserInfoService {
 		}
 	}
 	
-	public String getLoginId() {
+	public static String getLoginId() {
 		UserInfo userInfo = getCurentUserInfo();
 		if (userInfo != null) {
 			return userInfo.getLoginId();
@@ -63,7 +63,7 @@ public class UserInfoService {
 		return null;
 	}
 	
-	public String getUserId() {
+	public static String getUserId() {
 		UserInfo userInfo = getCurentUserInfo();
 		if (userInfo != null) {
 			return userInfo.getUserId();

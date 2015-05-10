@@ -20,11 +20,9 @@ import com.zifei.corebeau.utils.Utils;
 public class PostTask {
 
     private Context context;
-    private UserInfoService userInfoService;
 
     public PostTask(Context context) {
         this.context = context;
-        userInfoService = new UserInfoService(context);
     }
     
     public void getItemDetail(String itemId, final AsyncCallBacks.OneOne<ItemDetailResponse, String> callback) {
@@ -81,7 +79,7 @@ public class PostTask {
     
     public void insertComment(String itemId, String content, String replyUserId, String replyUserNickName, final AsyncCallBacks.OneOne<CommentListResponse, String> callback) {
 		
-		UserInfo userInfo = userInfoService.getCurentUserInfo();
+		UserInfo userInfo = UserInfoService.getCurentUserInfo();
 		
         Map<String, Object> params = Utils.buildMap("itemId",itemId,"content",content,
         		"userNickName",userInfo.getNickName() !=null ? userInfo.getNickName() : "",

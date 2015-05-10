@@ -15,10 +15,8 @@ import com.zifei.corebeau.utils.Utils;
 
 public class MyInfoTask {
 
-	private UserInfoService userInfoService;
 
 	public MyInfoTask(Context context) {
-		userInfoService = new UserInfoService(context);
 	}
 
 	public void updateUserInfo(final UserInfoDetail userInfoDetail,
@@ -36,7 +34,7 @@ public class MyInfoTask {
 
 						if (status == Response.SUCCESS) {
 							callback.onSuccess(response);
-							UserInfo userInfo = userInfoService.getCurentUserInfo();
+							UserInfo userInfo = UserInfoService.getCurentUserInfo();
 							
 							if(userInfoDetail.getUserGender()!= null ){
 								userInfo.setUserGender(userInfoDetail.getUserGender());
@@ -48,7 +46,7 @@ public class MyInfoTask {
 								userInfo.setUrl(userInfoDetail.getUserImageUrl());
 							}
 							
-							userInfoService.updateCurentUserInfo(userInfo);
+							UserInfoService.updateCurentUserInfo(userInfo);
 							
 							callback.onSuccess(response);
 						} else {
@@ -77,9 +75,9 @@ public class MyInfoTask {
 						if (status == Response.SUCCESS) {
 							callback.onSuccess(response);
 							// save userInfo on db
-							UserInfo userInfo = userInfoService.getCurentUserInfo();
+							UserInfo userInfo = UserInfoService.getCurentUserInfo();
 							userInfo.setUserEmail(account);
-							userInfoService.updateCurentUserInfo(userInfo);
+							UserInfoService.updateCurentUserInfo(userInfo);
 							callback.onSuccess(response);
 						} else {
 							callback.onError(msg);
