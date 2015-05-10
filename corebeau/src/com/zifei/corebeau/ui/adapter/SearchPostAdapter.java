@@ -21,6 +21,7 @@ import com.zifei.corebeau.bean.ItemInfo;
 import com.zifei.corebeau.common.CorebeauApp;
 import com.zifei.corebeau.extra.ScaleImageView;
 import com.zifei.corebeau.extra.pla.XListView;
+import com.zifei.corebeau.utils.DateUtil;
 import com.zifei.corebeau.utils.StringUtil;
 
 public class SearchPostAdapter extends BaseAdapter {
@@ -98,6 +99,7 @@ public class SearchPostAdapter extends BaseAdapter {
 					.findViewById(R.id.tv_comment_cnt);
 			vh.nickName = (TextView) convertView
 					.findViewById(R.id.tv_search_nickname);
+			vh.date = (TextView)convertView.findViewById(R.id.tv_search_date);
 			convertView.setTag(vh);
 		}
 
@@ -118,7 +120,8 @@ public class SearchPostAdapter extends BaseAdapter {
 //							+ "  idx : " + position));
 //	vh.message.setTextColor(Color.RED);
 		}
-
+		
+		vh.date.setText(DateUtil.caculatePassTime((itemInfo.getUploadTime())));
 
 		if (itemInfo.getNickName() != null) {
 			vh.nickName.setText(String.valueOf("by " + itemInfo.getNickName()));
@@ -146,6 +149,7 @@ public class SearchPostAdapter extends BaseAdapter {
 		TextView commentCnt;
 		TextView message;
 		TextView nickName;
+		TextView date;
 	}
 
 	@Override

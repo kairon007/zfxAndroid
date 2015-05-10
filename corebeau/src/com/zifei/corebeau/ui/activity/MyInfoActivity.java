@@ -522,7 +522,7 @@ public class MyInfoActivity extends SherlockActivity implements
 
 			etBoundAccount = (EditText) findViewById(R.id.et_bound_account);
 			etBoundPassword = (EditText) findViewById(R.id.et_bound_password);
-			submit = (RelativeLayout) findViewById(R.id.rl_submit_password);
+			submit = (RelativeLayout) findViewById(R.id.rl_submit_bound);
 			submit.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 

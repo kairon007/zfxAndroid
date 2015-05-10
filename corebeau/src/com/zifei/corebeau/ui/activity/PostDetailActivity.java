@@ -23,6 +23,7 @@ import com.zifei.corebeau.task.PostTask;
 import com.zifei.corebeau.ui.adapter.ImageAdapter;
 import com.zifei.corebeau.ui.view.PostViewPager;
 import com.zifei.corebeau.ui.widget.DetailBottomBar;
+import com.zifei.corebeau.utils.DateUtil;
 
 public class PostDetailActivity extends FragmentActivity implements OnClickListener {
 
@@ -33,7 +34,8 @@ public class PostDetailActivity extends FragmentActivity implements OnClickListe
     private TextView tvMsg; 
     private CirclePageIndicator mIndicator;
     private DetailBottomBar bottomBar;
-
+    private TextView date;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +56,7 @@ public class PostDetailActivity extends FragmentActivity implements OnClickListe
         mIndicator.setOnPageChangeListener(new PageChangeListener());
         mIndicator.setFillColor(R.color.spot_inner_divider);
         tvMsg = (TextView)findViewById(R.id.tv_post_msg);
+        date = (TextView)findViewById(R.id.tv_item_detail_date);
         
         bottomBar = new DetailBottomBar(this);
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
@@ -107,7 +110,7 @@ public class PostDetailActivity extends FragmentActivity implements OnClickListe
     private void setPostData() {
     	
         tvMsg.setText(itemInfo.getTitle());
-        
+        date.setText(DateUtil.caculatePassTime(itemInfo.getUploadTime()));
     }
     
     private class PageChangeListener implements OnPageChangeListener {
