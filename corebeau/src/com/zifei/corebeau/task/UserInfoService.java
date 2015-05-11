@@ -19,8 +19,6 @@ public class UserInfoService {
 	
 	private static volatile UserInfo userInfo = null;
 	
-	private static volatile boolean userInfoLoaded = false;
-	
 	private static final String USER_INFO_FILE = ".uis.uif";
 
 	public UserInfoService(Context context) {
@@ -29,11 +27,10 @@ public class UserInfoService {
 	public static UserInfo getCurentUserInfo() {
 		userInfoReadLock.lock();
 		try {
-			if (userInfo == null && userInfoLoaded == false) {
+			if (userInfo == null ) {
 				synchronized (userInfoLock) {
-					if (userInfo == null && userInfoLoaded == false) {
+					if (userInfo == null ) {
 						userInfo = FileUtils.readJSON(USER_INFO_FILE, true, UserInfo.class);
-						userInfoLoaded = true;
 					}
 				}
 			}

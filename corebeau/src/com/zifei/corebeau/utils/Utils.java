@@ -1,6 +1,10 @@
 package com.zifei.corebeau.utils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,6 +30,7 @@ import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -327,6 +332,30 @@ public class Utils {
 			resultMap.put((String) keyValues[i], keyValues[i + 1]);
 		}
 		return resultMap;
+	}
+    
+    public static String TAG="UTIL";
+	public static Bitmap getbitmap(String imageUri) {
+		Log.v(TAG, "getbitmap:" + imageUri);
+		// 显示网络上的图片
+		Bitmap bitmap = null;
+		try {
+			URL myFileUrl = new URL(imageUri);
+			HttpURLConnection conn = (HttpURLConnection) myFileUrl
+					.openConnection();
+			conn.setDoInput(true);
+			conn.connect();
+			InputStream is = conn.getInputStream();
+			bitmap = BitmapFactory.decodeStream(is);
+			is.close();
+
+			Log.v(TAG, "image download finished." + imageUri);
+		} catch (IOException e) {
+			e.printStackTrace();
+			Log.v(TAG, "getbitmap bmp fail---");
+			return null;
+		}
+		return bitmap;
 	}
     
 }

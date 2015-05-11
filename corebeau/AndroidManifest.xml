@@ -31,6 +31,8 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                
+                <data android:scheme="tencent1104498075" />
             </intent-filter>
         </activity>
         <activity
@@ -53,25 +55,24 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyPageTheme" >
         </activity>
-         <activity
-  			android:name="com.zifei.corebeau.ui.activity.MyItemDetailActivity"
+        <activity
+            android:name="com.zifei.corebeau.ui.activity.MyItemDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-  			android:name="com.zifei.corebeau.ui.activity.UploadActivity"
+            android:name="com.zifei.corebeau.ui.activity.UploadActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.common"
             android:windowSoftInputMode="adjustPan" >
         </activity>
-
         <activity
-        	android:name="com.zifei.corebeau.ui.activity.FollowActivity"
+            android:name="com.zifei.corebeau.ui.activity.FollowActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.common" >
         </activity>
         <activity
-  			android:name="com.zifei.corebeau.ui.activity.MyInfoActivity"
+            android:name="com.zifei.corebeau.ui.activity.MyInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.common" >
         </activity>
@@ -80,39 +81,32 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.common" >
         </activity>
-        
-
-        
-            <activity
+        <activity
             android:name="com.zifei.corebeau.ui.activity.OtherUserActivity"
             android:screenOrientation="portrait"
             android:theme="@style/OtherUserTheme" >
         </activity>
-        
-                <service
+
+        <service
             android:name="com.zifei.corebeau.service.UploadService"
             android:enabled="true" >
         </service>
-        
-          <service
+        <service
             android:name="com.zifei.corebeau.service.ProfileImageService"
             android:enabled="true" >
         </service>
-        
-            
-            <!--  extra -->
-                 <activity
+
+        <!-- extra -->
+        <activity
             android:name="com.zifei.corebeau.extra.cropimg.CropImageActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
-     
-                <activity
+        <activity
             android:name="com.zifei.corebeau.extra.imgselector.MultiImageSelectorActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
-        
     </application>
 
 </manifest>
