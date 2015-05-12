@@ -10,12 +10,12 @@
         android:layout_height="50dp"
         android:gravity="center_vertical"
         android:layout_marginLeft="10dp"
-        android:text="bount account" />
+        android:text="register" />
 
     <View style="@style/custom_divider_grey" />
 
     <EditText
-        android:id="@+id/et_bound_account"
+        android:id="@+id/et_register_account"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:background="@color/common_background_grey"
@@ -30,14 +30,21 @@
         android:textSize="10sp" />
 
     <EditText
-        android:id="@+id/et_bound_password"
+        android:id="@+id/et_register_nickname"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:background="@color/common_background_grey"
         android:layout_margin="10dp" />
     
-       <EditText
-        android:id="@+id/et_bound_password_re"
+        <EditText
+        android:id="@+id/et_register_password"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@color/common_background_grey"
+        android:layout_margin="10dp" />
+        
+            <EditText
+        android:id="@+id/et_register_password_re"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:background="@color/common_background_grey"
@@ -46,7 +53,7 @@
      <View style="@style/custom_divider_grey" />
 
     <RelativeLayout
-        android:id="@+id/rl_submit_register"
+        android:id="@+id/rl_submit_bound"
         style="@style/other_rl_btn" >
 
         <TextView

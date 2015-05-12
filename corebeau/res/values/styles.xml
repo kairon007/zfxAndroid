@@ -199,5 +199,13 @@
         <item name="android:textColor">@android:color/darker_gray</item>
         <item name="android:textSize">17dip</item>
     </style>
+    
+         <style name="dialogProgress" parent="@android:style/Theme.Dialog">
+        <item name="android:progressBarStyle">@style/myProgressBar</item>
+    </style>
+    
+       <style name="myProgressBar" parent="@android:style/Widget.ProgressBar.Inverse">
+        <item name="android:indeterminateDrawable">@drawable/color_progress</item>
+    </style>
 
 </resources>

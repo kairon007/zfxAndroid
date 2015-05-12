@@ -10,43 +10,28 @@
         android:layout_height="50dp"
         android:gravity="center_vertical"
         android:layout_marginLeft="10dp"
-        android:text="bount account" />
+        android:text="login" />
 
     <View style="@style/custom_divider_grey" />
 
     <EditText
-        android:id="@+id/et_bound_account"
+        android:id="@+id/et_login_account"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:background="@color/common_background_grey"
         android:layout_margin="10dp" />
 
-    <TextView
-        style="@style/other_rl_btn_text"
-        android:layout_gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:text="if you dont have pass, remian empty"
-        android:textSize="10sp" />
-
     <EditText
-        android:id="@+id/et_bound_password"
+        android:id="@+id/et_login_password"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:background="@color/common_background_grey"
         android:layout_margin="10dp" />
     
-       <EditText
-        android:id="@+id/et_bound_password_re"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:background="@color/common_background_grey"
-        android:layout_margin="10dp" />
-
      <View style="@style/custom_divider_grey" />
 
     <RelativeLayout
-        android:id="@+id/rl_submit_register"
+        android:id="@+id/rl_submit_login"
         style="@style/other_rl_btn" >
 
         <TextView
