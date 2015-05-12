@@ -23,7 +23,7 @@
         android:allowBackup="true"
         android:label="@string/app_name" >
         <activity
-            android:name="com.zifei.corebeau.ui.activity.NewSplashActivity"
+            android:name="com.zifei.corebeau.ui.activity.QQLoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
@@ -31,9 +31,21 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-                
-                 <data android:scheme="tencent1104498075" />
-                
+
+                <data android:scheme="tencent1104498075" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent你的AppId" />
             </intent-filter>
         </activity>
         <activity
@@ -81,10 +93,6 @@
             android:name="com.zifei.corebeau.ui.activity.OptionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.common" >
-        </activity>
-        <activity
-            android:name="com.zifei.corebeau.ui.activity.LoginActivity"
-            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
             android:name="com.zifei.corebeau.ui.activity.OtherUserActivity"
