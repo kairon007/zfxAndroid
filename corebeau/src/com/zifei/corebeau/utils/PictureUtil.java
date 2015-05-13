@@ -144,7 +144,11 @@ public class PictureUtil {
 			bm = rotateBitmap(bm, degree);
 		}
 
-		String filesDir = context.getFilesDir().getAbsolutePath();
+		String filesDir = context.getFilesDir().getAbsolutePath() + "/temp/";
+		
+		File file = new File(filesDir);
+		file.delete();
+		
 		File outputFile = new File(filesDir, fileName);
 
 		FileOutputStream out = new FileOutputStream(outputFile);
