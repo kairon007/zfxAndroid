@@ -148,10 +148,8 @@ public class PictureUtil {
 		String filesDir = context.getFilesDir().getAbsolutePath() + "/temp/";
 
 		File file = new File(filesDir);
-		if (file.exists()) {
-			Log.i("PictureUtil", filesDir);
-			delete(file);
-		}
+		Log.i("PictureUtil", filesDir);
+		delete(file);
 
 		File outputFile = new File(filesDir, fileName);
 
