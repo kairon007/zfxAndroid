@@ -19,6 +19,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Base64;
+import android.util.Log;
 
 public class PictureUtil {
 
@@ -56,7 +57,7 @@ public class PictureUtil {
 				|| options.outHeight / scale >= reqHeight) {
 			scale *= 2;
 		}
-		return scale;//TODO
+		return scale;// TODO
 	}
 
 	/**
@@ -71,7 +72,7 @@ public class PictureUtil {
 		BitmapFactory.decodeFile(filePath, options);
 
 		// Calculate inSampleSize
-		
+
 		options.inSampleSize = calculateInSampleSize(options, 800, 960);
 
 		// Decode bitmap with inSampleSize set
@@ -134,7 +135,7 @@ public class PictureUtil {
 	 */
 	@SuppressLint("NewApi")
 	public static File compressImage(Context context, String filePath,
-			String fileName, int q ) throws FileNotFoundException {
+			String fileName, int q) throws FileNotFoundException {
 
 		Bitmap bm = getSmallBitmap(filePath);
 
@@ -145,28 +146,56 @@ public class PictureUtil {
 		}
 
 		String filesDir = context.getFilesDir().getAbsolutePath() + "/temp/";
-		
+
 		File file = new File(filesDir);
-		file.delete();
-		
+		if (file.exists()) {
+			Log.i("PictureUtil", filesDir);
+			delete(file);
+		}
+
 		File outputFile = new File(filesDir, fileName);
 
 		FileOutputStream out = new FileOutputStream(outputFile);
 
-		
-//		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//		bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
-//		int options = 100;
-//		while (baos.toByteArray().length / 1024 > CommonConfig.UPLOAD_IMAGE_QUALITY) { // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
-//			baos.reset();// 重置baos即清空baos
-//			bm.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
-//			options -= 10;// 每次都减少10
-//		}
-//		ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
-//		Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
+		// ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		// bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);//
+		// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+		// int options = 100;
+		// while (baos.toByteArray().length / 1024 >
+		// CommonConfig.UPLOAD_IMAGE_QUALITY) { // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
+		// baos.reset();// 重置baos即清空baos
+		// bm.compress(Bitmap.CompressFormat.JPEG, options, baos);//
+		// 这里压缩options%，把压缩后的数据存放到baos中
+		// options -= 10;// 每次都减少10
+		// }
+		// ByteArrayInputStream isBm = new
+		// ByteArrayInputStream(baos.toByteArray());//
+		// 把压缩后的数据baos存放到ByteArrayInputStream中
+		// Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);//
+		// 把ByteArrayInputStream数据生成图片
 
-		bm.compress(Bitmap.CompressFormat.JPEG, 100, out);//TODO
+		bm.compress(Bitmap.CompressFormat.JPEG, 100, out);// TODO
 		return outputFile;
+	}
+
+	public static void delete(File file) {
+		if (file.isFile()) {
+			file.delete();
+			return;
+		}
+
+		if (file.isDirectory()) {
+			File[] childFiles = file.listFiles();
+			if (childFiles == null || childFiles.length == 0) {
+				file.delete();
+				return;
+			}
+
+			for (int i = 0; i < childFiles.length; i++) {
+				delete(childFiles[i]);
+			}
+			file.delete();
+		}
 	}
 
 	public static int readPictureDegree(String path) {
@@ -192,15 +221,15 @@ public class PictureUtil {
 		}
 		return degree;
 	}
-	
-	public static Bitmap rotateBitmap(Bitmap bitmap,int degress) {
-        if (bitmap != null) {
-            Matrix m = new Matrix();
-            m.postRotate(degress); 
-            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
-                    bitmap.getHeight(), m, true);
-            return bitmap;
-        }
-        return bitmap;
-    }
+
+	public static Bitmap rotateBitmap(Bitmap bitmap, int degress) {
+		if (bitmap != null) {
+			Matrix m = new Matrix();
+			m.postRotate(degress);
+			bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+					bitmap.getHeight(), m, true);
+			return bitmap;
+		}
+		return bitmap;
+	}
 }
