@@ -263,5 +263,9 @@ public class AccountTask {
 					}
 				});
 	}
-
+	
+	public void logout(){
+		UserInfo userInfo = new UserInfo();
+		UserInfoService.updateCurentUserInfo(userInfo);
+	}
 }

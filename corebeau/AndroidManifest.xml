@@ -29,7 +29,6 @@
             android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -38,8 +37,7 @@
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
           <activity
-            android:name="com.zifei.corebeau.ui.activity.QQLoginActivity"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:name="com.zifei.corebeau.ui.activity.QQLoginActivity" >
             <intent-filter>
                 <data android:scheme="tencent1104498075" />
             </intent-filter>

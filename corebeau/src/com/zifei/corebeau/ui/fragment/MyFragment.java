@@ -20,11 +20,14 @@ import com.zifei.corebeau.bean.UserShowInfo;
 import com.zifei.corebeau.bean.response.OtherUserInfoResponse;
 import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.extra.CircularImageView;
+import com.zifei.corebeau.task.AccountTask;
 import com.zifei.corebeau.task.OtherUserTask;
 import com.zifei.corebeau.task.UserInfoService;
 import com.zifei.corebeau.ui.activity.FollowActivity;
+import com.zifei.corebeau.ui.activity.LoginActivity;
 import com.zifei.corebeau.ui.activity.MyInfoActivity;
 import com.zifei.corebeau.ui.activity.MyPageActivity;
+import com.zifei.corebeau.ui.activity.NewSplashActivity;
 import com.zifei.corebeau.ui.activity.OptionActivity;
 import com.zifei.corebeau.ui.activity.OtherUserActivity;
 import com.zifei.corebeau.utils.StringUtil;
@@ -149,9 +152,19 @@ public class MyFragment extends Fragment implements View.OnClickListener {
 			Intent intent5 = new Intent(getActivity(), MyInfoActivity.class);
 			startActivity(intent5);
 			break;
+		case R.id.rl_my_logout:
+			logout();
+			break;
 		default:
 			break;
 		}
+	}
+	
+	private void logout(){
+		new AccountTask(getActivity()).logout();
+		Intent intent = new Intent(getActivity(), NewSplashActivity.class);
+		startActivity(intent);
+		getActivity().finish();
 	}
 
 }
