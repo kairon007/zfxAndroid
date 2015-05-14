@@ -40,7 +40,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 	private AccountLoginDialog loginDialog;
 	private RegisterDialog registerDialog;
 	private FindPassDialog findPassDialog;
-//	private QQLoginDialog qQLoginDialog;
 	private TextView tvQQLogin;
 	private TextView tvAccountLogin;
 	private TextView tvRegister;
@@ -111,6 +110,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 					Intent intent = new Intent(LoginActivity.this,
 							MainActivity.class);
 					startActivity(intent);
+					finish();
 				}
 
 				@Override
