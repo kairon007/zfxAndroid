@@ -487,8 +487,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 							nickName = json.getString("nickname");
 						}
 
-						if (json.has("figureurl")) {
-							figureurl = json.getString("figureurl");
+						if (json.has("figureurl_1")) {
+							figureurl = json.getString("figureurl_1");
 						}
 
 						if (json.has("gender")) {
