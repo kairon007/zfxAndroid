@@ -35,8 +35,6 @@
         <activity
             android:name="com.zifei.corebeau.ui.activity.LoginActivity"
             android:theme="@android:style/Theme.NoTitleBar" >
-        </activity>
-        <activity android:name="com.zifei.corebeau.ui.activity.QQLoginActivity" >
             <intent-filter>
                 <data android:scheme="tencent1104498075" />
             </intent-filter>

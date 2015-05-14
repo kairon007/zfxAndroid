@@ -9,8 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tencent.connect.UserInfo;
-import com.tencent.connect.auth.QQAuth;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
@@ -46,15 +43,11 @@ public class LoginActivity extends Activity implements OnClickListener {
 	private TextView tvFindPass;
 	private TextView tvGuestLogin;
 	private AccountTask accountTask;
-	
-	TextView openidTextView;
-	TextView nicknameTextView;
+
 	Button loginButton;
 	private Tencent mTencent;
-	public static QQAuth mQQAuth;
 	public static String mAppid;
 	public static String openidString;
-	public static String nicknameString;
 	public static String TAG = "MainActivity";
 	Bitmap bitmap = null;
 
@@ -104,21 +97,22 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 	private void guestLogin() {
 		showWaitDialog("guestLogin...");
-			accountTask.loginByDevice(new AsyncCallBacks.TwoTwo<Integer,String,Integer,String>(){
-				@Override
-				public void onSuccess(Integer status, String msg) {
-					Intent intent = new Intent(LoginActivity.this,
-							MainActivity.class);
-					startActivity(intent);
-					finish();
-				}
+		accountTask
+				.loginByDevice(new AsyncCallBacks.TwoTwo<Integer, String, Integer, String>() {
+					@Override
+					public void onSuccess(Integer status, String msg) {
+						Intent intent = new Intent(LoginActivity.this,
+								MainActivity.class);
+						startActivity(intent);
+						finish();
+					}
 
-				@Override
-				public void onError(Integer status, String errorMsg) {
-					dismissWaitDialog();
-					Utils.showToast(LoginActivity.this, errorMsg);
-				}
-			});
+					@Override
+					public void onError(Integer status, String errorMsg) {
+						dismissWaitDialog();
+						Utils.showToast(LoginActivity.this, errorMsg);
+					}
+				});
 	}
 
 	private void showRegisterDialog() {
@@ -129,7 +123,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 	public class RegisterDialog extends Dialog {
 
-		private EditText etRegisterAccount, etRegisterNickname, etRegisterPassword, etRegisterPasswordConfirm;
+		private EditText etRegisterAccount, etRegisterNickname,
+				etRegisterPassword, etRegisterPasswordConfirm;
 		private RelativeLayout submit;
 
 		public RegisterDialog(Context context, int theme) {
@@ -150,16 +145,22 @@ public class LoginActivity extends Activity implements OnClickListener {
 				public void onClick(View v) {
 
 					String strAccount = etRegisterAccount.getText().toString();
-					String strNickName = etRegisterNickname.getText().toString();
-					String strPassword = etRegisterPassword.getText().toString();
-					String strPasswordComfirm = etRegisterPasswordConfirm.getText().toString();
-					if (registerParamCheck(strAccount,strNickName,strPassword,strPasswordComfirm))
+					String strNickName = etRegisterNickname.getText()
+							.toString();
+					String strPassword = etRegisterPassword.getText()
+							.toString();
+					String strPasswordComfirm = etRegisterPasswordConfirm
+							.getText().toString();
+					if (registerParamCheck(strAccount, strNickName,
+							strPassword, strPasswordComfirm))
 						register(strAccount, strNickName, strPassword);
 				}
 			});
 		}
 
-		private boolean registerParamCheck(String strAccount,String strNickName,String strPassword,String strPasswordComfirm) {
+		private boolean registerParamCheck(String strAccount,
+				String strNickName, String strPassword,
+				String strPasswordComfirm) {
 			if (TextUtils.isEmpty(strAccount)) {
 				Utils.showToast(LoginActivity.this, "email empty");
 				return false;
@@ -172,10 +173,12 @@ public class LoginActivity extends Activity implements OnClickListener {
 				Utils.showToast(LoginActivity.this, "password empty");
 				return false;
 			} else if (!strPassword.equals(strPasswordComfirm)) {
-				Utils.showToast(LoginActivity.this, "passwordconfirm must equal");
+				Utils.showToast(LoginActivity.this,
+						"passwordconfirm must equal");
 				return false;
 			} else if (strPassword.length() < 8 || strPassword.length() > 16) {
-				Utils.showToast(LoginActivity.this, "password must be 8~16 word");
+				Utils.showToast(LoginActivity.this,
+						"password must be 8~16 word");
 				return false;
 			} else if (strNickName.isEmpty()) {
 				Utils.showToast(LoginActivity.this, "nickname empty");
@@ -246,13 +249,13 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 					String strAccount = etLoginAccount.getText().toString();
 					String strPassword = etLoginPassword.getText().toString();
-					if (loginParamCheck(strAccount,strPassword))
+					if (loginParamCheck(strAccount, strPassword))
 						login(strAccount, strPassword);
 				}
 			});
 		}
 
-		private boolean loginParamCheck(String strAccount,String strPassword) {
+		private boolean loginParamCheck(String strAccount, String strPassword) {
 			if (TextUtils.isEmpty(strAccount)) {
 				Utils.showToast(LoginActivity.this, "email empty");
 				return false;
@@ -265,7 +268,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 				Utils.showToast(LoginActivity.this, "password empty");
 				return false;
 			} else if (strPassword.length() < 8 || strPassword.length() > 16) {
-				Utils.showToast(LoginActivity.this, "password must be 8~16 word");
+				Utils.showToast(LoginActivity.this,
+						"password must be 8~16 word");
 				return false;
 			}
 			return true;
@@ -364,45 +368,45 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 	}
 
-//	// call 시점 잘 생각해보기
-//	private void checkAccount(String account) {
-//		accountTask.checkAccount(account,
-//				new AsyncCallBacks.TwoOne<Integer, String, String>() {
-//
-//					@Override
-//					public void onSuccess(Integer state, String msg) {
-//						tvCheckAccount.setText("you can use this account");
-//						tvCheckAccount.setTextColor(Color.GREEN);
-//					}
-//
-//					@Override
-//					public void onError(String errorMsg) {
-//						tvCheckAccount
-//								.setText("already existed account, plz set another account");
-//						tvCheckAccount.setTextColor(Color.RED);
-//					}
-//				});
-//	}
-//
-//	// call 시점 잘 생각해보기
-//	private void checkNickname(String nickName) {
-//		accountTask.checkAccount(nickName,
-//				new AsyncCallBacks.TwoOne<Integer, String, String>() {
-//
-//					@Override
-//					public void onSuccess(Integer state, String msg) {
-//						tvCheckNickname.setText("you can use this nickname");
-//						tvCheckNickname.setTextColor(Color.GREEN);
-//					}
-//
-//					@Override
-//					public void onError(String errorMsg) {
-//						tvCheckNickname
-//								.setText("already existed nickname, plz set another nickname");
-//						tvCheckNickname.setTextColor(Color.RED);
-//					}
-//				});
-//	}
+	// // call 시점 잘 생각해보기
+	// private void checkAccount(String account) {
+	// accountTask.checkAccount(account,
+	// new AsyncCallBacks.TwoOne<Integer, String, String>() {
+	//
+	// @Override
+	// public void onSuccess(Integer state, String msg) {
+	// tvCheckAccount.setText("you can use this account");
+	// tvCheckAccount.setTextColor(Color.GREEN);
+	// }
+	//
+	// @Override
+	// public void onError(String errorMsg) {
+	// tvCheckAccount
+	// .setText("already existed account, plz set another account");
+	// tvCheckAccount.setTextColor(Color.RED);
+	// }
+	// });
+	// }
+	//
+	// // call 시점 잘 생각해보기
+	// private void checkNickname(String nickName) {
+	// accountTask.checkAccount(nickName,
+	// new AsyncCallBacks.TwoOne<Integer, String, String>() {
+	//
+	// @Override
+	// public void onSuccess(Integer state, String msg) {
+	// tvCheckNickname.setText("you can use this nickname");
+	// tvCheckNickname.setTextColor(Color.GREEN);
+	// }
+	//
+	// @Override
+	// public void onError(String errorMsg) {
+	// tvCheckNickname
+	// .setText("already existed nickname, plz set another nickname");
+	// tvCheckNickname.setTextColor(Color.RED);
+	// }
+	// });
+	// }
 
 	/**
 	 * show wait dialog
@@ -433,14 +437,12 @@ public class LoginActivity extends Activity implements OnClickListener {
 	 * show dismiss dialog
 	 */
 	public void dismissWaitDialog() {
-		if (waitDialog != null && waitDialog.isShowing()
-				&& !this.isFinishing()) {
+		if (waitDialog != null && waitDialog.isShowing() && !this.isFinishing()) {
 			waitDialog.dismiss();
 		}
 		waitDialog = null;
 	}
-	
-	
+
 	public void LoginQQ() {
 		mAppid = AppConstant.APP_ID;
 		mTencent = Tencent.createInstance(mAppid, getApplicationContext());
@@ -459,76 +461,81 @@ public class LoginActivity extends Activity implements OnClickListener {
 		public void onComplete(Object response) {
 			Toast.makeText(getApplicationContext(), "登录成功", 0).show();
 			try {
-				Log.e(TAG, "-------------"+response.toString());
+				Log.e(TAG, "-------------" + response.toString());
 				openidString = ((JSONObject) response).getString("openid");
-				openidTextView.setText(openidString);
-				Log.e(TAG, "-------------"+openidString);
-				//access_token= ((JSONObject) response).getString("access_token");				//expires_in = ((JSONObject) response).getString("expires_in");
+				Log.e(TAG, "-------------" + openidString);
+				// access_token= ((JSONObject)
+				// response).getString("access_token"); //expires_in =
+				// ((JSONObject) response).getString("expires_in");
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			UserInfo info = new UserInfo(getApplicationContext(), mQQAuth.getQQToken());
-			
+			UserInfo info = new UserInfo(getApplicationContext(),
+					mTencent.getQQToken());
+
 			info.getUserInfo(new IUiListener() {
 
 				public void onComplete(final Object response) {
 					Log.e(TAG, "---------------111111");
-					Message msg = new Message();
-					msg.obj = response;
-					msg.what = 0;
-					mHandler.sendMessage(msg);
-					Log.e(TAG, "-----111---"+response.toString());
-					new Thread(){
+					Log.e(TAG, "-----111---" + response.toString());
+					JSONObject json = (JSONObject) response;
+					String nickName = null;
+					Boolean gender = null;
+					String figureurl = null;
+					try {
+						if (json.has("nickname")) {
+							nickName = json.getString("nickname");
+						}
 
-						@Override
-						public void run() {
-							JSONObject json = (JSONObject)response;
-							try {
-								bitmap = Utils.getbitmap(json.getString("figureurl"));
-							} catch (JSONException e) {
-								e.printStackTrace();
-							}
-							Message msg = new Message();
-							msg.obj = bitmap;
-							msg.what = 1;
-							mHandler.sendMessage(msg);
-						}						
-					}.start();
-				}				
+						if (json.has("figureurl")) {
+							figureurl = json.getString("figureurl");
+						}
+
+						if (json.has("gender")) {
+							gender = "男".equals(json.getString("gender")) ? true
+									: false;
+						}
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+
+					accountTask
+							.qqLogin(
+									new AsyncCallBacks.TwoTwo<Integer, String, Integer, String>() {
+										@Override
+										public void onSuccess(Integer status,
+												String msg) {
+											Intent intent = new Intent(
+													LoginActivity.this,
+													MainActivity.class);
+											startActivity(intent);
+											finish();
+										}
+
+										@Override
+										public void onError(Integer status,
+												String errorMsg) {
+											dismissWaitDialog();
+											Utils.showToast(LoginActivity.this,
+													errorMsg);
+										}
+									}, nickName, figureurl, gender,
+									openidString);
+				}
+
 				public void onCancel() {
 				}
+
 				public void onError(UiError arg0) {
 				}
-				
+
 			});
-			
+
 		}
 
 		public void onError(UiError arg0) {
 		}
 
 	}
-
-	Handler mHandler = new Handler() {
-
-		@Override
-		public void handleMessage(Message msg) {
-			if (msg.what == 0) {
-				JSONObject response = (JSONObject) msg.obj;
-				if (response.has("nickname")) {
-					try {
-						nicknameString = response.getString("nickname");
-						nicknameTextView.setText(nicknameString);
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}
-			} else if (msg.what == 1) {
-				Bitmap bitmap = (Bitmap) msg.obj;
-//				userlogo.setImageBitmap(bitmap);
-			}
-		}
-
-	};
 
 }

@@ -21,16 +21,16 @@ import com.zifei.corebeau.utils.Utils;
 
 public class AccountTask {
 
-
 	public AccountTask(Context context) {
 	}
-	
+
 	public void checkAccount(final String account,
 			final AsyncCallBacks.TwoOne<Integer, String, String> callback) {
 
 		Map<String, Object> params = Utils.buildMap("account", account);
 
-		NetworkExecutor.post(UrlConstants.CHECK_ACCOUNT, params, CheckAccountResponse.class,
+		NetworkExecutor.post(UrlConstants.CHECK_ACCOUNT, params,
+				CheckAccountResponse.class,
 				new NetworkExecutor.CallBack<CheckAccountResponse>() {
 					@Override
 					public void onSuccess(CheckAccountResponse response) {
@@ -56,13 +56,14 @@ public class AccountTask {
 				});
 
 	}
-	
+
 	public void checkNickname(final String nickname,
 			final AsyncCallBacks.TwoOne<Integer, String, String> callback) {
 
 		Map<String, Object> params = Utils.buildMap("nickname", nickname);
 
-		NetworkExecutor.post(UrlConstants.CHECK_NICKNAME, params, CheckNicknameResponse.class,
+		NetworkExecutor.post(UrlConstants.CHECK_NICKNAME, params,
+				CheckNicknameResponse.class,
 				new NetworkExecutor.CallBack<CheckNicknameResponse>() {
 					@Override
 					public void onSuccess(CheckNicknameResponse response) {
@@ -88,14 +89,14 @@ public class AccountTask {
 				});
 	}
 
-
 	public void login(final String account, final String password,
 			final AsyncCallBacks.TwoOne<Integer, String, String> callback) {
 
-		Map<String, Object> params = Utils.buildMap("account", account, "password",
-				password, "imei", DeviceUtils.getDeviceId(CorebeauApp.app),
-				"manufacturer", DeviceUtils.getManufacturer(),
-				"appVersion", Utils.getVersionCode(),"androidId",
+		Map<String, Object> params = Utils.buildMap("account", account,
+				"password", password, "imei",
+				DeviceUtils.getDeviceId(CorebeauApp.app), "manufacturer",
+				DeviceUtils.getManufacturer(), "appVersion",
+				Utils.getVersionCode(), "androidId",
 				DeviceUtils.getAndroidId(), "macAddress",
 				DeviceUtils.getMacAddress());
 
@@ -160,18 +161,62 @@ public class AccountTask {
 						int status = response.getStatusCode();
 						String msg = response.getMsg();
 
-						if (status == LoginByDeviceResponse.SUCCESS || status == LoginByDeviceResponse.ACCOUNT_EXIST) {
-							
+						if (status == LoginByDeviceResponse.SUCCESS
+								|| status == LoginByDeviceResponse.ACCOUNT_EXIST) {
+
 							UserInfo userInfo = response.getUserInfo();
 							userInfo.setLoginId(response.getLoginId());
 							UserInfoService.updateCurentUserInfo(userInfo);
 							callback.onSuccess(status, msg);
-							
-						} else if (status == LoginByDeviceResponse.IMEI_DUPLICATE){
+
+						} else if (status == LoginByDeviceResponse.IMEI_DUPLICATE) {
 							callback.onError(status, msg);
-//						} else if (status == LoginByDeviceResponse.   ) {  // distinguish go where??
-//						} else if (status == LoginByDeviceResponse.   ) {
-//						} else if (status == LoginByDeviceResponse.   ) {
+							// } else if (status == LoginByDeviceResponse. ) {
+							// // distinguish go where??
+							// } else if (status == LoginByDeviceResponse. ) {
+							// } else if (status == LoginByDeviceResponse. ) {
+						} else {
+							callback.onError(status, msg);
+						}
+					}
+
+					@Override
+					public void onError(Integer status, String msg) {
+						callback.onError(status, msg);
+					}
+
+				});
+	}
+
+	public void qqLogin(
+			final AsyncCallBacks.TwoTwo<Integer, String, Integer, String> callback,
+			String nickName, String figureurl, Boolean userGender, String openId) {
+
+		Map<String, Object> params = Utils.buildMap("imei",
+				DeviceUtils.getDeviceId(CorebeauApp.app), "androidId",
+				DeviceUtils.getAndroidId(), "macAddress",
+				DeviceUtils.getMacAddress(), "nickName", nickName, "figureurl",
+				figureurl, "userGender", userGender, "openId", openId);
+
+		NetworkExecutor.post(UrlConstants.QQ_LOGIN, params,
+				LoginByDeviceResponse.class,
+				new NetworkExecutor.CallBack<LoginByDeviceResponse>() {
+					@Override
+					public void onSuccess(LoginByDeviceResponse response) {
+
+						int status = response.getStatusCode();
+						String msg = response.getMsg();
+
+						if (status == LoginByDeviceResponse.SUCCESS
+								|| status == LoginByDeviceResponse.ACCOUNT_EXIST) {
+
+							UserInfo userInfo = response.getUserInfo();
+							userInfo.setLoginId(response.getLoginId());
+							UserInfoService.updateCurentUserInfo(userInfo);
+							callback.onSuccess(status, msg);
+
+						} else if (status == LoginByDeviceResponse.IMEI_DUPLICATE) {
+							callback.onError(status, msg);
 						} else {
 							callback.onError(status, msg);
 						}
@@ -263,8 +308,8 @@ public class AccountTask {
 					}
 				});
 	}
-	
-	public void logout(){
+
+	public void logout() {
 		UserInfo userInfo = new UserInfo();
 		UserInfoService.updateCurentUserInfo(userInfo);
 	}
