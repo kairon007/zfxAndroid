@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tencent.connect.UserInfo;
-import com.tencent.connect.auth.QQAuth;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
@@ -31,7 +30,6 @@ public class QQLoginActivity extends Activity implements OnClickListener {
 	Button loginButton;
 	ImageView userlogo;
 	private Tencent mTencent;
-	public static QQAuth mQQAuth;
 	public static String mAppid;
 	public static String openidString;
 	public static String nicknameString;
@@ -113,7 +111,7 @@ public class QQLoginActivity extends Activity implements OnClickListener {
 			sdk给我们提供了一个类UserInfo，这个类中封装了QQ用户的一些信息，我么可以通过这个类拿到这些信息 
 			如何得到这个UserInfo类呢？  */
 			//Q<a href="http://www.it165.net/pro/pkqt/" target="_blank" class="keylink">QT</a>oken qqToken = mTencent.getQ<a href="http://www.it165.net/pro/pkqt/" target="_blank" class="keylink">QT</a>oken();
-			UserInfo info = new UserInfo(getApplicationContext(), mQQAuth.getQQToken());
+			UserInfo info = new UserInfo(getApplicationContext(), mTencent.getQQToken());
 			//这样我们就拿到这个类了，之后的操作就跟上面的一样了，同样是解析JSON			
 			
 			info.getUserInfo(new IUiListener() {
