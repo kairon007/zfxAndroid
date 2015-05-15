@@ -40,17 +40,27 @@ public class MainActivity extends SherlockFragmentActivity {
 		if (savedInstanceState != null) {
 			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
 		}
-		
-		mTabsAdapter.addTab(mTabHost.newTabSpec("spot")
-				.setIndicator("spot",
-						getResources().getDrawable( R.drawable.topnav_spot_on)
-						),
+
+		mTabsAdapter.addTab(
+				mTabHost.newTabSpec(this.getString(R.string.spotTab))
+						.setIndicator(
+								this.getString(R.string.spotTab),
+								getResources().getDrawable(
+										R.drawable.topnav_spot_on)),
 				SpotFragment.class, null);
 		mTabsAdapter.addTab(
-				mTabHost.newTabSpec("search").setIndicator("search",getResources().getDrawable( R.drawable.topnav_spot_on)),
+				mTabHost.newTabSpec(this.getString(R.string.searchTab))
+						.setIndicator(
+								this.getString(R.string.searchTab),
+								getResources().getDrawable(
+										R.drawable.topnav_spot_on)),
 				SearchFragment.class, null);
-		mTabsAdapter.addTab(mTabHost.newTabSpec("my")
-				.setIndicator("my",getResources().getDrawable( R.drawable.topnav_spot_on)),
+		mTabsAdapter.addTab(
+				mTabHost.newTabSpec(this.getString(R.string.myTab))
+						.setIndicator(
+								this.getString(R.string.myTab),
+								getResources().getDrawable(
+										R.drawable.topnav_spot_on)),
 				MyFragment.class, null);
 
 	}
@@ -60,12 +70,11 @@ public class MainActivity extends SherlockFragmentActivity {
 		getSupportActionBar().setDisplayShowHomeEnabled(false);
 	}
 
-	
 	@Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("tab", mTabHost.getCurrentTabTag());
-    }
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putString("tab", mTabHost.getCurrentTabTag());
+	}
 
 	public static class TabsAdapter extends FragmentPagerAdapter implements
 			TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {

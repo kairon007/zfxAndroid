@@ -25,7 +25,6 @@ import com.zifei.corebeau.utils.StringUtil;
 public class NewSplashActivity extends Activity {
 	
 	private final int DELAY_MILLIS = 2000;
-	private AccountTask accountTask;
 	
 	private Runnable run = new Runnable() {
 		@Override
@@ -62,11 +61,7 @@ public class NewSplashActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash_new);
-		
-		init();
-		
 		new ConfigTask(this).getConfig();
-		
 		if (PreferenceManager.getInstance(this).getPreferencesBoolean("region_db_state", true)) {
 			initRegionDatabase();
 		}
@@ -78,9 +73,6 @@ public class NewSplashActivity extends Activity {
 		}
 	}
 
-	protected void init() {
-		accountTask = new AccountTask(this);
-	}
 
 	private void initRegionDatabase() {
 		try {
@@ -103,27 +95,6 @@ public class NewSplashActivity extends Activity {
 		handler.removeCallbacks(run);
 	}
 
-	private void loginByDevice(final boolean ifViewNavigation) {
-		accountTask.loginByDevice(new AsyncCallBacks.TwoTwo<Integer, String, Integer, String>() {
-			@Override
-			public void onSuccess(Integer status, String msg) {
-					Intent intent;
-					if (ifViewNavigation) {
-						intent = new Intent(NewSplashActivity.this, MainActivity.class);
-					} else {
-						intent = new Intent(NewSplashActivity.this, IntroActivity.class);
-					}
-					startActivity(intent);
-					finish();
-			}
-
-			@Override
-			public void onError(Integer status, String msg) {
-				Log.i("","plz check network status");
-				finish();
-			}
-		});
-	}
 
 	public void setLauncherMap() {
 		HashMap<String, String> map = new HashMap<String, String>();

@@ -9,9 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.zifei.corebeau.R;
@@ -22,15 +20,15 @@ import com.zifei.corebeau.common.AsyncCallBacks;
 import com.zifei.corebeau.extra.pla.PullSingleListView;
 import com.zifei.corebeau.extra.pla.PullSingleListView.SingleRefreshListener;
 import com.zifei.corebeau.extra.pla.internal.PLA_AbsListView;
-import com.zifei.corebeau.extra.pla.internal.PLA_AdapterView;
 import com.zifei.corebeau.extra.pla.internal.PLA_AbsListView.OnScrollListener;
+import com.zifei.corebeau.extra.pla.internal.PLA_AdapterView;
 import com.zifei.corebeau.extra.pla.internal.PLA_AdapterView.OnItemClickListener;
 import com.zifei.corebeau.task.SpotTask;
 import com.zifei.corebeau.ui.adapter.SpotAdapter;
 import com.zifei.corebeau.utils.Utils;
 
-public class SpotFragment extends Fragment implements
-		OnItemClickListener, View.OnClickListener, OnScrollListener, SingleRefreshListener {
+public class SpotFragment extends Fragment implements OnItemClickListener,
+		View.OnClickListener, OnScrollListener, SingleRefreshListener {
 
 	private SpotAdapter spotAdapter;
 	private PullSingleListView listview;
@@ -72,8 +70,8 @@ public class SpotFragment extends Fragment implements
 		listview.setOnScrollListener(this);
 		listview.setSingleRefreshListener(this);
 		listview.setSelector(color.transparent);
-		errorImg = (ImageView)view.findViewById(R.id.network_error_spot);
-		
+		errorImg = (ImageView) view.findViewById(R.id.network_error_spot);
+
 		getSpotTask();
 		return view;
 	}
@@ -89,110 +87,91 @@ public class SpotFragment extends Fragment implements
 	}
 
 	private void getSpotTask() {
-		if(isLast){
+		if (isLast) {
 			return;
 		}
 		isRequestPost = true;
 		progressBar.setVisibility(View.VISIBLE);
-		spotTask.getSpotList(currentPage,new AsyncCallBacks.OneOne<SpotListResponse, String>() {
-			@Override
-			public void onSuccess(SpotListResponse response) {
-				progressBar.setVisibility(View.GONE);
-				PageBean<ItemInfo> pageBean = (PageBean<ItemInfo>) response
-						.getPageBean();
-				List<ItemInfo> list = pageBean.getList();
-				currentPage = pageBean.getCurrentPage();
-				errorImg.setVisibility(View.GONE);
-					if(list.size() >= 30){
-						isLast = false;
-						if(currentPage==1){
-							spotAdapter.addItemTop(list);
-							spotAdapter.notifyDataSetChanged();
-						}else{
-							spotAdapter.addItemLast(list);
-							spotAdapter.notifyDataSetChanged();
-						}
-						currentPage = currentPage+1;
-					}else if(list.size() < 30){
-						isLast = true;
-						if(currentPage==1){
-							spotAdapter.addItemTop(list);
-							spotAdapter.notifyDataSetChanged();
-						}else{
-							spotAdapter.addItemLast(list);
-							spotAdapter.notifyDataSetChanged();
-						}
-					}else{
-						isLast = true;
+		spotTask.getSpotList(currentPage,
+				new AsyncCallBacks.OneOne<SpotListResponse, String>() {
+					@Override
+					public void onSuccess(SpotListResponse response) {
+						progressBar.setVisibility(View.GONE);
+						handlerSucc(response, false);
+						isRequestPost = false;
 					}
-					isRequestPost = false;
-			}
 
-			@Override
-			public void onError(String msg) {
-				progressBar.setVisibility(View.GONE);
-				if(spotAdapter.getCount()==0){
-					errorImg.setVisibility(View.VISIBLE);
-				}else{
-					Utils.showToast(getActivity(), msg);
-				}
-				isRequestPost = false;
-			}
-		});
+					@Override
+					public void onError(String msg) {
+						progressBar.setVisibility(View.GONE);
+						handlerError(msg);
+						isRequestPost = false;
+					}
+				});
 	}
-	
-	
+
+	private void handlerSucc(SpotListResponse response, boolean isRefresh) {
+		PageBean<ItemInfo> pageBean = (PageBean<ItemInfo>) response
+				.getPageBean();
+		List<ItemInfo> list = pageBean.getList();
+		currentPage = pageBean.getCurrentPage();
+		errorImg.setVisibility(View.GONE);
+		if (list.size() >= 30) {
+			isLast = false;
+			if (currentPage == 1) {
+				spotAdapter.addItemTop(list);
+				spotAdapter.notifyDataSetChanged();
+				if (isRefresh) {
+					listview.stopRefresh();
+				}
+			} else {
+				spotAdapter.addItemLast(list);
+				spotAdapter.notifyDataSetChanged();
+			}
+			currentPage = currentPage + 1;
+		} else if (list.size() < 30) {
+			isLast = true;
+			if (currentPage == 1) {
+				spotAdapter.addItemTop(list);
+				spotAdapter.notifyDataSetChanged();
+				if (isRefresh) {
+					listview.stopRefresh();
+				}
+			} else {
+				spotAdapter.addItemLast(list);
+				spotAdapter.notifyDataSetChanged();
+			}
+		} else {
+			isLast = true;
+		}
+	}
+
+	private void handlerError(String msg) {
+		if (spotAdapter.getCount() == 0) {
+			errorImg.setVisibility(View.VISIBLE);
+		} else {
+			Utils.showToast(getActivity(), msg);
+		}
+	}
+
 	private void getSpotTaskRefresh() {
 		currentPage = 0;
-		spotTask.getSpotList(currentPage,new AsyncCallBacks.OneOne<SpotListResponse, String>() {
-			@Override
-			public void onSuccess(SpotListResponse response) {
-				PageBean<ItemInfo> pageBean = (PageBean<ItemInfo>) response
-						.getPageBean();
-				List<ItemInfo> list = pageBean.getList();
-				errorImg.setVisibility(View.GONE);
-				currentPage = pageBean.getCurrentPage();
-				spotAdapter.clearAdapter();
-					if(list.size() >= 30){
-						isLast = false;
-						if(currentPage==1){
-							spotAdapter.addItemTop(list);
-							spotAdapter.notifyDataSetChanged();
-							listview.stopRefresh();
-						}else{
-							spotAdapter.addItemLast(list);
-							spotAdapter.notifyDataSetChanged();
-						}
-						currentPage = currentPage+1;
-					}else if(list.size() < 30){
-						isLast = true;
-						if(currentPage==1){
-							spotAdapter.addItemTop(list);
-							spotAdapter.notifyDataSetChanged();
-							listview.stopRefresh();
-						}else{
-							spotAdapter.addItemLast(list);
-							spotAdapter.notifyDataSetChanged();
-						}
-					}else{
-						isLast = true;
+		spotTask.getSpotList(currentPage,
+				new AsyncCallBacks.OneOne<SpotListResponse, String>() {
+					@Override
+					public void onSuccess(SpotListResponse response) {
+						spotAdapter.clearAdapter();
+						handlerSucc(response, true);
 					}
-				
-			}
 
-			@Override
-			public void onError(String msg) {
-				if(spotAdapter.getCount()==0){
-					errorImg.setVisibility(View.VISIBLE);
-				}else{
-					Utils.showToast(getActivity(), msg);
-				}
-				listview.stopRefresh();
-				
-			}
-		});
+					@Override
+					public void onError(String msg) {
+						handlerError(msg);
+						listview.stopRefresh();
+
+					}
+				});
 	}
-
 
 	@Override
 	public void onClick(View v) {
@@ -202,12 +181,11 @@ public class SpotFragment extends Fragment implements
 		}
 	}
 
-
 	@Override
 	public void onScrollStateChanged(PLA_AbsListView view, int scrollState) {
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
-			if (view.getLastVisiblePosition() == (view.getCount()-1)) {
-				if(!isRequestPost){
+			if (view.getLastVisiblePosition() == (view.getCount() - 1)) {
+				if (!isRequestPost) {
 					getSpotTask();
 				}
 			}

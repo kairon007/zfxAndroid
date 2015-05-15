@@ -48,7 +48,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 	private Tencent mTencent;
 	public static String mAppid;
 	public static String openidString;
-	public static String TAG = "MainActivity";
+	public static String TAG = "LoginActivity";
 	Bitmap bitmap = null;
 
 	@Override
@@ -464,9 +464,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 				Log.e(TAG, "-------------" + response.toString());
 				openidString = ((JSONObject) response).getString("openid");
 				Log.e(TAG, "-------------" + openidString);
-				// access_token= ((JSONObject)
-				// response).getString("access_token"); //expires_in =
-				// ((JSONObject) response).getString("expires_in");
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -476,8 +473,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 			info.getUserInfo(new IUiListener() {
 
 				public void onComplete(final Object response) {
-					Log.e(TAG, "---------------111111");
-					Log.e(TAG, "-----111---" + response.toString());
 					JSONObject json = (JSONObject) response;
 					String nickName = null;
 					Boolean gender = null;

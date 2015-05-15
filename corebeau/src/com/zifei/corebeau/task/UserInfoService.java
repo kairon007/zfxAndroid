@@ -43,10 +43,8 @@ public class UserInfoService {
 	public static void updateCurentUserInfo(UserInfo userInfo) {
 		userInfoWriteLock.lock();
 		try {
-			if (userInfo != null) {
 				UserInfoService.userInfo = userInfo;
 				FileUtils.storeJSON(USER_INFO_FILE, userInfo, true);
-			}
 		} finally {
 			userInfoWriteLock.unlock();
 		}

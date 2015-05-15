@@ -45,5 +45,9 @@
     <string name="map">地图</string>
     <string name="share">分享</string>
     <string name="enjoy">喜欢</string>
-
+    
+    <!-- tab -->
+    <string name="spotTab">热门</string>  
+    <string name="searchTab">选择</string>
+    <string name="myTab">我</string>  
 </resources>

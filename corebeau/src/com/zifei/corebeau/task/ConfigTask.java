@@ -38,7 +38,6 @@ public class ConfigTask {
 					public void onSuccess(ConfigResponse response) {
 
 						int status = response.getStatusCode();
-						String msg = response.getMsg();
 
 						if (status == ConfigResponse.UPDATE) {
 							updateCurrentConfig(response.getConfMap());
