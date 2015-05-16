@@ -59,7 +59,7 @@
         <activity
             android:name="com.zifei.corebeau.ui.activity.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.VPI" >
+            android:theme="@style/Theme.common" >
         </activity>
         <activity
             android:name="com.zifei.corebeau.ui.activity.PostDetailActivity"

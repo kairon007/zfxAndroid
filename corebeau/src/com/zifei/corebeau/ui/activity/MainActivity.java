@@ -1,168 +1,108 @@
 package com.zifei.corebeau.ui.activity;
 
-import java.util.ArrayList;
-
-import android.content.Context;
-import android.graphics.PorterDuff.Mode;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TabHost;
-import android.widget.TabWidget;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.zifei.corebeau.R;
+import com.zifei.corebeau.extra.parallaxheader.PagerSlidingTabStrip;
+import com.zifei.corebeau.extra.parallaxheader.PagerSlidingTabStrip.IconTabProvider;
 import com.zifei.corebeau.ui.fragment.MyFragment;
 import com.zifei.corebeau.ui.fragment.SearchFragment;
 import com.zifei.corebeau.ui.fragment.SpotFragment;
 
-public class MainActivity extends SherlockFragmentActivity {
+public class MainActivity extends SherlockFragmentActivity implements  ViewPager.OnPageChangeListener{
 
 	private ViewPager mViewPager;
-	private TabHost mTabHost;
-	private TabsAdapter mTabsAdapter;
+	private PagerAdapter mPagerAdapter;
+	private PagerSlidingTabStrip mPagerSlidingTabStrip;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		initActionBar();
-		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mTabHost = (TabHost) findViewById(android.R.id.tabhost);
-		mTabHost.setup();
-		mTabsAdapter = new TabsAdapter(this, mTabHost, mViewPager);
-
-		if (savedInstanceState != null) {
-			mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
-		}
 		
-		mTabsAdapter.addTab(mTabHost.newTabSpec("spot")
-				.setIndicator("spot",
-						getResources().getDrawable( R.drawable.topnav_spot_on)
-						),
-				SpotFragment.class, null);
-		mTabsAdapter.addTab(
-				mTabHost.newTabSpec("search").setIndicator("search",getResources().getDrawable( R.drawable.topnav_spot_on)),
-				SearchFragment.class, null);
-		mTabsAdapter.addTab(mTabHost.newTabSpec("my")
-				.setIndicator("my",getResources().getDrawable( R.drawable.topnav_spot_on)),
-				MyFragment.class, null);
-
+		mPagerSlidingTabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+		mViewPager = (ViewPager) findViewById(R.id.main_pager);
+		mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
+		mViewPager.setAdapter(mPagerAdapter);
+		mPagerSlidingTabStrip.setViewPager(mViewPager);
+		mPagerSlidingTabStrip.setOnPageChangeListener(this);
+	
 	}
 
 	private void initActionBar() {
 		getSupportActionBar().setDisplayShowTitleEnabled(true);
 		getSupportActionBar().setDisplayShowHomeEnabled(false);
 	}
-
 	
-	@Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("tab", mTabHost.getCurrentTabTag());
-    }
+	public class PagerAdapter extends FragmentPagerAdapter implements IconTabProvider  {
 
-	public static class TabsAdapter extends FragmentPagerAdapter implements
-			TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
-		private final Context mContext;
-		private final TabHost mTabHost;
-		private final ViewPager mViewPager;
-		private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
+		private final int PAGE_COUNT = 3;
+		private final int[] ICONS = {R.drawable.tab_spot,R.drawable.tab_search,R.drawable.tab_my};
 
-		static final class TabInfo {
-			private final String tag;
-			private final Class<?> clss;
-			private final Bundle args;
-
-			TabInfo(String _tag, Class<?> _class, Bundle _args) {
-				tag = _tag;
-				clss = _class;
-				args = _args;
-			}
-		}
-
-		static class DummyTabFactory implements TabHost.TabContentFactory {
-			private final Context mContext;
-
-			public DummyTabFactory(Context context) {
-				mContext = context;
-			}
-
-			@Override
-			public View createTabContent(String tag) {
-				View v = new View(mContext);
-				v.setMinimumWidth(0);
-				v.setMinimumHeight(0);
-				return v;
-			}
-		}
-
-		public TabsAdapter(FragmentActivity activity, TabHost tabHost,
-				ViewPager pager) {
-			super(activity.getSupportFragmentManager());
-			mContext = activity;
-			mTabHost = tabHost;
-			mViewPager = pager;
-			mTabHost.setOnTabChangedListener(this);
-			mViewPager.setAdapter(this);
-			mViewPager.setOnPageChangeListener(this);
-		}
-
-		public void addTab(TabHost.TabSpec tabSpec, Class<?> clss, Bundle args) {
-			tabSpec.setContent(new DummyTabFactory(mContext));
-			String tag = tabSpec.getTag();
-
-			TabInfo info = new TabInfo(tag, clss, args);
-			mTabs.add(info);
-			mTabHost.addTab(tabSpec);
-			notifyDataSetChanged();
-		}
-
-		@Override
-		public int getCount() {
-			return mTabs.size();
+		public PagerAdapter(FragmentManager fm) {
+			super(fm);
 		}
 
 		@Override
 		public Fragment getItem(int position) {
-			TabInfo info = mTabs.get(position);
-			return Fragment.instantiate(mContext, info.clss.getName(),
-					info.args);
+			Fragment f = null;
+
+			switch (position) {
+			case 0:
+				f =  Fragment.instantiate(
+						MainActivity.this,
+						SpotFragment.class.getName(), null);
+				break;
+			case 1:
+				f = Fragment.instantiate(
+						MainActivity.this,
+						SearchFragment.class.getName(), null);
+				break;
+			case 2:
+				f = Fragment.instantiate(
+						MainActivity.this,
+						MyFragment.class.getName(), null);
+				break;
+			default:
+				f = Fragment.instantiate(
+						MainActivity.this,
+						SpotFragment.class.getName(), null);
+				break;
+			}
+
+			return f;
 		}
 
 		@Override
-		public void onTabChanged(String tabId) {
-			int position = mTabHost.getCurrentTab();
-			mViewPager.setCurrentItem(position);
+		public int getCount() {
+			return PAGE_COUNT;
 		}
 
-		@Override
-		public void onPageScrolled(int position, float positionOffset,
-				int positionOffsetPixels) {
-		}
 
 		@Override
-		public void onPageSelected(int position) {
-			// Unfortunately when TabHost changes the current tab, it kindly
-			// also takes care of putting focus on it when not in touch mode.
-			// The jerk.
-			// This hack tries to prevent this from pulling focus out of our
-			// ViewPager.
-			TabWidget widget = mTabHost.getTabWidget();
-			int oldFocusability = widget.getDescendantFocusability();
-			widget.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-			mTabHost.setCurrentTab(position);
-			widget.setDescendantFocusability(oldFocusability);
+		public int getPageIconResId(int position) {
+			 return ICONS[position];
 		}
 
-		@Override
-		public void onPageScrollStateChanged(int state) {
-		}
 	}
+
+	@Override
+	public void onPageScrollStateChanged(int arg0) {
+	}
+
+	@Override
+	public void onPageScrolled(int arg0, float arg1, int arg2) {
+	}
+
+	@Override
+	public void onPageSelected(int arg0) {
+	}
+
 
 }

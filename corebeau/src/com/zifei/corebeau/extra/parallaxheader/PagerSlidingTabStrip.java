@@ -49,6 +49,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 		public int getPageIconResId(int position);
 	}
 
+	private int currentPageSelected = 0;
+	
 	// @formatter:off
 	private static final int[] ATTRS = new int[] {
 		android.R.attr.textSize,
@@ -218,6 +220,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 				}
 
 				currentPosition = pager.getCurrentItem();
+				tabsContainer.getChildAt(currentPosition).setSelected(true);
 				scrollToChild(currentPosition, 0);
 			}
 		});
@@ -380,6 +383,9 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 		@Override
 		public void onPageSelected(int position) {
+			tabsContainer.getChildAt(currentPageSelected).setSelected(false);
+			currentPageSelected = position;
+			tabsContainer.getChildAt(position).setSelected(true);
 			if (delegatePageListener != null) {
 				delegatePageListener.onPageSelected(position);
 			}
